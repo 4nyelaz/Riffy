@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body th:fragment="header">
+    <!-- Sección 1 : Encabezado - Bienvenida -->
+    <section th:fragment="encabezado" class="encabezado">
+        <div class="encabezado-contenedor">
+            
+            <!-- Lado izquierdo: Texto -->
+            <div class="encabezado-izquierda">
+                <h1>
+                    Compra y vende <br>
+                    <span class="acento">vinilos y CDs</span>
+                </h1>
+                
+                <p>
+                    El sitio donde los amantes de la música encuentran 
+                    esas joyas que buscan o venden las que ya no escuchan.
+                </p>
+                
+                <!-- TODO: Poner los enlaces a los botones -->
+                <div class="encabezado-botones">
+                    <a href="/explorar" class="boton-primario">Explorar</a> 
+                    <a href="/vender" class="boton-secundario">Vender</a>
+                </div>
+            </div>
+            
+            <!-- Lado derecho: Imagen recortada -->
+            <div class="encabezado-derecha">
+                <img th:src="@{/img/vinyl_encabezado.jpg}" 
+                        alt="Vinilos y CDs" 
+                        class="encabezado-imagen" title="Fotografía de vinilo en tonalidades rojizas">
+            </div>
+            
+        </div>
+    </section>
+    
+    <!-- Sección 2: Paso a paso -->
+    <section class="como-funciona py-5" th:fragment="como-funciona" style="background-color: var(--color-bg-alt);">
+        <div class="container py-4">
+            
+            <!-- Título -->
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold" style="color: var(--color-first);">
+                    <i class="fas fa-compact-disc me-2" style="color: var(--color-accent);"></i>
+                    ¿Cómo funciona Riffy?
+                </h2>
+                <p class="lead" style="color: var(--color-text-secondary);">
+                    Compra y vende vinilos y CDs en tres simples pasos
+                </p>
+            </div>
+            
+            <!-- 3 Pasos -->
+            <div class="row g-4">
+                
+                <!-- Paso 1 -->
+                <div class="col-md-4">
+                    <div class="text-center p-4 h-100 bg-white rounded-4 shadow-sm paso-card">
+                        <div class="paso-icono mb-3 mx-auto d-flex align-items-center justify-content-center"
+                            style="width: 80px; height: 80px; background: var(--color-accent); border-radius: 50%;">
+                            <i class="fas fa-search fa-2x" style="color: white;"></i>
+                        </div>
+                        <span class="badge mb-2 px-3 py-2" style="background: var(--color-second); color: white;">
+                            Paso 1
+                        </span>
+                        <h4 class="fw-bold mt-3 mb-3" style="color: var(--color-first);">Explora</h4>
+                        <p style="color: var(--color-text-secondary);">
+                            Navega por nuestro catálogo de vinilos y CDs. 
+                            Filtra por género, artista, año o precio.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Paso 2 -->
+                <div class="col-md-4">
+                    <div class="text-center p-4 h-100 bg-white rounded-4 shadow-sm paso-card">
+                        <div class="paso-icono mb-3 mx-auto d-flex align-items-center justify-content-center"
+                            style="width: 80px; height: 80px; background: var(--color-accent); border-radius: 50%;">
+                            <i class="fas fa-hand-holding-usd fa-2x" style="color: white;"></i>
+                        </div>
+                        <span class="badge mb-2 px-3 py-2" style="background: var(--color-second); color: white;">
+                            Paso 2
+                        </span>
+                        <h4 class="fw-bold mt-3 mb-3" style="color: var(--color-first);">Compra o vende</h4>
+                        <p style="color: var(--color-text-secondary);">
+                            ¿Encontraste algo? Cómpralo con un clic. 
+                            ¿Quieres vender? Sube tus discos en minutos.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Paso 3 -->
+                <div class="col-md-4">
+                    <div class="text-center p-4 h-100 bg-white rounded-4 shadow-sm paso-card">
+                        <div class="paso-icono mb-3 mx-auto d-flex align-items-center justify-content-center"
+                            style="width: 80px; height: 80px; background: var(--color-accent); border-radius: 50%;">
+                            <i class="fas fa-box-open fa-2x" style="color: white;"></i>
+                        </div>
+                        <span class="badge mb-2 px-3 py-2" style="background: var(--color-second); color: white;">
+                            Paso 3
+                        </span>
+                        <h4 class="fw-bold mt-3 mb-3" style="color: var(--color-first);">Recibe o envía</h4>
+                        <p style="color: var(--color-text-secondary);">
+                            Recibe tu pedido en 24/48h con envío certificado.
+                            O envía tus ventas de forma segura.
+                        </p>
+                    </div>
+                </div>
+                
+            </div>
+            
+            <!-- Frase final -->
+            <div class="text-center mt-5">
+                <p class="mb-4" style="font-size: 1.2rem; color: var(--color-text-primary);">
+                    <i class="fas fa-shield-alt me-2" style="color: var(--color-accent);"></i>
+                    <strong>Pago 100% seguro</strong> • Protección al comprador • Atención personalizada
+                </p>
+                <a href="/registro" class="btn btn-lg rounded-pill px-5" 
+                style="background: var(--color-accent); color: white;">
+                    Empieza ahora
+                    <i class="fas fa-arrow-right ms-2"></i>
+                </a>
+            </div>
+            
+        </div>
+    </section>
+
+</body>
+</html>

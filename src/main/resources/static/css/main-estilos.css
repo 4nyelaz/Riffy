@@ -1,0 +1,232 @@
+:root {
+  /* Colores principales */
+  --color-first: #0d1b2a;    
+  --color-second: #1b3a57;    
+
+  /* Colores de acción */
+  --color-accent: #e63946;        
+
+  /* Colores de fondo */
+  --color-bg: #f1faee;       /* Fondo principal */
+  --color-bg-alt: #e5e5e5;   /* Fondo alternativa */     
+
+  /* Colores de texto */
+  --color-text-primary: #0d1b2a;  
+  --color-text-secondary: #1b3a57;
+  --color-text-light: #ffffff;    
+}
+
+/* ----- Navegador ------ */
+#mainNav {
+  background-color: var(--color-bg-alt);
+}
+
+#mainNav a {
+  color: var(--color-text-primary);
+}
+
+#mainNav a:hover {
+  color: var(--color-accent); 
+}
+
+/* Redefinir clases de btn-outline-primary, btn-primary para que cuadre con la estética */
+.btn-outline-primary {
+  --bs-btn-color: #e63946;
+  --bs-btn-border-color: #e63946;
+  --bs-btn-hover-bg: #e63946;
+  --bs-btn-hover-border-color: #e63946;
+  --bs-btn-active-bg: #c1121f;
+  --bs-btn-active-border-color: #c1121f;
+}
+
+.btn-primary {
+  --bs-btn-bg: #e63946;
+  --bs-btn-border-color: #e63946;
+  --bs-btn-hover-bg: #c1121f;
+  --bs-btn-hover-border-color: #c1121f;
+  --bs-btn-active-bg: #a4161a;
+  --bs-btn-active-border-color: #a4161a;
+}
+
+/* Ajuste de tamaño del logo */
+#logoRiffy {
+  height: 1.8em;         
+  width: auto;           
+  margin-right: 0.3em;   
+}
+
+#pack_riffy_logo:hover {
+    filter: brightness(0) saturate(100%) invert(33%) sepia(79%) saturate(2476%) hue-rotate(337deg) brightness(94%) contrast(93%);
+}
+
+/* ----- ENCABEZADO ----- */
+.encabezado {
+    background: #1b3a57;
+    min-height: 650px;
+    display: flex;
+    align-items: center;
+}
+
+.encabezado-contenedor {
+    display: flex;
+    width: 100%;
+    min-height: 650px;
+}
+
+/* Lado izquierdo - Texto */
+.encabezado-izquierda {
+    width: 50%;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+}
+
+.encabezado-izquierda h1 {
+    font-size: 3.2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.encabezado-izquierda .acento {
+    color: #e63946;
+}
+
+.encabezado-izquierda p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+/* Lado derecho - Imagen */
+.encabezado-derecha {
+    width: 50%;
+    position: relative;
+    overflow: hidden;
+}
+
+.encabezado-imagen {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+/* Difuminado en el borde izquierdo de la imagen */
+.encabezado-derecha::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 100%;
+    background: linear-gradient(to right, #1b3a57, transparent);
+    z-index: 2;
+}
+
+/* Botones */
+.encabezado-botones {
+    display: flex;
+    gap: 15px;
+}
+
+.boton-primario {
+    background: #e63946;
+    color: white;
+    padding: 14px 32px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+}
+
+.boton-primario:hover {
+    background: #c1121f;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.boton-secundario {
+    border: 1px solid white;
+    color: white;
+    padding: 14px 32px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+}
+
+.boton-secundario:hover {
+    background: white;
+    color: #1b3a57;
+    transform: translateY(-2px);
+}
+
+.paso-card {
+    transition: all 0.3s ease;
+}
+
+.paso-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+}
+
+.paso-icono {
+    transition: all 0.3s ease;
+}
+
+.paso-card:hover .paso-icono {
+    transform: scale(1.1);
+    background: var(--color-second) !important;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .encabezado {
+        min-height: 550px;
+    }
+    
+    .encabezado-contenedor {
+        min-height: 550px;
+    }
+    
+    .encabezado-izquierda h1 {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .encabezado {
+        min-height: auto;
+    }
+    
+    .encabezado-contenedor {
+        flex-direction: column;
+        min-height: auto;
+    }
+    
+    .encabezado-izquierda {
+        width: 100%;
+        padding: 50px 25px;
+        text-align: center;
+    }
+    
+    .encabezado-izquierda h1 {
+        font-size: 2.2rem;
+    }
+    
+    .encabezado-botones {
+        justify-content: center;
+    }
+    
+    .encabezado-derecha {
+        width: 100%;
+        height: 350px;
+    }
+}
