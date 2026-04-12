@@ -1,128 +1,217 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <body th:fragment="header">
     <!-- Sección 1 : Encabezado - Bienvenida -->
     <section th:fragment="encabezado" class="encabezado">
         <div class="encabezado-contenedor">
-            
+
             <!-- Lado izquierdo: Texto -->
             <div class="encabezado-izquierda">
                 <h1>
                     Compra y vende <br>
                     <span class="acento">vinilos y CDs</span>
                 </h1>
-                
+
                 <p>
-                    El sitio donde los amantes de la música encuentran 
+                    El sitio donde los amantes de la música encuentran
                     esas joyas que buscan o venden las que ya no escuchan.
                 </p>
-                
+
                 <!-- TODO: Poner los enlaces a los botones -->
                 <div class="encabezado-botones">
-                    <a href="/explorar" class="boton-primario">Explorar</a> 
+                    <a href="/explorar" class="boton-primario">Explorar</a>
                     <a href="/vender" class="boton-secundario">Vender</a>
                 </div>
             </div>
-            
+
             <!-- Lado derecho: Imagen recortada -->
             <div class="encabezado-derecha">
-                <img th:src="@{/img/vinyl_encabezado.jpg}" 
-                        alt="Vinilos y CDs" 
-                        class="encabezado-imagen" title="Fotografía de vinilo en tonalidades rojizas">
+                <img th:src="@{/img/vinyl_encabezado.jpg}" alt="Vinilos y CDs" class="encabezado-imagen"
+                    title="Fotografía de vinilo en tonalidades rojizas">
             </div>
-            
+
         </div>
     </section>
-    
-    <!-- Sección 2: Paso a paso -->
-    <section class="como-funciona py-5" th:fragment="como-funciona" style="background-color: var(--color-bg-alt);">
+
+    <!-- Sección 2 : ¿Cómo funciona? -->
+    <section class="como-funciona py-5" th:fragment="como-funciona">
         <div class="container py-4">
-            
+
             <!-- Título -->
             <div class="text-center mb-5">
-                <h2 class="display-5 fw-bold" style="color: var(--color-first);">
-                    <i class="fas fa-compact-disc me-2" style="color: var(--color-accent);"></i>
+                <h2 class="display-5 fw-bold titulo-seccion">
+                    <i class="fas fa-compact-disc me-2 icono-titulo"></i>
                     ¿Cómo funciona Riffy?
                 </h2>
-                <p class="lead" style="color: var(--color-text-secondary);">
+                <p class="lead subtitulo-seccion">
                     Compra y vende vinilos y CDs en tres simples pasos
                 </p>
             </div>
-            
+
             <!-- 3 Pasos -->
             <div class="row g-4">
-                
+
                 <!-- Paso 1 -->
                 <div class="col-md-4">
                     <div class="text-center p-4 h-100 bg-white rounded-4 shadow-sm paso-card">
-                        <div class="paso-icono mb-3 mx-auto d-flex align-items-center justify-content-center"
-                            style="width: 80px; height: 80px; background: var(--color-accent); border-radius: 50%;">
-                            <i class="fas fa-search fa-2x" style="color: white;"></i>
+                        <div class="paso-icono mb-3 mx-auto d-flex align-items-center justify-content-center">
+                            <i class="fas fa-search fa-2x icono-paso"></i>
                         </div>
-                        <span class="badge mb-2 px-3 py-2" style="background: var(--color-second); color: white;">
-                            Paso 1
-                        </span>
-                        <h4 class="fw-bold mt-3 mb-3" style="color: var(--color-first);">Explora</h4>
-                        <p style="color: var(--color-text-secondary);">
-                            Navega por nuestro catálogo de vinilos y CDs. 
+                        <span class="badge mb-2 px-3 py-2 etiqueta-paso">Paso 1</span>
+                        <h4 class="fw-bold mt-3 mb-3 titulo-paso">Explora</h4>
+                        <p class="descripcion-paso">
+                            Navega por nuestro catálogo de vinilos y CDs.
                             Filtra por género, artista, año o precio.
                         </p>
                     </div>
                 </div>
-                
+
                 <!-- Paso 2 -->
                 <div class="col-md-4">
                     <div class="text-center p-4 h-100 bg-white rounded-4 shadow-sm paso-card">
-                        <div class="paso-icono mb-3 mx-auto d-flex align-items-center justify-content-center"
-                            style="width: 80px; height: 80px; background: var(--color-accent); border-radius: 50%;">
-                            <i class="fas fa-hand-holding-usd fa-2x" style="color: white;"></i>
+                        <div class="paso-icono mb-3 mx-auto d-flex align-items-center justify-content-center">
+                            <i class="fas fa-hand-holding-usd fa-2x icono-paso"></i>
                         </div>
-                        <span class="badge mb-2 px-3 py-2" style="background: var(--color-second); color: white;">
-                            Paso 2
-                        </span>
-                        <h4 class="fw-bold mt-3 mb-3" style="color: var(--color-first);">Compra o vende</h4>
-                        <p style="color: var(--color-text-secondary);">
-                            ¿Encontraste algo? Cómpralo con un clic. 
+                        <span class="badge mb-2 px-3 py-2 etiqueta-paso">Paso 2</span>
+                        <h4 class="fw-bold mt-3 mb-3 titulo-paso">Compra o vende</h4>
+                        <p class="descripcion-paso">
+                            ¿Encontraste algo? Cómpralo con un clic.
                             ¿Quieres vender? Sube tus discos en minutos.
                         </p>
                     </div>
                 </div>
-                
+
                 <!-- Paso 3 -->
                 <div class="col-md-4">
                     <div class="text-center p-4 h-100 bg-white rounded-4 shadow-sm paso-card">
-                        <div class="paso-icono mb-3 mx-auto d-flex align-items-center justify-content-center"
-                            style="width: 80px; height: 80px; background: var(--color-accent); border-radius: 50%;">
-                            <i class="fas fa-box-open fa-2x" style="color: white;"></i>
+                        <div class="paso-icono mb-3 mx-auto d-flex align-items-center justify-content-center">
+                            <i class="fas fa-box-open fa-2x icono-paso"></i>
                         </div>
-                        <span class="badge mb-2 px-3 py-2" style="background: var(--color-second); color: white;">
-                            Paso 3
-                        </span>
-                        <h4 class="fw-bold mt-3 mb-3" style="color: var(--color-first);">Recibe o envía</h4>
-                        <p style="color: var(--color-text-secondary);">
+                        <span class="badge mb-2 px-3 py-2 etiqueta-paso">Paso 3</span>
+                        <h4 class="fw-bold mt-3 mb-3 titulo-paso">Recibe o envía</h4>
+                        <p class="descripcion-paso">
                             Recibe tu pedido en 24/48h con envío certificado.
                             O envía tus ventas de forma segura.
                         </p>
                     </div>
                 </div>
-                
+
             </div>
-            
-            <!-- Frase final -->
-            <div class="text-center mt-5">
-                <p class="mb-4" style="font-size: 1.2rem; color: var(--color-text-primary);">
-                    <i class="fas fa-shield-alt me-2" style="color: var(--color-accent);"></i>
-                    <strong>Pago 100% seguro</strong> • Protección al comprador • Atención personalizada
-                </p>
-                <a href="/registro" class="btn btn-lg rounded-pill px-5" 
-                style="background: var(--color-accent); color: white;">
-                    Empieza ahora
-                    <i class="fas fa-arrow-right ms-2"></i>
-                </a>
-            </div>
-            
         </div>
     </section>
 
+    <!-- Sección 3 : Preguntas frecuentes-->
+    <section class="py-5" th:fragment="preguntas-despliegue" style="background-color: var(--color-bg-alt);">
+        <div class="container py-4">
+
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold" style="color: var(--color-first);">
+                    <i class="fas fa-compact-disc me-2" style="color: var(--color-accent);"></i>
+                    Preguntas frecuentes
+                </h2>
+                <p class="lead" style="color: var(--color-text-secondary);">
+                    Todo lo que necesitas saber sobre Riffy
+                </p>
+            </div>
+
+            <div class="accordion d-flex flex-column gap-3" id="faqAcordeon">
+
+                <div class="accordion-item rounded-4 overflow-hidden border" id="seccion-compraventa">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button bg-body-secondary fw-bold collapsed" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#faq1" aria-expanded="false">
+                            <i class="fa-solid fa-caret-right me-2" style="color: var(--color-accent);"></i>
+                            ¿Cómo funciona la compraventa de discos en Riffy?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAcordeon">
+                        <div class="accordion-body" style="color: var(--color-text-secondary);">
+                            <p>Riffy es un marketplace donde cualquier usuario puede <strong>comprar y vender vinilos y
+                                    CDs</strong>.
+                                Como vendedor, publicas tu disco con fotos, estado y precio. Como comprador, navegas el
+                                catálogo,
+                                filtras por género o artista y compras con un clic. El pago es seguro y el envío queda
+                                registrado
+                                en la plataforma hasta confirmar la entrega.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item rounded-4 overflow-hidden border" id="seccion-servicios">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button bg-body-secondary fw-bold collapsed" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#faq2" aria-expanded="false">
+                            <i class="fa-solid fa-caret-right me-2" style="color: var(--color-accent);"></i>
+                            ¿Qué servicios ofrece Riffy?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAcordeon">
+                        <div class="accordion-body" style="color: var(--color-text-secondary);">
+                            <p>Riffy ofrece una plataforma completa para el coleccionista:</p>
+                            <ul>
+                                <li><i class="fas fa-thumbtack me-1" style="color: var(--color-accent);"></i>
+                                    <strong>Tasación gratuita</strong> para orientarte con el precio de venta.
+                                </li>
+                                <li><i class="fas fa-thumbtack me-1" style="color: var(--color-accent);"></i>
+                                    <strong>Envío certificado</strong> con embalaje reforzado en 24/48h.
+                                </li>
+                                <li><i class="fas fa-thumbtack me-1" style="color: var(--color-accent);"></i>
+                                    <strong>Protección al comprador</strong> con devoluciones garantizadas en 14 días.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item rounded-4 overflow-hidden border" id="seccion-nosotros">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button bg-body-secondary fw-bold collapsed" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#faq3" aria-expanded="false">
+                            <i class="fa-solid fa-caret-right me-2" style="color: var(--color-accent);"></i>
+                            ¿Quiénes somos?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAcordeon">
+                        <div class="accordion-body" style="color: var(--color-text-secondary);">
+                            <p>Riffy nació de la pasión por la música física. Somos un equipo de coleccionistas y
+                                amantes
+                                del vinilo que crearon una plataforma <strong>segura, sencilla y especializada</strong>
+                                para conectar a compradores y vendedores. Todos los vendedores pasan por un proceso de
+                                verificación de identidad y cuentan con valoraciones de la comunidad.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item rounded-4 overflow-hidden border" id="seccion-contacto">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button bg-body-secondary fw-bold collapsed" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#faq4" aria-expanded="false">
+                            <i class="fa-solid fa-caret-right me-2" style="color: var(--color-accent);"></i>
+                            ¿Cómo puedo contactar con Riffy?
+                        </button>
+                    </h2>
+                    <div id="faq4" class="accordion-collapse collapse" data-bs-parent="#faqAcordeon">
+                        <div class="accordion-body" style="color: var(--color-text-secondary);">
+                            <p>Nuestro equipo está disponible de <strong>lunes a viernes de 9:00 a 18:00 h</strong>.
+                                Respondemos en un máximo de 24 horas hábiles.</p>
+                            <p><i class="fas fa-envelope me-1" style="color: var(--color-accent);"></i>
+                                <strong>soporte@riffy.com</strong>
+                            </p>
+                            <div class="d-grid col-sm-4 mx-auto mt-3">
+                                <a th:href="@{/contacto}" class="btn btn-primary rounded-pill">
+                                    <i class="fas fa-paper-plane me-2"></i>Escribirnos
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
 </body>
+
 </html>

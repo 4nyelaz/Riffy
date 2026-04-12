@@ -186,6 +186,120 @@
     background: var(--color-second) !important;
 }
 
+/* ── Sección Cómo Funciona ── */
+.como-funciona {
+    background-color: var(--color-bg-alt);
+}
+
+.titulo-seccion {
+    color: var(--color-first);
+}
+
+.icono-titulo {
+    color: var(--color-accent);
+}
+
+.subtitulo-seccion {
+    color: var(--color-text-secondary);
+}
+
+/* Tarjetas de pasos */
+.paso-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.paso-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Círculo del icono */
+.paso-icono {
+    width: 80px;
+    height: 80px;
+    background: var(--color-accent);
+    border-radius: 50%;
+}
+
+.icono-paso {
+    color: white;
+}
+
+/* Badge / etiqueta de número de paso */
+.etiqueta-paso {
+    background: var(--color-second);
+    color: white;
+}
+
+/* Textos */
+.titulo-paso {
+    color: var(--color-first);
+}
+
+.descripcion-paso {
+    color: var(--color-text-secondary);
+}
+
+/* ── Footer ── */
+footer {
+    background-color: var(--color-second);
+}
+
+.footer-descripcion {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.footer-titulo {
+    color: var(--color-accent);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.footer-link {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: color 0.2s;
+}
+
+.footer-link:hover {
+    color: var(--color-accent);
+}
+
+.footer-social {
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.2s, transform 0.2s;
+    display: inline-block;
+}
+
+.footer-social:hover {
+    color: var(--color-accent) !important;
+    transform: translateY(-3px);
+}
+
+.footer-contacto-item {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.95rem;
+}
+
+.footer-divider {
+    border-color: rgba(255, 255, 255, 0.15);
+    margin-top: 3rem;
+}
+
+.footer-copyright {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.footer-corazon {
+    color: var(--color-accent);
+}
+
+
 /* Responsive */
 @media (max-width: 992px) {
     .encabezado {

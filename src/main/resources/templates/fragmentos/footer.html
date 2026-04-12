@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<body>
+    <footer th:fragment="footer">
+        <div class="container py-5">
+            <div class="row g-4">
+
+                <!-- Logo y descripción -->
+                <div class="col-lg-4 col-md-6">
+                    <a th:href="@{/}" class="d-flex align-items-center text-decoration-none mb-3">
+                        <img th:src="@{/img/riffy_logo.png}" alt="Logo Riffy" id="logoRiffy">
+                        <span class="fw-bold fs-4" style="color: white;">Riffy</span>
+                    </a>
+                    <p class="footer-descripcion">
+                        El marketplace para coleccionistas de vinilos y CDs. Compra, vende y descubre música física de
+                        forma segura.
+                    </p>
+                    <div class="d-flex gap-3 mt-3">
+                        <a href="#" class="footer-social"><i class="fab fa-instagram fa-lg"></i></a>
+                        <a href="#" class="footer-social"><i class="fab fa-twitter fa-lg"></i></a>
+                        <a href="#" class="footer-social"><i class="fab fa-facebook fa-lg"></i></a>
+                    </div>
+                </div>
+
+                <!-- Enlaces -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="footer-titulo">Riffy</h6>
+                    <ul class="list-unstyled d-flex flex-column gap-2">
+                        <li><a th:href="@{/}" class="footer-link">Inicio</a></li>
+                        <li><a th:href="@{/#seccion-nosotros}" class="footer-link">Nosotros</a></li>
+                        <li><a th:href="@{/#seccion-servicios}" class="footer-link">Servicios</a></li>
+                        <li><a th:href="@{/#seccion-contacto}" class="footer-link">Contacto</a></li>
+                    </ul>
+                </div>
+
+                <!-- Legal -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="footer-titulo">Legal</h6>
+                    <ul class="list-unstyled d-flex flex-column gap-2">
+                        <li><a th:href="@{/privacidad}" class="footer-link">Privacidad</a></li>
+                        <li><a th:href="@{/terminos}" class="footer-link">Términos de uso</a></li>
+                        <li><a th:href="@{/cookies}" class="footer-link">Cookies</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contacto -->
+                <div class="col-lg-4 col-md-6">
+                    <h6 class="footer-titulo">Contacto</h6>
+                    <ul class="list-unstyled d-flex flex-column gap-2">
+                        <li class="footer-contacto-item">
+                            <i class="fas fa-envelope me-2" style="color: var(--color-accent);"></i>soporte@riffy.com
+                        </li>
+                        <li class="footer-contacto-item">
+                            <i class="fas fa-clock me-2" style="color: var(--color-accent);"></i>Lun - Vie, 9:00 - 18:00
+                            h
+                        </li>
+                    </ul>
+                    <a th:href="@{/#seccion-contacto}"
+                        class="btn btn-outline-light rounded-pill px-4 mt-3 footer-btn-contacto">
+                        <i class="fas fa-paper-plane me-2"></i>Escribirnos
+                    </a>
+                </div>
+
+            </div>
+
+            <hr class="footer-divider">
+
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2 pt-2">
+                <p class="footer-copyright">&copy; 2025 Riffy. Todos los derechos reservados.</p>
+            </div>
+
+        </div>
+    </footer>
+</body>
+
+</html>
