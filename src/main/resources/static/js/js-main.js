@@ -41,3 +41,47 @@
     
     // 2. Ejecutar cuando cambie el hash (CLAVE para que funcione sin recargar)
     window.addEventListener('hashchange', abrirAcordeonDesdeHash);
+
+// LOGIN
+
+document.addEventListener('DOMContentLoaded', function () {
+
+    const pestanaLogin = document.getElementById('pestana-login');
+    const pestanaRegistro = document.getElementById('pestana-registro');
+    const secLogin = document.getElementById('sec-login');
+    const secRegistro = document.getElementById('sec-registro');
+    const enlaceRegistro = document.getElementById('enlace-registro');
+    const enlaceLogin = document.getElementById('enlace-login');
+
+    function cambiarSeccion(seccion) {
+        const esLogin = seccion === 'login';
+
+        secLogin.classList.toggle('activa', esLogin);
+        secRegistro.classList.toggle('activa', !esLogin);
+        pestanaLogin.classList.toggle('activa', esLogin);
+        pestanaRegistro.classList.toggle('activa', !esLogin);
+
+        history.replaceState(null, '', window.location.pathname);
+    }
+
+    pestanaLogin.addEventListener('click', function () {
+        cambiarSeccion('login');
+    });
+
+    pestanaRegistro.addEventListener('click', function () {
+        cambiarSeccion('registro');
+    });
+
+    enlaceRegistro.addEventListener('click', function () {
+        cambiarSeccion('registro');
+    });
+
+    enlaceLogin.addEventListener('click', function () {
+        cambiarSeccion('login');
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('section') === 'register') cambiarSeccion('registro');
+    else cambiarSeccion('login');
+
+});

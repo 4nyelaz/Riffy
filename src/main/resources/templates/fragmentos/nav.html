@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<body th:fragment="header">
+<body th:fragment="nav">
     <header>
         <!-- Nav principal de la página web de inicio, genérico -->
         <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
@@ -38,26 +38,22 @@
                         </li>
                     </ul>
                     <div class="d-flex flex-column flex-lg-row gap-2">
-                        <button class="btn btn-outline-primary rounded-pill px-3">
+                        <a th:href="@{/login(section=login)}" class="btn btn-outline-primary rounded-pill px-3">
                             <span class="d-flex align-items-center">
                                 <i class="fas fa-sign-in-alt me-2"></i>
                                 <span class="small">Iniciar sesión</span>
                             </span>
-                        </button>
-                        <button class="btn btn-primary rounded-pill px-3">
+                        </a>
+                        <a th:href="@{/login(section=register)}" class="btn btn-primary rounded-pill px-3 text-white">
                             <span class="d-flex align-items-center">
                                 <i class="fas fa-user-plus me-2"></i>
                                 <span class="small">Registrarse</span>
                             </span>
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
         </nav>
     </header>
-
-    
-
-
 </body>
 </html>

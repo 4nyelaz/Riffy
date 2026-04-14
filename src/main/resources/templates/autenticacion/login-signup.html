@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso - Riffy</title>
+
+    <!-- Enlace Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Enlace boostrap CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Main-CSS -->
+    <link rel="stylesheet" th:href="@{/css/main-estilos.css}">
+
+    <!-- Enlace Boostrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+    <!-- Main JS -->
+    <script defer th:src="@{/js/js-main.js}"></script>
+
+    <!-- Riffy favicon -->
+    <link rel="icon" type="image/ico" th:href="@{/img/riffy_favicon.ico}">
+</head>
+
+
+<body>
+    <div class="cabecera-auth">
+        <a th:href="@{/home}">
+            <img th:src="@{/img/riffy_logo.png}" alt="Riffy" class="logo-auth" />
+        </a>
+        <a th:href="@{/}" class="enlace-volver">
+            <i class="fas fa-arrow-left"></i>
+            Volver al inicio
+        </a>
+    </div>
+    <div class="pagina-auth">
+        <div class="tarjeta-auth">
+
+            <div class="pestanas-auth">
+                <button class="pestana activa" id="pestana-login">Iniciar sesión</button>
+                <button class="pestana" id="pestana-registro">Registrarse</button>
+            </div>
+
+            <div class="cuerpo-auth">
+
+                <div class="seccion-formulario activa" id="sec-login">
+                    <h2>Bienvenido de nuevo</h2>
+                    <p>Accede a tu cuenta</p>
+                    <form th:action="@{/login}" method="post">
+                        <div class="campo-formulario">
+                            <label>Usuario</label>
+                            <input type="text" name="usuario" placeholder="Tu nombre de usuario" required />
+                        </div>
+                        <div class="campo-formulario">
+                            <label>Contraseña</label>
+                            <input type="password" name="contrasena" placeholder="••••••••" required />
+                        </div>
+                        <button type="submit" class="boton-enviar">Iniciar sesión</button>
+                    </form>
+                    <p class="pie-formulario">¿No tienes cuenta? <span id="enlace-registro">Regístrate aquí</span>
+                    </p>
+                </div>
+
+                <div class="seccion-formulario" id="sec-registro">
+                    <h2>Crea tu cuenta</h2>
+                    <p>Únete a Riffy gratis</p>
+                    <form th:action="@{/register}" method="post">
+                        <div class="campo-formulario">
+                            <label>Nombre completo</label>
+                            <input type="text" name="nombre" placeholder="Tu nombre" required />
+                        </div>
+                        <div class="campo-formulario">
+                            <label>Usuario</label>
+                            <input type="text" name="usuario" placeholder="Elige un nombre de usuario" required />
+                        </div>
+                        <div class="campo-formulario">
+                            <label>Contraseña</label>
+                            <input type="password" name="contrasena" placeholder="••••••••" required />
+                        </div>
+                        <div class="row m-1">
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="gridCheck1" required>
+                                    <label class="form-check-label" for="gridCheck1">
+                                        <small>He leído y acepto los
+                                            <a th:href="@{/terminos}" class="enlace-politicas">Términos y
+                                                condiciones</a>
+                                            y la
+                                            <a th:href="@{/privacidad}" class="enlace-politicas">Política de
+                                                privacidad</a>
+                                        </small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="submit" class="boton-enviar">Crear cuenta</button>
+                    </form>
+                    <p class="pie-formulario">¿Ya tienes cuenta? <span id="enlace-login">Inicia sesión</span></p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,141 +1,60 @@
+/* ------------------------------------------------------------------ */
+/* variables
+/* ------------------------------------------------------------------ */
 :root {
-  /* Colores principales */
-  --color-first: #0d1b2a;    
-  --color-second: #1b3a57;    
-
-  /* Colores de acción */
-  --color-accent: #e63946;        
-
-  /* Colores de fondo */
-  --color-bg: #f1faee;       /* Fondo principal */
-  --color-bg-alt: #e5e5e5;   /* Fondo alternativa */     
-
-  /* Colores de texto */
-  --color-text-primary: #0d1b2a;  
-  --color-text-secondary: #1b3a57;
-  --color-text-light: #ffffff;    
+    --color-first: #0d1b2a;
+    --color-second: #1b3a57;
+    --color-accent: #e63946;
+    --color-accent-hover: #c1121f;
+    --color-accent-active: #a4161a;
+    --color-bg: #ffffff;
+    --color-bg-alt: #e5e5e5;
+    --color-text-primary: #0d1b2a;
+    --color-text-secondary: #1b3a57;
+    --color-text-light: #ffffff;
 }
 
-/* ----- Navegador ------ */
-#mainNav {
-  background-color: var(--color-bg-alt);
+
+/* ------------------------------------------------------------------ */
+/* base
+/* ------------------------------------------------------------------ */
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-#mainNav a {
-  color: var(--color-text-primary);
-}
 
-#mainNav a:hover {
-  color: var(--color-accent); 
-}
-
-/* Redefinir clases de btn-outline-primary, btn-primary para que cuadre con la estética */
+/* ------------------------------------------------------------------ */
+/* botones
+/* ------------------------------------------------------------------ */
 .btn-outline-primary {
-  --bs-btn-color: #e63946;
-  --bs-btn-border-color: #e63946;
-  --bs-btn-hover-bg: #e63946;
-  --bs-btn-hover-border-color: #e63946;
-  --bs-btn-active-bg: #c1121f;
-  --bs-btn-active-border-color: #c1121f;
+    --bs-btn-color: var(--color-accent);
+    --bs-btn-border-color: var(--color-accent);
+    --bs-btn-hover-bg: var(--color-accent);
+    --bs-btn-hover-border-color: var(--color-accent);
+    --bs-btn-active-bg: var(--color-accent-hover);
+    --bs-btn-active-border-color: var(--color-accent-hover);
+    color: var(--color-accent);
+}
+
+.btn-outline-primary:hover {
+    color: white !important;
 }
 
 .btn-primary {
-  --bs-btn-bg: #e63946;
-  --bs-btn-border-color: #e63946;
-  --bs-btn-hover-bg: #c1121f;
-  --bs-btn-hover-border-color: #c1121f;
-  --bs-btn-active-bg: #a4161a;
-  --bs-btn-active-border-color: #a4161a;
-}
-
-/* Ajuste de tamaño del logo */
-#logoRiffy {
-  height: 1.8em;         
-  width: auto;           
-  margin-right: 0.3em;   
-}
-
-#pack_riffy_logo:hover {
-    filter: brightness(0) saturate(100%) invert(33%) sepia(79%) saturate(2476%) hue-rotate(337deg) brightness(94%) contrast(93%);
-}
-
-/* ----- ENCABEZADO ----- */
-.encabezado {
-    background: #1b3a57;
-    min-height: 650px;
-    display: flex;
-    align-items: center;
-}
-
-.encabezado-contenedor {
-    display: flex;
-    width: 100%;
-    min-height: 650px;
-}
-
-/* Lado izquierdo - Texto */
-.encabezado-izquierda {
-    width: 50%;
-    padding: 60px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    color: white;
-}
-
-.encabezado-izquierda h1 {
-    font-size: 3.2rem;
-    font-weight: bold;
-    margin-bottom: 20px;
-    line-height: 1.2;
-}
-
-.encabezado-izquierda .acento {
-    color: #e63946;
-}
-
-.encabezado-izquierda p {
-    font-size: 1.2rem;
-    opacity: 0.9;
-    margin-bottom: 30px;
-    line-height: 1.6;
-}
-
-/* Lado derecho - Imagen */
-.encabezado-derecha {
-    width: 50%;
-    position: relative;
-    overflow: hidden;
-}
-
-.encabezado-imagen {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-}
-
-/* Difuminado en el borde izquierdo de la imagen */
-.encabezado-derecha::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 60px;
-    height: 100%;
-    background: linear-gradient(to right, #1b3a57, transparent);
-    z-index: 2;
-}
-
-/* Botones */
-.encabezado-botones {
-    display: flex;
-    gap: 15px;
+    --bs-btn-bg: var(--color-accent);
+    --bs-btn-border-color: var(--color-accent);
+    --bs-btn-hover-bg: var(--color-accent-hover);
+    --bs-btn-hover-border-color: var(--color-accent-hover);
+    --bs-btn-active-bg: var(--color-accent-active);
+    --bs-btn-active-border-color: var(--color-accent-active);
 }
 
 .boton-primario {
-    background: #e63946;
+    background: var(--color-accent);
     color: white;
     padding: 14px 32px;
     border-radius: 50px;
@@ -146,7 +65,7 @@
 }
 
 .boton-primario:hover {
-    background: #c1121f;
+    background: var(--color-accent-hover);
     color: white;
     transform: translateY(-2px);
 }
@@ -164,33 +83,124 @@
 
 .boton-secundario:hover {
     background: white;
-    color: #1b3a57;
+    color: var(--color-second);
     transform: translateY(-2px);
 }
 
-.paso-card {
-    transition: all 0.3s ease;
+
+/* ------------------------------------------------------------------ */
+/* nav
+/* ------------------------------------------------------------------ */
+
+/* -- logo -- */
+#logoRiffy {
+    height: 1.8em;
+    width: auto;
+    margin-right: 0.3em;
 }
 
-.paso-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.1) !important;
+#pack_riffy_logo:hover {
+    filter: brightness(0) saturate(100%) invert(33%) sepia(79%) saturate(2476%) hue-rotate(337deg) brightness(94%) contrast(93%);
 }
 
-.paso-icono {
-    transition: all 0.3s ease;
+/* -- enlaces -- */
+#mainNav {
+    background-color: var(--color-bg) !important;
 }
 
-.paso-card:hover .paso-icono {
-    transform: scale(1.1);
-    background: var(--color-second) !important;
+#mainNav a {
+    color: var(--color-text-primary);
 }
 
-/* ── Sección Cómo Funciona ── */
+#mainNav a:hover {
+    color: var(--color-accent);
+}
+
+
+/* ------------------------------------------------------------------ */
+/* header
+/* ------------------------------------------------------------------ */
+.encabezado {
+    background: var(--color-second);
+    min-height: 650px;
+    display: flex;
+    align-items: center;
+}
+
+.encabezado-contenedor {
+    display: flex;
+    width: 100%;
+    min-height: 650px;
+}
+
+/* -- texto -- */
+.encabezado-izquierda {
+    width: 50%;
+    padding: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: white;
+}
+
+.encabezado-izquierda h1 {
+    font-size: 3.2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    line-height: 1.2;
+}
+
+.encabezado-izquierda .acento {
+    color: var(--color-accent);
+}
+
+.encabezado-izquierda p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.encabezado-botones {
+    display: flex;
+    gap: 15px;
+}
+
+/* -- imagen -- */
+.encabezado-derecha {
+    width: 50%;
+    position: relative;
+    overflow: hidden;
+}
+
+.encabezado-imagen {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
+.encabezado-derecha::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60px;
+    height: 100%;
+    background: linear-gradient(to right, var(--color-second), transparent);
+    z-index: 2;
+}
+
+
+/* ------------------------------------------------------------------ */
+/* como funciona
+/* ------------------------------------------------------------------ */
 .como-funciona {
     background-color: var(--color-bg-alt);
 }
 
+/* -- titulos -- */
 .titulo-seccion {
     color: var(--color-first);
 }
@@ -203,7 +213,7 @@
     color: var(--color-text-secondary);
 }
 
-/* Tarjetas de pasos */
+/* -- tarjetas -- */
 .paso-card {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
@@ -213,25 +223,29 @@
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12) !important;
 }
 
-/* Círculo del icono */
+.paso-card:hover .paso-icono {
+    transform: scale(1.1);
+    background: var(--color-second) !important;
+}
+
+/* -- icono -- */
 .paso-icono {
     width: 80px;
     height: 80px;
     background: var(--color-accent);
     border-radius: 50%;
+    transition: all 0.3s ease;
 }
 
 .icono-paso {
     color: white;
 }
 
-/* Badge / etiqueta de número de paso */
 .etiqueta-paso {
     background: var(--color-second);
     color: white;
 }
 
-/* Textos */
 .titulo-paso {
     color: var(--color-first);
 }
@@ -240,7 +254,10 @@
     color: var(--color-text-secondary);
 }
 
-/* ── Footer ── */
+
+/* ------------------------------------------------------------------ */
+/* footer
+/* ------------------------------------------------------------------ */
 footer {
     background-color: var(--color-second);
 }
@@ -251,12 +268,14 @@ footer {
     line-height: 1.7;
 }
 
+/* -- titulos -- */
 .footer-titulo {
     color: var(--color-accent);
     font-weight: 700;
     margin-bottom: 1rem;
 }
 
+/* -- enlaces -- */
 .footer-link {
     color: rgba(255, 255, 255, 0.7);
     text-decoration: none;
@@ -268,6 +287,7 @@ footer {
     color: var(--color-accent);
 }
 
+/* -- redes sociales -- */
 .footer-social {
     color: rgba(255, 255, 255, 0.7);
     transition: color 0.2s, transform 0.2s;
@@ -284,6 +304,7 @@ footer {
     font-size: 0.95rem;
 }
 
+/* -- pie -- */
 .footer-divider {
     border-color: rgba(255, 255, 255, 0.15);
     margin-top: 3rem;
@@ -300,16 +321,254 @@ footer {
 }
 
 
-/* Responsive */
+/* ------------------------------------------------------------------ */
+/* auth
+/* ------------------------------------------------------------------ */
+
+/* -- cabecera -- */
+.cabecera-auth {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 40px;
+    background: var(--color-bg-alt);
+    width: 100%;
+    box-sizing: border-box;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+.logo-auth {
+    height: 1.8em;
+    width: auto;
+    margin-right: 0.3em;
+}
+
+/* -- nombre logo -- */
+.nombre-logo-auth {
+    font-weight: bold;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+.nombre-logo-auth:hover {
+    color: var(--color-accent);
+}
+
+.enlace-volver {
+    font-size: 14px;
+    color: var(--color-text-primary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+}
+
+.enlace-volver:hover {
+    color: var(--color-accent);
+}
+
+/* -- pagina -- */
+.pagina-auth {
+    background: var(--color-bg-alt);
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 16px;
+    box-sizing: border-box;
+}
+
+/* -- tarjeta -- */
+.tarjeta-auth {
+    background: var(--color-bg);
+    border-radius: 16px;
+    border: 0.5px solid #d0dde8;
+    width: 100%;
+    max-width: 420px;
+    overflow: hidden;
+}
+
+/* -- pestanas -- */
+.pestanas-auth {
+    display: flex;
+    border-bottom: 0.5px solid #d0dde8;
+}
+
+.pestana {
+    flex: 1;
+    padding: 14px;
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-size: 14px;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    transition: all 0.2s;
+    margin-bottom: -0.5px;
+}
+
+.pestana.activa {
+    color: var(--color-accent);
+    border-bottom: 2px solid var(--color-accent);
+    font-weight: 500;
+}
+
+/* -- formulario -- */
+.cuerpo-auth {
+    padding: 32px;
+}
+
+.seccion-formulario {
+    display: none;
+}
+
+.seccion-formulario.activa {
+    display: block;
+}
+
+.campo-formulario {
+    margin-bottom: 16px;
+}
+
+.campo-formulario label {
+    display: block;
+    font-size: 12px;
+    color: var(--color-second);
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.campo-formulario input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 14px;
+    border: 0.5px solid #b0c4d4;
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--color-first);
+    background: #f8fbfd;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.campo-formulario input:focus {
+    border-color: var(--color-accent);
+    background: #fff;
+}
+
+/* -- checkbox -- */
+.campo-checkbox {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.campo-checkbox input[type="checkbox"] {
+    margin-top: 2px;
+    accent-color: var(--color-accent);
+    cursor: pointer;
+    width: 15px;
+    height: 15px;
+    flex-shrink: 0;
+}
+
+.campo-checkbox label {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    line-height: 1.5;
+}
+
+.enlace-politicas {
+    color: var(--color-accent);
+    text-decoration: underline;
+}
+
+/* -- boton enviar -- */
+.boton-enviar {
+    width: 100%;
+    background: var(--color-accent);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 8px;
+}
+
+.boton-enviar:hover {
+    background: var(--color-accent-hover);
+}
+
+.pie-formulario {
+    text-align: center;
+    font-size: 12px;
+    color: var(--color-second);
+    margin-top: 16px;
+}
+
+.pie-formulario span {
+    color: var(--color-accent);
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* ------------------------------------------------------------------ */
+/* home nav
+/* ------------------------------------------------------------------ */
+
+#logoRiffy {
+    height: 36px;
+}
+
+.nav-search-wrapper {
+    max-width: 480px;
+}
+
+.nav-search-form {
+    width: 100%;
+    max-width: 480px;
+}
+
+.nav-user-icon {
+    font-size: 1.25rem;
+}
+
+.dropdown-item-danger {
+    color: var(--bs-danger);
+}
+
+.dropdown-item-danger:hover {
+    background-color: #fff1f1;
+    color: var(--bs-danger);
+}
+
+.nav-link-danger {
+    color: var(--bs-danger) !important;
+}
+
+.nav-mobile-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* responsive
+/* ------------------------------------------------------------------ */
 @media (max-width: 992px) {
-    .encabezado {
-        min-height: 550px;
-    }
-    
+    .encabezado,
     .encabezado-contenedor {
         min-height: 550px;
     }
-    
+
     .encabezado-izquierda h1 {
         font-size: 2.5rem;
     }
@@ -319,26 +578,26 @@ footer {
     .encabezado {
         min-height: auto;
     }
-    
+
     .encabezado-contenedor {
         flex-direction: column;
         min-height: auto;
     }
-    
+
     .encabezado-izquierda {
         width: 100%;
         padding: 50px 25px;
         text-align: center;
     }
-    
+
     .encabezado-izquierda h1 {
         font-size: 2.2rem;
     }
-    
+
     .encabezado-botones {
         justify-content: center;
     }
-    
+
     .encabezado-derecha {
         width: 100%;
         height: 350px;

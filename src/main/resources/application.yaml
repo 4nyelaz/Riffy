@@ -1,14 +1,21 @@
 server:
   port: 8084
+  servlet:
+    session:
+      tracking-modes: cookie
 
 spring:
   application:
     name: riffy
-  autoconfigure:
-    exclude:
-      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
-      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
-      - org.springframework.boot.autoconfigure.jdbc.XADataSourceAutoConfiguration
+  datasource:
+    url: jdbc:mysql://localhost:/riffy_db
+    username: root
+    password: ""
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
   thymeleaf:
     cache: false
     prefix: classpath:/templates/
