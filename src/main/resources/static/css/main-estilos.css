@@ -526,6 +526,19 @@ footer {
     height: 36px;
 }
 
+/* -- enlaces -- */
+#homeNav {
+    background-color: var(--color-bg) !important;
+}
+
+#homeNav a {
+    color: var(--color-text-primary);
+}
+
+#homeNav a:hover {
+    color: var(--color-accent);
+}
+
 .nav-search-wrapper {
     max-width: 480px;
 }

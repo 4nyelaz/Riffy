@@ -4,131 +4,99 @@
 <body th:fragment="nav-home">
     <header>
         <nav class="navbar navbar-expand-lg navbar-light fixed-top shadow-sm" id="mainNav">
-            <div class="container-fluid px-4 d-flex align-items-center justify-content-between">
+            <div class="container-fluid px-4">
 
-                <!-- IZQUIERDA: Logo -->
-                <a class="navbar-brand fw-bold d-flex align-items-center gap-2" th:href="@{/home}" title="Riffy"
-                    id="pack_riffy_logo">
-                    <img th:src="@{/img/riffy_logo.png}" alt="Logo de Riffy" id="logoRiffy">
+                <!-- Logo (siempre visible) -->
+                <a class="navbar-brand fw-bold d-flex align-items-center gap-2" th:href="@{/home}" title="Riffy">
+                    <img th:src="@{/img/riffy_logo.png}" alt="Logo de Riffy" id="logoRiffy" style="height: 32px;">
                     Riffy
                 </a>
 
-                <!-- CENTRO: Buscador -->
-                <div class="nav-search-wrapper d-none d-lg-flex justify-content-center flex-grow-1 mx-4">
-                    <form class="nav-search-form d-flex w-100" th:action="@{/buscar}" method="get">
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0">
-                                <i class="fas fa-search text-muted"></i>
-                            </span>
-                            <input class="form-control border-start-0 ps-0" type="search" name="q"
-                                placeholder="Buscar CDs, vinilos..." aria-label="Buscar">
-                        </div>
-                    </form>
-                </div>
-
-                <!-- DERECHA: Dropdown usuario -->
-                <div class="d-none d-lg-flex align-items-center">
-                    <div class="dropdown">
-                        <button
-                            class="btn btn-outline-secondary rounded-pill px-3 d-flex align-items-center gap-2 dropdown-toggle"
-                            type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle nav-user-icon"></i>
-                            <span class="small fw-semibold" th:text="${nombreCompletoUsuario}">Usuario</span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-sm mt-2" aria-labelledby="userDropdown">
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/vender}">
-                                    <i class="fas fa-tag text-primary"></i> Vender
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/configuracion}">
-                                    <i class="fas fa-cog"></i> Configuración
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/perfil/editar}">
-                                    <i class="fas fa-user-edit"></i> Editar perfil
-                                </a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/ayuda}">
-                                    <i class="fas fa-question-circle"></i> Ayuda al usuario
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li>
-                                <a class="dropdown-item d-flex align-items-center gap-2 dropdown-item-danger"
-                                    th:href="@{/logout}">
-                                    <i class="fas fa-sign-out-alt"></i> Cerrar sesión
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Toggler móvil
-                <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarMobile" aria-controls="navbarMobile"
-                    aria-expanded="false" aria-label="Toggle navigation">
+                <!-- Botón hamburguesa (visible en móvil) -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
+                    aria-label="Toggle navigation">
                     <i class="fas fa-bars"></i>
-                </button> -->
-            </div>
+                </button>
 
-            <!-- MÓVIL -->
-            <!-- <div class="collapse navbar-collapse d-lg-none" id="navbarMobile">
-                <div class="nav-mobile-wrapper container-fluid px-4">
+                <!-- Contenido colapsable -->
+                <div class="collapse navbar-collapse" id="navbarResponsive">
+                    <!-- Buscador: en desktop se muestra centrado, en móvil dentro del menú -->
+                    <div class="nav-search-wrapper my-3 my-lg-0 mx-lg-auto w-100 w-lg-50">
+                        <form class="nav-search-form d-flex" th:action="@{/buscar}" method="get">
+                            <div class="input-group">
+                                <span class="input-group-text bg-white border-end-0">
+                                    <i class="fas fa-search text-muted"></i>
+                                </span>
+                                <input class="form-control border-start-0 ps-0" type="search" name="q"
+                                    placeholder="Buscar CDs, vinilos..." aria-label="Buscar">
+                            </div>
+                        </form>
+                    </div>
 
-                    <form class="nav-search-form" th:action="@{/buscar}" method="get">
-                        <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0">
-                                <i class="fas fa-search text-muted"></i>
-                            </span>
-                            <input
-                                class="form-control border-start-0 ps-0"
-                                type="search"
-                                name="q"
-                                placeholder="Buscar artistas, instrumentos..."
-                                aria-label="Buscar"
-                            >
-                        </div>
-                    </form>
-
-                    <ul class="navbar-nav gap-1">
-                        <li class="nav-item">
+                    <!-- Menú de usuario (dropdown) y enlaces móviles -->
+                    <ul class="navbar-nav ms-auto mt-3 mt-lg-0 align-items-lg-center gap-2">
+                        <!-- Opción Vender (siempre visible en móvil, en desktop dentro del dropdown? Mejor mantener consistencia) -->
+                        <li class="nav-item d-lg-none">
                             <a class="nav-link d-flex align-items-center gap-2" th:href="@{/vender}">
                                 <i class="fas fa-tag text-primary"></i> Vender
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item d-lg-none">
                             <a class="nav-link d-flex align-items-center gap-2" th:href="@{/configuracion}">
                                 <i class="fas fa-cog"></i> Configuración
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item d-lg-none">
                             <a class="nav-link d-flex align-items-center gap-2" th:href="@{/perfil/editar}">
                                 <i class="fas fa-user-edit"></i> Editar perfil
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item d-lg-none">
                             <a class="nav-link d-flex align-items-center gap-2" th:href="@{/ayuda}">
                                 <i class="fas fa-question-circle"></i> Ayuda al usuario
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link d-flex align-items-center gap-2 nav-link-danger" th:href="@{/logout}">
+                        <li class="nav-item d-lg-none">
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li class="nav-item d-lg-none">
+                            <a class="nav-link d-flex align-items-center gap-2 text-danger" th:href="@{/logout}">
                                 <i class="fas fa-sign-out-alt"></i> Cerrar sesión
                             </a>
                         </li>
+
+                        <!-- Dropdown para desktop (solo visible en lg) -->
+                        <li class="nav-item dropdown d-none d-lg-block">
+                            <button
+                                class="btn btn-outline-secondary rounded-pill px-3 d-flex align-items-center gap-2 dropdown-toggle"
+                                type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fas fa-user-circle nav-user-icon"></i>
+                                <span class="small fw-semibold" th:text="${nombreCompletoUsuario}">Usuario</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm mt-2" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/vender}"><i
+                                            class="fas fa-tag text-primary"></i> Vender</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item d-flex align-items-center gap-2"
+                                        th:href="@{/configuracion}"><i class="fas fa-cog"></i> Configuración</a></li>
+                                <li><a class="dropdown-item d-flex align-items-center gap-2"
+                                        th:href="@{/perfil/editar}"><i class="fas fa-user-edit"></i> Editar perfil</a>
+                                </li>
+                                <li><a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/ayuda}"><i
+                                            class="fas fa-question-circle"></i> Ayuda al usuario</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li><a class="dropdown-item d-flex align-items-center gap-2 text-danger"
+                                        th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 </div>
-            </div> -->
-
+            </div>
         </nav>
     </header>
 </body>

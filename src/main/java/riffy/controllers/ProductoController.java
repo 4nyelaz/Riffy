@@ -22,6 +22,18 @@ public class ProductoController {
 
         Long usuarioId = (Long) session.getAttribute("usuarioId");
 
+        //     // CONTAR TODOS LOS PRODUCTOS
+        // long totalProductos = productoRepository.count();
+        // System.out.println("📊 TOTAL de productos en BD: " + totalProductos);
+        
+
+        // // LISTAR TODOS LOS PRODUCTOS
+        // List<ProductoEntity> todos = productoRepository.findAll();
+        // System.out.println("📋 LISTA COMPLETA:");
+        // for (ProductoEntity p : todos) {
+        //     System.out.println("   - ID: " + p.getId_producto() + " | Título: " + p.getTitulo() + " | Propietario: " + p.getPropietario().getIdUsuario());
+        // }
+
         if (usuarioId == null) {
             return "redirect:/login";
         }

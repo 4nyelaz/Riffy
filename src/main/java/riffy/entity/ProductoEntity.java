@@ -13,34 +13,39 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "productos")
+@Table(name = "producto")
 public class ProductoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_producto;
 
-    @Column(nullable = false)
+    @Column(name = "titulo", nullable = false)
     private String titulo;
 
+    @Column(name = "artista")
     private String artista;
 
+    @Column(name = "formato")
     private String formato;
 
-    @Column(length = 1000)
+    @Column(name = "descripcion", length = 1000)
     private String descripcion;
 
-    @Column(nullable = false)
+    @Column(name = "precio", nullable = false)
     private BigDecimal precio;
 
     @ManyToOne
-    @JoinColumn(name = "propietario_id", referencedColumnName = "id_usuario", nullable = false)
+    @JoinColumn(name = "propietario", referencedColumnName = "id_usuario", nullable = false)
     private UsuarioEntity propietario;
 
+    @Column(name = "fecha_edicion")
     private LocalDate fecha_edicion;
 
+    @Column(name = "estado")
     private String estado;
 
+    @Column(name = "categoria")
     private String categoria;
 
     @Column(name = "imagenes", length = 1000)
