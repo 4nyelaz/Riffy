@@ -31,6 +31,6 @@ public class UsuarioService {
     }
 
     public boolean comprobarContrasena(String contrasenaIntroducida, String contrasenaGuardada) {
-    return encoder.matches(contrasenaIntroducida, contrasenaGuardada);
-}
+        return encoder.matches(contrasenaIntroducida, contrasenaGuardada);
+    }
 }

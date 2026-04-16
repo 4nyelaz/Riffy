@@ -29,8 +29,7 @@ public class AutenticacionController {
 
     // modelattribute recoge los datos del form, y los mete en el objeto usuario
     // si hace registro, manda al login para iniciar sesion, si no es así, te manda de nuevo a registrarte
-    // si no, lanza excepción -> flash attribute -> vista errorRegistro
-    /*  TODO Añadir validaciones en registrar */
+    // si no, lanza excepción -> flash attribute -> vista errorRegistro 
     @PostMapping("/register")
     public String registrar(@ModelAttribute UsuarioEntity usuario, RedirectAttributes redirect) { 
         try {
@@ -50,6 +49,8 @@ public class AutenticacionController {
                 .filter(u -> usuarioService.comprobarContrasena(usuario.getContrasena(), u.getContrasena()))
                 .map(u -> {
                     session.setAttribute("nombreCompletoUsuario", u.getNombre());
+                    session.setAttribute("usuarioId", u.getIdUsuario());
+                    session.setAttribute("nombreUsuario", u.getUsuario());
                     return "redirect:/home";
                 })
                 .orElseGet(() -> {
