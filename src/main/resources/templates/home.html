@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -30,46 +30,13 @@
 
 <body>
     <!-- Fragmento de header -->
-    <!-- <div th:replace="~{fragmentos/nav-home :: nav-home}"></div> -->
+    <div th:replace="~{fragmentos/nav-home :: nav-home}"></div>
 
-    <main>
-        <h1>Mis productos</h1>
-        <p>CASDHBDSHKFDSA</p>
-        <!-- Iterar una lista de productos -->
-        <div th:each="producto : ${productos}" th:class="'carousel-item' + (iterStat.first ? ' active' : '')">
-            <div id="carouselProductos" class="carousel slide" data-bs-ride="carousel" data-bs-touch="false">
-                <div class="carousel-inner">
+    <main class="home-main">
+        
+        <div th:replace="~{fragmentos/sections :: mis-productos}"></div>
 
-
-                    <!-- Imagen del producto (ruta corregida) -->
-                    <img th:if="${producto.imagenes != null}" th:src="@{/img/productos_img/{producto.imagenes}}"
-                        class="d-block w-100" th:alt="'Portada de ' + ${producto.titulo}">
-
-
-                    <!-- Opcional: texto superpuesto (título y artista) -->
-                    <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-2">
-                        <h5 th:text="${producto.titulo}">Título</h5>
-                        <p th:text="${producto.artista}">Artista</p>
-                        <p class="fw-bold" th:text="'$' + ${producto.precio}">Precio</p>
-                    </div>
-
-                </div>
-
-                <!-- Controles prev/next -->
-                <button class="carousel-control-prev" type="button" data-bs-target="#carouselProductos"
-                    data-bs-slide="prev">
-                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Anterior</span>
-                </button>
-                <button class="carousel-control-next" type="button" data-bs-target="#carouselProductos"
-                    data-bs-slide="next">
-                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                    <span class="visually-hidden">Siguiente</span>
-                </button>
-            </div>
-        </div>
-
-
+        
     </main>
 </body>
 

@@ -573,6 +573,64 @@ footer {
     padding-bottom: 0.75rem;
 }
 
+
+/* ------------------------------------------------------------------ */
+/* home main
+/* ------------------------------------------------------------------ */
+.home-main {
+    padding-top: 58px;
+    min-height: 100vh;
+    background-color: var(--color-bg-alt);
+}
+
+/* ------------------------------------------------------------------ */
+/* mis productos
+/* ------------------------------------------------------------------ */
+.mis-productos-seccion {
+    
+    padding: 3rem 0;
+}
+
+.producto-img {
+    height: 200px;
+    object-fit: cover;
+}
+
+.producto-titulo {
+    color: var(--color-first);
+    height: 3rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.producto-descripcion {
+    color: var(--color-text-secondary);
+    height: 4rem;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.producto-info-item {
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.btn-eliminar {
+    background-color: var(--color-accent);
+    color: white;
+}
+
+.btn-eliminar:hover {
+    background-color: var(--color-accent-hover);
+    color: white;
+}
+
 /* ------------------------------------------------------------------ */
 /* responsive
 /* ------------------------------------------------------------------ */

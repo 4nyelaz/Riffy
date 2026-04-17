@@ -7,8 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes; // Anotación: permite mandar datos omitiendolo en la URL
 
 import jakarta.servlet.http.HttpSession;
-// Lógica de negocio --> 
-import riffy.entity.UsuarioEntity;
+import riffy.model.UsuarioEntity;
 import riffy.services.UsuarioService;
 
 @Controller 

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import riffy.entity.ProductoEntity;
+import riffy.model.ProductoEntity;
 
 @Repository
 public interface ProductoRepository extends JpaRepository<ProductoEntity, Long> {

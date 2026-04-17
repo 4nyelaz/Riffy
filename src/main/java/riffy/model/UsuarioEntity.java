@@ -1,4 +1,4 @@
-package riffy.entity;
+package riffy.model;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;

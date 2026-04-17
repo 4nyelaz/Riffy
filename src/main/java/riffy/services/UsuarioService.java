@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import riffy.entity.UsuarioEntity;
+import riffy.model.UsuarioEntity;
 import riffy.repository.UsuarioRepository;
 
 @Service

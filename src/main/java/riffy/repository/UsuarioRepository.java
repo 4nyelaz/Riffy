@@ -2,7 +2,9 @@ package riffy.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import riffy.entity.UsuarioEntity;
+
+import riffy.model.UsuarioEntity;
+
 import java.util.Optional;
 
 @Repository

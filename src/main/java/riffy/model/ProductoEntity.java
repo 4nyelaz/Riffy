@@ -1,4 +1,4 @@
-package riffy.entity;
+package riffy.model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

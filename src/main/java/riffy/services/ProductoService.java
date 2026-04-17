@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import riffy.entity.ProductoEntity;
+import riffy.model.ProductoEntity;
 import riffy.repository.ProductoRepository;
 
 @Service

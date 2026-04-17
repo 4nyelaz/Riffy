@@ -8,7 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import jakarta.servlet.http.HttpSession;
-import riffy.entity.ProductoEntity;
+import riffy.model.ProductoEntity;
 import riffy.repository.ProductoRepository;
 
 @Controller
