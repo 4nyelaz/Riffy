@@ -1,46 +1,46 @@
 "use strict";
 
 // Función para abrir el acordeón según el hash actual
-    function abrirAcordeonDesdeHash() {
-        const hash = window.location.hash; // Ej: "#seccion-compraventa"
-        
-        if (hash) {
-            const accordionItem = document.querySelector(hash);
-            
-            if (accordionItem) {
-                const button = accordionItem.querySelector('.accordion-button');
-                const collapseElement = accordionItem.querySelector('.accordion-collapse');
-                
-                if (button && collapseElement) {
-                    // Primero cerramos todos los acordeones (opcional, para limpiar)
-                    document.querySelectorAll('.accordion-collapse').forEach(el => {
-                        const bsCollapse = bootstrap.Collapse.getInstance(el);
-                        if (bsCollapse) bsCollapse.hide();
+function abrirAcordeonDesdeHash() {
+    const hash = window.location.hash; // Ej: "#seccion-compraventa"
+
+    if (hash) {
+        const accordionItem = document.querySelector(hash);
+
+        if (accordionItem) {
+            const button = accordionItem.querySelector('.accordion-button');
+            const collapseElement = accordionItem.querySelector('.accordion-collapse');
+
+            if (button && collapseElement) {
+                // Primero cerramos todos los acordeones (opcional, para limpiar)
+                document.querySelectorAll('.accordion-collapse').forEach(el => {
+                    const bsCollapse = bootstrap.Collapse.getInstance(el);
+                    if (bsCollapse) bsCollapse.hide();
+                });
+
+                // Abrimos el que nos interesa
+                const bsCollapse = new bootstrap.Collapse(collapseElement, {
+                    toggle: false // No toggle, queremos asegurar que se abra
+                });
+                bsCollapse.show();
+
+                // Scroll suave hasta la pregunta
+                setTimeout(() => {
+                    accordionItem.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'center'
                     });
-                    
-                    // Abrimos el que nos interesa
-                    const bsCollapse = new bootstrap.Collapse(collapseElement, {
-                        toggle: false // No toggle, queremos asegurar que se abra
-                    });
-                    bsCollapse.show();
-                    
-                    // Scroll suave hasta la pregunta
-                    setTimeout(() => {
-                        accordionItem.scrollIntoView({ 
-                            behavior: 'smooth', 
-                            block: 'center' 
-                        });
-                    }, 300);
-                }
+                }, 300);
             }
         }
     }
+}
 
-    // 1. Ejecutar al cargar la página
-    document.addEventListener('DOMContentLoaded', abrirAcordeonDesdeHash);
-    
-    // 2. Ejecutar cuando cambie el hash (CLAVE para que funcione sin recargar)
-    window.addEventListener('hashchange', abrirAcordeonDesdeHash);
+// 1. Ejecutar al cargar la página
+document.addEventListener('DOMContentLoaded', abrirAcordeonDesdeHash);
+
+// 2. Ejecutar cuando cambie el hash (CLAVE para que funcione sin recargar)
+window.addEventListener('hashchange', abrirAcordeonDesdeHash);
 
 // LOGIN
 
@@ -84,4 +84,206 @@ document.addEventListener('DOMContentLoaded', function () {
     if (params.get('section') === 'register') cambiarSeccion('registro');
     else cambiarSeccion('login');
 
+});
+
+// ─── DIALOG ELIMINAR ──────────────────────────────────────────────────────
+
+const dialogEliminar = document.createElement('dialog');
+dialogEliminar.id = 'dialogEliminar';
+
+const boxEliminar = document.createElement('div');
+boxEliminar.className = 'dialog-box';
+
+const h5Eliminar = document.createElement('h5');
+h5Eliminar.textContent = '¿Eliminar producto?';
+
+const pEliminar = document.createElement('p');
+pEliminar.id = 'dialogEliminarNombre';
+
+const actionsEliminar = document.createElement('div');
+actionsEliminar.className = 'dialog-actions';
+
+const btnConfirmarEliminar = document.createElement('button');
+btnConfirmarEliminar.id = 'btnConfirmarEliminar';
+btnConfirmarEliminar.className = 'btn btn-danger btn-sm rounded-pill';
+btnConfirmarEliminar.textContent = 'Confirmar';
+
+const btnCancelarEliminar = document.createElement('button');
+btnCancelarEliminar.id = 'btnCancelarEliminar';
+btnCancelarEliminar.className = 'btn btn-secondary btn-sm rounded-pill';
+btnCancelarEliminar.textContent = 'Cancelar';
+
+actionsEliminar.appendChild(btnConfirmarEliminar);
+actionsEliminar.appendChild(btnCancelarEliminar);
+
+boxEliminar.appendChild(h5Eliminar);
+boxEliminar.appendChild(pEliminar);
+boxEliminar.appendChild(actionsEliminar);
+
+dialogEliminar.appendChild(boxEliminar);
+document.body.appendChild(dialogEliminar);
+
+
+// ─── DIALOG EDITAR ────────────────────────────────────────────────────────
+
+const dialogEditar = document.createElement('dialog');
+dialogEditar.id = 'dialogEditar';
+
+const boxEditar = document.createElement('div');
+boxEditar.className = 'dialog-box';
+
+const h5Editar = document.createElement('h5');
+h5Editar.textContent = 'Editar producto';
+
+const inputHiddenId = document.createElement('input');
+inputHiddenId.type = 'hidden';
+inputHiddenId.id = 'editarId';
+
+// Helper para crear un campo de texto/select/textarea
+function crearCampo(labelText, elemento) {
+    const div = document.createElement('div');
+    div.className = 'mb-2';
+
+    const label = document.createElement('label');
+    label.textContent = labelText;
+
+    div.appendChild(label);
+    div.appendChild(elemento);
+    return div;
+}
+
+// Helper para crear un input
+function crearInput(id, tipo = 'text') {
+    const input = document.createElement('input');
+    input.type = tipo;
+    input.id = id;
+    input.className = 'form-control form-control-sm';
+    return input;
+}
+
+// Helper para crear un select con opciones
+function crearSelect(id, opciones) {
+    const select = document.createElement('select');
+    select.id = id;
+    select.className = 'form-select form-select-sm';
+    opciones.forEach(op => {
+        const option = document.createElement('option');
+        option.value = op;
+        option.textContent = op;
+        select.appendChild(option);
+    });
+    return select;
+}
+
+const inputTitulo = crearInput('editarTitulo');
+const inputArtista = crearInput('editarArtista');
+const inputPrecio = crearInput('editarPrecio', 'number');
+
+const textareaDescripcion = document.createElement('textarea');
+textareaDescripcion.id = 'editarDescripcion';
+textareaDescripcion.className = 'form-control form-control-sm';
+
+const selectEstado = crearSelect('editarEstado', ['Disponible', 'Vendido', 'Reservado']);
+const selectCategoria = crearSelect('editarCategoria', ['Vinilo', 'CD']);
+const selectFormato   = crearSelect('editarFormato',   ['Nuevo', 'Muy Bueno', 'Bueno', 'Usado']);
+
+const actionsEditar = document.createElement('div');
+actionsEditar.className = 'dialog-actions';
+
+const btnConfirmarEditar = document.createElement('button');
+btnConfirmarEditar.id = 'btnConfirmarEditar';
+btnConfirmarEditar.className = 'btn btn-primary btn-sm rounded-pill';
+btnConfirmarEditar.textContent = 'Guardar';
+
+const btnCancelarEditar = document.createElement('button');
+btnCancelarEditar.id = 'btnCancelarEditar';
+btnCancelarEditar.className = 'btn btn-secondary btn-sm rounded-pill';
+btnCancelarEditar.textContent = 'Cancelar';
+
+actionsEditar.appendChild(btnConfirmarEditar);
+actionsEditar.appendChild(btnCancelarEditar);
+
+boxEditar.appendChild(h5Editar);
+boxEditar.appendChild(inputHiddenId);
+boxEditar.appendChild(crearCampo('Título', inputTitulo));
+boxEditar.appendChild(crearCampo('Artista', inputArtista));
+boxEditar.appendChild(crearCampo('Descripción', textareaDescripcion));
+boxEditar.appendChild(crearCampo('Precio', inputPrecio));
+boxEditar.appendChild(crearCampo('Estado', selectEstado));
+boxEditar.appendChild(crearCampo('Categoría', selectCategoria));
+boxEditar.appendChild(crearCampo('Formato', selectFormato));
+boxEditar.appendChild(actionsEditar);
+
+dialogEditar.appendChild(boxEditar);
+document.body.appendChild(dialogEditar);
+
+
+// ─── LÓGICA ELIMINAR ──────────────────────────────────────────────────────
+
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn-eliminar');
+    if (!btn) return;
+
+    e.preventDefault();
+    pEliminar.textContent = `"${btn.dataset.titulo}"`;
+    dialogEliminar.showModal();
+
+    btnConfirmarEliminar.onclick = () => {
+        window.location.href = `/eliminarproducto/${btn.dataset.id}`;
+    };
+
+    btnCancelarEliminar.onclick = () => {
+        dialogEliminar.close();
+    };
+});
+
+
+// ─── LÓGICA EDITAR ────────────────────────────────────────────────────────
+
+document.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn-editar');
+    if (!btn) return;
+
+    e.preventDefault();
+    const d = btn.dataset;
+
+    inputHiddenId.value = d.id;
+    inputTitulo.value = d.titulo;
+    inputArtista.value = d.artista;
+    textareaDescripcion.value = d.descripcion;
+    inputPrecio.value = d.precio;
+    selectEstado.value = d.estado;
+    selectCategoria.value = d.categoria;
+    selectFormato.value = d.formato;
+
+    dialogEditar.showModal();
+
+    btnCancelarEditar.onclick = () => dialogEditar.close();
+
+    btnConfirmarEditar.onclick = () => {
+        const form = document.createElement('form');
+        form.method = 'POST';
+        form.action = `/editarproducto/${d.id}`;
+
+        const campos = {
+            titulo: inputTitulo.value,
+            artista: inputArtista.value,
+            descripcion: textareaDescripcion.value,
+            precio: inputPrecio.value,
+            estado: selectEstado.value,
+            categoria: selectCategoria.value,
+            formato: selectFormato.value,
+        };
+
+        for (const [name, value] of Object.entries(campos)) {
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = name;
+            input.value = value;
+            form.appendChild(input);
+        }
+
+        document.body.appendChild(form);
+        form.submit();
+    };
 });
