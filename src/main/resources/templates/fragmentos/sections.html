@@ -229,11 +229,11 @@
                     <div class="card h-100 shadow-sm border rounded-4 overflow-hidden paso-card">
 
                         <!-- Carrusel -->
-                        <div th:id="|carousel-${producto.id_producto}|" class="carousel slide" data-bs-ride="carousel">
+                        <div th:id="|carousel-${producto.id_producto}|" class="carousel slide" data-bs-ride="false">
                             <div class="carousel-inner">
-                                <div class="carousel-item active">
-                                    <img th:src="@{'/img/productos_img/' + ${producto.imagenes}}"
-                                        class="card-img-top producto-img" alt="Imagen del producto">
+                                <div class="carousel-item active" th:each="img, iterStat : ${imagenesMap[producto.id_producto]}">
+                                    <img th:src="@{'/img/productos_img/' + ${img}}" class="card-img-top producto-img"
+                                        alt="Imagen del producto" onerror="this.src='/img/productos_img/sin_foto.png'">
                                 </div>
                             </div>
                             <button class="carousel-control-prev" type="button"

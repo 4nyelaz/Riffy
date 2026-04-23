@@ -51,8 +51,6 @@ public class ProductoEntity {
     @Column(name = "imagenes", length = 1000)
     private String imagenes;
 
-    // para guardarlas en lista: List<String> lista =
-    // Arrays.asList(producto.getImagenes().split(","));
     // para guardarlas otra vez en el server: producto.setImagenes(String.join(",",
     // listaDeUrls));
 

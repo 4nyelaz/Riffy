@@ -54,6 +54,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const pestanaLogin = document.getElementById('pestana-login');
     const pestanaRegistro = document.getElementById('pestana-registro');
+
+    if (!pestanaLogin || !pestanaRegistro) return;
+
     const secLogin = document.getElementById('sec-login');
     const secRegistro = document.getElementById('sec-registro');
     const enlaceRegistro = document.getElementById('enlace-registro');
@@ -187,6 +190,13 @@ function crearSelect(id, opciones) {
     return select;
 }
 
+const inputImagenesVisible = document.createElement('input');
+inputImagenesVisible.type = 'file';
+inputImagenesVisible.id = 'editarImagenes';
+inputImagenesVisible.className = 'form-control form-control-sm';
+inputImagenesVisible.multiple = true;
+inputImagenesVisible.accept = 'image/*';
+
 const inputTitulo = crearInput('editarTitulo');
 const inputArtista = crearInput('editarArtista');
 const inputPrecio = crearInput('editarPrecio', 'number');
@@ -224,8 +234,9 @@ boxEditar.appendChild(crearCampo('Precio', inputPrecio));
 boxEditar.appendChild(crearCampo('Estado', selectEstado));
 boxEditar.appendChild(crearCampo('Categoría', selectCategoria));
 boxEditar.appendChild(crearCampo('Formato', selectFormato));
-boxEditar.appendChild(actionsEditar);
+boxEditar.appendChild(crearCampo('Imágenes (opcional)', inputImagenesVisible));
 
+boxEditar.appendChild(actionsEditar);
 dialogEditar.appendChild(boxEditar);
 document.body.appendChild(dialogEditar);
 
@@ -278,10 +289,10 @@ document.addEventListener('click', (e) => {
     btnCancelarEditar.onclick = () => dialogEditar.close();
 
     btnConfirmarEditar.onclick = () => {
-        // creamos un form dinámico y lo enviamos
         const form = document.createElement('form');
         form.method = 'POST';
-        form.action = `/editarproducto/${d.id}`;
+        form.action = `/editarproducto/${inputHiddenId.value}`;
+        form.enctype = 'multipart/form-data';
 
         const campos = {
             titulo: inputTitulo.value,
@@ -300,6 +311,11 @@ document.addEventListener('click', (e) => {
             input.value = value;
             form.appendChild(input);
         }
+
+        // Mover el input file real al form (no se puede clonar con ficheros)
+        const fileInput = document.querySelector('#editarImagenes');
+        fileInput.name = 'imagenes';
+        form.appendChild(fileInput);
 
         document.body.appendChild(form);
         form.submit();
