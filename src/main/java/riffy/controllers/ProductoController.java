@@ -84,11 +84,11 @@ public class ProductoController {
         ProductoEntity productoExistente = productoRepository.findById(id_producto).orElse(null);
 
         if (productoExistente == null) {
-            return "redirect:/home?error=producto-no-encontrado";
+            return "redirect:/home"; // TO DO: Poner que redirija a un error
         }
 
         if (!productoExistente.getPropietario().getIdUsuario().equals(usuarioId)) {
-            return "redirect:/home?error=no-autorizado";
+            return "redirect:/home"; // TO DO: Poner que redirija a un error
         }
 
         productoExistente.setTitulo(productoForm.getTitulo());
@@ -103,7 +103,7 @@ public class ProductoController {
 
         productoRepository.save(productoExistente);
 
-        return "redirect:/home?success=producto-actualizado";
+        return "redirect:/home"; // TO DO: Poner que redirija a un dialog con animacion de success
     }
 
     @GetMapping("/eliminarproducto/{id}")
@@ -119,10 +119,10 @@ public class ProductoController {
 
         if (producto != null && producto.getPropietario().getIdUsuario().equals(usuarioId)) {
             productoRepository.delete(producto);
-            return "redirect:/home?success=producto-eliminado";
+            return "redirect:/home"; // TO DO: Poner que redirija a un error
         }
 
-        return "redirect:/home?error=no-autorizado";
+        return "redirect:/home"; // TO DO: Poner que redirija a un error
     }
 
     // // 🆕 GET - Mostrar formulario para nuevo producto

@@ -1,8 +1,11 @@
 "use strict";
 
-// Función para abrir el acordeón según el hash actual
+/* ------------------------------------------------------------------ */
+/* acordeón por hash
+/* ------------------------------------------------------------------ */
+
 function abrirAcordeonDesdeHash() {
-    const hash = window.location.hash; // Ej: "#seccion-compraventa"
+    const hash = window.location.hash;
 
     if (hash) {
         const accordionItem = document.querySelector(hash);
@@ -12,19 +15,19 @@ function abrirAcordeonDesdeHash() {
             const collapseElement = accordionItem.querySelector('.accordion-collapse');
 
             if (button && collapseElement) {
-                // Primero cerramos todos los acordeones (opcional, para limpiar)
+                // cerramos todos primero
                 document.querySelectorAll('.accordion-collapse').forEach(el => {
                     const bsCollapse = bootstrap.Collapse.getInstance(el);
                     if (bsCollapse) bsCollapse.hide();
                 });
 
-                // Abrimos el que nos interesa
+                // abrimos el que toca
                 const bsCollapse = new bootstrap.Collapse(collapseElement, {
-                    toggle: false // No toggle, queremos asegurar que se abra
+                    toggle: false
                 });
                 bsCollapse.show();
 
-                // Scroll suave hasta la pregunta
+                // scroll suave al elemento
                 setTimeout(() => {
                     accordionItem.scrollIntoView({
                         behavior: 'smooth',
@@ -36,13 +39,16 @@ function abrirAcordeonDesdeHash() {
     }
 }
 
-// 1. Ejecutar al cargar la página
+// al cargar la página
 document.addEventListener('DOMContentLoaded', abrirAcordeonDesdeHash);
 
-// 2. Ejecutar cuando cambie el hash (CLAVE para que funcione sin recargar)
+// y también si cambia el hash sin recargar
 window.addEventListener('hashchange', abrirAcordeonDesdeHash);
 
-// LOGIN
+
+/* ------------------------------------------------------------------ */
+/* login / registro
+/* ------------------------------------------------------------------ */
 
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -80,13 +86,17 @@ document.addEventListener('DOMContentLoaded', function () {
         cambiarSeccion('login');
     });
 
+    // si viene con ?section=register abrimos directamente el registro
     const params = new URLSearchParams(window.location.search);
     if (params.get('section') === 'register') cambiarSeccion('registro');
     else cambiarSeccion('login');
 
 });
 
-// ─── DIALOG ELIMINAR ──────────────────────────────────────────────────────
+
+/* ------------------------------------------------------------------ */
+/* dialog — eliminar producto
+/* ------------------------------------------------------------------ */
 
 const dialogEliminar = document.createElement('dialog');
 dialogEliminar.id = 'dialogEliminar';
@@ -124,7 +134,9 @@ dialogEliminar.appendChild(boxEliminar);
 document.body.appendChild(dialogEliminar);
 
 
-// ─── DIALOG EDITAR ────────────────────────────────────────────────────────
+/* ------------------------------------------------------------------ */
+/* dialog — editar producto
+/* ------------------------------------------------------------------ */
 
 const dialogEditar = document.createElement('dialog');
 dialogEditar.id = 'dialogEditar';
@@ -139,7 +151,7 @@ const inputHiddenId = document.createElement('input');
 inputHiddenId.type = 'hidden';
 inputHiddenId.id = 'editarId';
 
-// Helper para crear un campo de texto/select/textarea
+// crea un wrapper label + campo
 function crearCampo(labelText, elemento) {
     const div = document.createElement('div');
     div.className = 'mb-2';
@@ -152,7 +164,7 @@ function crearCampo(labelText, elemento) {
     return div;
 }
 
-// Helper para crear un input
+// input genérico
 function crearInput(id, tipo = 'text') {
     const input = document.createElement('input');
     input.type = tipo;
@@ -161,7 +173,7 @@ function crearInput(id, tipo = 'text') {
     return input;
 }
 
-// Helper para crear un select con opciones
+// select con sus opciones
 function crearSelect(id, opciones) {
     const select = document.createElement('select');
     select.id = id;
@@ -185,7 +197,7 @@ textareaDescripcion.className = 'form-control form-control-sm';
 
 const selectEstado = crearSelect('editarEstado', ['Disponible', 'Vendido', 'Reservado']);
 const selectCategoria = crearSelect('editarCategoria', ['Vinilo', 'CD']);
-const selectFormato   = crearSelect('editarFormato',   ['Nuevo', 'Muy Bueno', 'Bueno', 'Usado']);
+const selectFormato = crearSelect('editarFormato', ['Nuevo', 'Muy Bueno', 'Bueno', 'Usado']);
 
 const actionsEditar = document.createElement('div');
 actionsEditar.className = 'dialog-actions';
@@ -218,7 +230,9 @@ dialogEditar.appendChild(boxEditar);
 document.body.appendChild(dialogEditar);
 
 
-// ─── LÓGICA ELIMINAR ──────────────────────────────────────────────────────
+/* ------------------------------------------------------------------ */
+/* lógica — eliminar
+/* ------------------------------------------------------------------ */
 
 document.addEventListener('click', (e) => {
     const btn = e.target.closest('.btn-eliminar');
@@ -238,7 +252,9 @@ document.addEventListener('click', (e) => {
 });
 
 
-// ─── LÓGICA EDITAR ────────────────────────────────────────────────────────
+/* ------------------------------------------------------------------ */
+/* lógica — editar
+/* ------------------------------------------------------------------ */
 
 document.addEventListener('click', (e) => {
     const btn = e.target.closest('.btn-editar');
@@ -247,6 +263,7 @@ document.addEventListener('click', (e) => {
     e.preventDefault();
     const d = btn.dataset;
 
+    // rellenamos el formulario con los datos del producto
     inputHiddenId.value = d.id;
     inputTitulo.value = d.titulo;
     inputArtista.value = d.artista;
@@ -261,6 +278,7 @@ document.addEventListener('click', (e) => {
     btnCancelarEditar.onclick = () => dialogEditar.close();
 
     btnConfirmarEditar.onclick = () => {
+        // creamos un form dinámico y lo enviamos
         const form = document.createElement('form');
         form.method = 'POST';
         form.action = `/editarproducto/${d.id}`;
