@@ -197,6 +197,50 @@ inputImagenesVisible.className = 'form-control form-control-sm';
 inputImagenesVisible.multiple = true;
 inputImagenesVisible.accept = 'image/*';
 
+const contenedorPreview = document.createElement('div');
+contenedorPreview.id = 'previewImagenes';
+contenedorPreview.style.cssText = 'display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;';
+
+inputImagenesVisible.addEventListener('change', () => {
+    contenedorPreview.innerHTML = '';
+    
+    // Convertir FileList a array para poder filtrar
+    let archivosSeleccionados = Array.from(inputImagenesVisible.files);
+
+    function renderPreview() {
+        contenedorPreview.innerHTML = '';
+        archivosSeleccionados.forEach((file, index) => {
+            const tag = document.createElement('div');
+            tag.style.cssText = 'display:flex; align-items:center; gap:4px; background:var(--color-bg-alt); border-radius:20px; padding:4px 10px; font-size:12px;';
+
+            const nombre = document.createElement('span');
+            nombre.textContent = file.name;
+
+            const cruz = document.createElement('button');
+            cruz.type = 'button';
+            cruz.innerHTML = '&times;';
+            cruz.style.cssText = 'background:none; border:none; color:var(--color-accent); font-size:14px; cursor:pointer; padding:0; line-height:1;';
+            
+            cruz.addEventListener('click', () => {
+                archivosSeleccionados.splice(index, 1);
+
+                // Reconstruir el FileList con los archivos restantes
+                const dt = new DataTransfer();
+                archivosSeleccionados.forEach(f => dt.items.add(f));
+                inputImagenesVisible.files = dt.files;
+
+                renderPreview();
+            });
+
+            tag.appendChild(nombre);
+            tag.appendChild(cruz);
+            contenedorPreview.appendChild(tag);
+        });
+    }
+
+    renderPreview();
+});
+
 const inputTitulo = crearInput('editarTitulo');
 const inputArtista = crearInput('editarArtista');
 const inputPrecio = crearInput('editarPrecio', 'number');
@@ -234,7 +278,11 @@ boxEditar.appendChild(crearCampo('Precio', inputPrecio));
 boxEditar.appendChild(crearCampo('Estado', selectEstado));
 boxEditar.appendChild(crearCampo('Categoría', selectCategoria));
 boxEditar.appendChild(crearCampo('Formato', selectFormato));
-boxEditar.appendChild(crearCampo('Imágenes (opcional)', inputImagenesVisible));
+const campoimagenes = crearCampo('Imágenes (opcional)', inputImagenesVisible);
+campoimagenes.appendChild(contenedorPreview);
+boxEditar.appendChild(campoimagenes);
+boxEditar.appendChild(actionsEditar);
+dialogEditar.appendChild(boxEditar);
 
 boxEditar.appendChild(actionsEditar);
 dialogEditar.appendChild(boxEditar);
