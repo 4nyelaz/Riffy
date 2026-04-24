@@ -29,13 +29,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.servlet.http.HttpSession;
 import riffy.model.ProductoEntity;
+import riffy.model.UsuarioEntity;
 import riffy.repository.ProductoRepository;
+import riffy.repository.UsuarioRepository;
 
 @Controller
 public class ProductoController {
 
     @Autowired
     private ProductoRepository productoRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     @GetMapping("/home")
     public String home(HttpSession session, Model model) {
@@ -199,62 +204,81 @@ public class ProductoController {
                 .body(resource);
     }
 
-    // // 🆕 GET - Mostrar formulario para nuevo producto
-    // @GetMapping("/nuevo-producto")
-    // public String nuevoProducto(HttpSession session, Model model) {
+    // ── GET ──────────────────────────────────────────────────────────────────────
+    @GetMapping("/nuevo-producto")
+    public String nuevoProducto(HttpSession session, Model model) {
 
-    // Long usuarioId = (Long) session.getAttribute("usuarioId");
-    // if (usuarioId == null) {
-    // return "redirect:/login";
-    // }
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
+            return "redirect:/login";
+        }
 
-    // // Datos de sesión
-    // model.addAttribute("usuarioId", usuarioId);
-    // model.addAttribute("nombreCompletoUsuario",
-    // session.getAttribute("nombreCompletoUsuario"));
+        model.addAttribute("usuarioId", usuarioId);
+        model.addAttribute("nombreCompletoUsuario", session.getAttribute("nombreCompletoUsuario"));
+        model.addAttribute("producto", new ProductoEntity());
+        model.addAttribute("modoEdicion", false);
 
-    // // Producto vacío para el formulario
-    // model.addAttribute("producto", new ProductoEntity());
-    // model.addAttribute("modoEdicion", false);
+        // Mismas listas que editarProducto
+        model.addAttribute("categorias", Arrays.asList("Vinilo", "CD"));
+        model.addAttribute("formatos", Arrays.asList("Nuevo", "Muy Bueno", "Bueno", "Usado"));
+        model.addAttribute("estados", Arrays.asList("Disponible", "Vendido", "Reservado"));
 
-    // // Datos de la app
-    // model.addAttribute("titleApp", titleApp);
-    // model.addAttribute("nameApp", nameApp);
-    // model.addAttribute("version", version);
+        return "formulario-producto";
+    }
 
-    // // Listas para selects
-    // model.addAttribute("categorias", Arrays.asList("Vinilo", "CD", "Cassette",
-    // "Merchandising"));
-    // model.addAttribute("formatos", Arrays.asList("Nuevo", "Usado", "Reedición",
-    // "Edición Especial"));
-    // model.addAttribute("estados", Arrays.asList("Disponible", "Vendido",
-    // "Reservado"));
+    // ── POST ─────────────────────────────────────────────────────────────────────
+    @PostMapping("/nuevo-producto")
+    public String crearProducto(@RequestParam("titulo") String titulo,
+            @RequestParam("artista") String artista,
+            @RequestParam("formato") String formato,
+            @RequestParam("descripcion") String descripcion,
+            @RequestParam("precio") BigDecimal precio,
+            @RequestParam("estado") String estado,
+            @RequestParam("categoria") String categoria,
+            @RequestParam(value = "imagenes", required = false) List<MultipartFile> imagenes,
+            HttpSession session) {
 
-    // return "formulario-producto";
-    // }
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
+            return "redirect:/login";
+        }
 
-    // // 💾 POST - Crear nuevo producto
-    // @PostMapping("/nuevo-producto")
-    // public String crearProducto(@ModelAttribute("producto") ProductoEntity
-    // producto,
-    // HttpSession session) {
+        ProductoEntity nuevoProducto = new ProductoEntity();
+        nuevoProducto.setTitulo(titulo);
+        nuevoProducto.setArtista(artista);
+        nuevoProducto.setFormato(formato);
+        nuevoProducto.setDescripcion(descripcion);
+        nuevoProducto.setPrecio(precio);
+        nuevoProducto.setEstado(estado);
+        nuevoProducto.setCategoria(categoria);
+        nuevoProducto.setFecha_edicion(LocalDate.now());
 
-    // Long usuarioId = (Long) session.getAttribute("usuarioId");
-    // if (usuarioId == null) {
-    // return "redirect:/login";
-    // }
+        // Asignar propietario desde BD (igual que editarProducto comprueba el
+        // propietario)
+        UsuarioEntity propietario = usuarioRepository.findById(usuarioId).orElse(null);
+        nuevoProducto.setPropietario(propietario);
 
-    // // Asignar propietario
-    // UsuarioEntity propietario = new UsuarioEntity();
-    // propietario.setId_usuario(usuarioId);
-    // producto.setPropietario(propietario);
+        // Guardar imágenes si se han subido
+        if (imagenes != null && !imagenes.isEmpty() && !imagenes.get(0).isEmpty()) {
+            List<String> nombresImagenes = new ArrayList<>();
+            for (MultipartFile img : imagenes) {
+                if (!img.isEmpty()) {
+                    String nombreArchivo = "usu" + usuarioId + "_" + img.getOriginalFilename();
+                    Path ruta = Paths.get("src/main/resources/static/img/productos_img/" + nombreArchivo);
+                    try {
+                        Files.write(ruta, img.getBytes());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    nombresImagenes.add(nombreArchivo);
+                }
+            }
+            nuevoProducto.setImagenes(String.join(",", nombresImagenes));
+        }
 
-    // // Fecha de creación/edición
-    // producto.setFecha_edicion(LocalDate.now());
+        productoRepository.save(nuevoProducto);
 
-    // productoRepository.save(producto);
-
-    // return "redirect:/home?success=producto-creado";
-    // }
+        return "redirect:/home";
+    }
 
 }
