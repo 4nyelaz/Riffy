@@ -216,11 +216,15 @@
         <div class="ps-md-5">
 
             <!-- Título -->
-            <div class="text-left mb-5">
-                <h2 class="display-5 fw-bold titulo-seccion">
+            <div class="mb-5 d-flex align-items-center justify-content-between pe-4">
+                <h2 class="display-5 fw-bold titulo-seccion mb-0">
                     <i class="fas fa-compact-disc me-2 icono-titulo"></i>
                     Mis productos
                 </h2>
+
+                <a th:href="@{/nuevo-producto}" class="btn btn-sm rounded-pill btn-primary px-3 py-2">
+                    <i class="fa-solid fa-circle-plus"></i> Añadir producto
+                </a>
             </div>
 
             <!-- Grid de tarjetas -->
@@ -231,7 +235,8 @@
                         <!-- Carrusel -->
                         <div th:id="|carousel-${producto.id_producto}|" class="carousel slide" data-bs-ride="false">
                             <div class="carousel-inner">
-                                <div class="carousel-item active" th:each="img, iterStat : ${imagenesMap[producto.id_producto]}">
+                                <div class="carousel-item active"
+                                    th:each="img, iterStat : ${imagenesMap[producto.id_producto]}">
                                     <img th:src="@{'/img/productos_img/' + ${img}}" class="card-img-top producto-img"
                                         alt="Imagen del producto" onerror="this.src='/img/productos_img/sin_foto.png'">
                                 </div>

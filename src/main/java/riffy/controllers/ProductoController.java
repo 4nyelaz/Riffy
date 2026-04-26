@@ -72,6 +72,7 @@ public class ProductoController {
         return "home";
     }
 
+    
     @GetMapping("/editarproducto/{id}")
     public String editarProducto(@PathVariable("id") @NonNull Long id_producto,
             HttpSession session,
@@ -204,7 +205,6 @@ public class ProductoController {
                 .body(resource);
     }
 
-    // ── GET ──────────────────────────────────────────────────────────────────────
     @GetMapping("/nuevo-producto")
     public String nuevoProducto(HttpSession session, Model model) {
 
@@ -221,19 +221,18 @@ public class ProductoController {
         // Mismas listas que editarProducto
         model.addAttribute("categorias", Arrays.asList("Vinilo", "CD"));
         model.addAttribute("formatos", Arrays.asList("Nuevo", "Muy Bueno", "Bueno", "Usado"));
-        model.addAttribute("estados", Arrays.asList("Disponible", "Vendido", "Reservado"));
+        // model.addAttribute("estados", Arrays.asList("Disponible", "Vendido", "Reservado"));
 
-        return "formulario-producto";
+        return "crear-producto";
     }
 
-    // ── POST ─────────────────────────────────────────────────────────────────────
     @PostMapping("/nuevo-producto")
     public String crearProducto(@RequestParam("titulo") String titulo,
             @RequestParam("artista") String artista,
             @RequestParam("formato") String formato,
             @RequestParam("descripcion") String descripcion,
             @RequestParam("precio") BigDecimal precio,
-            @RequestParam("estado") String estado,
+            // @RequestParam("estado") String estado,
             @RequestParam("categoria") String categoria,
             @RequestParam(value = "imagenes", required = false) List<MultipartFile> imagenes,
             HttpSession session) {
@@ -249,7 +248,7 @@ public class ProductoController {
         nuevoProducto.setFormato(formato);
         nuevoProducto.setDescripcion(descripcion);
         nuevoProducto.setPrecio(precio);
-        nuevoProducto.setEstado(estado);
+        nuevoProducto.setEstado("Disponible");
         nuevoProducto.setCategoria(categoria);
         nuevoProducto.setFecha_edicion(LocalDate.now());
 
