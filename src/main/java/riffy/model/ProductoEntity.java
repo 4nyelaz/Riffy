@@ -51,9 +51,7 @@ public class ProductoEntity {
     @Column(name = "imagenes", length = 1000)
     private String imagenes;
 
-    // para guardarlas otra vez en el server: producto.setImagenes(String.join(",",
-    // listaDeUrls));
-
+ 
     // Getters y setters
     public Long getId_producto() {
         return id_producto;

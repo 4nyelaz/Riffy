@@ -715,11 +715,11 @@ dialog::backdrop {
 /* ------------------------------------------------------------------ */
 /* formulario producto
 /* ------------------------------------------------------------------ */
- 
+
 .contenedor-crear-producto {
     max-width: 800px;
 }
- 
+
 /* textarea y select heredan el mismo estilo que input en .campo-formulario */
 .campo-formulario textarea,
 .campo-formulario select {
@@ -734,24 +734,24 @@ dialog::backdrop {
     outline: none;
     transition: border-color 0.2s;
 }
- 
+
 .campo-formulario textarea:focus,
 .campo-formulario select:focus {
     border-color: var(--color-accent);
     background: #fff;
 }
- 
+
 .campo-formulario textarea {
     resize: vertical;
 }
- 
+
 .simbolo-euro {
     background: #eef4f8;
     border: 0.5px solid #b0c4d4;
     font-size: 14px;
     color: var(--color-second);
 }
- 
+
 .campo-precio .form-control,
 .campo-precio input {
     border-left: none;
@@ -797,6 +797,85 @@ dialog::backdrop {
     margin-bottom: 6px;
     font-weight: 500;
 }
+
+/* ------------------------------------------------------------------ */
+/* carrusel de productos
+/* ------------------------------------------------------------------ */
+
+.productos-carrusel {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+}
+
+.productos-carrusel::-webkit-scrollbar {
+    height: 8px;
+    width: 20px;
+}
+
+.productos-carrusel::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.productos-carrusel::-webkit-scrollbar-thumb {
+    background: white;
+    min-width: 20px;
+    max-width: 20px;
+}
+
+.producto-card {
+    min-width: 500px;
+    max-width: 500px;
+    scroll-snap-align: start;
+    flex-shrink: 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* desplegable filtro
+/* ------------------------------------------------------------------ */
+
+.filtro-ordenacion-select {
+    width: auto;
+    min-width: 200px;
+    padding: 0.4rem 2.2rem 0.4rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-accent);
+    background-color: transparent;
+    border: 1px solid var(--color-accent);
+    border-radius: 50px;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23e63946' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 12px 8px;
+    transition: all 0.2s ease;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.filtro-ordenacion-select:hover {
+    background-color: var(--color-accent);
+    color: white;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23ffffff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+}
+
+.filtro-ordenacion-select:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 0.2rem rgba(230, 57, 70, 0.15);
+    outline: none;
+}
+
+.filtro-ordenacion-select option {
+    background-color: var(--color-bg);
+    color: var(--color-first);
+    font-weight: 400;
+}
+
 /* ------------------------------------------------------------------ */
 /* responsive
 /* ------------------------------------------------------------------ */

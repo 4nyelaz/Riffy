@@ -371,7 +371,7 @@ document.addEventListener('click', (e) => {
 });
 
 /* ------------------------------------------------------------------ */
-/* imagenes - crear producto
+/* imagenes - crear producto */
 /* ------------------------------------------------------------------ */
 
 const inputImagenesCrear = document.querySelector('#imagenes');
@@ -416,4 +416,140 @@ if (inputImagenesCrear) {
             contenedorPreviewCrear.appendChild(tag);
         });
     }
+}
+
+/* ------------------------------------------------------------------ */
+/* imagenes - crear producto */
+/* ------------------------------------------------------------------ */
+document.addEventListener('DOMContentLoaded', function() {
+    const selectOrdenar = document.getElementById('ordenarProductos');
+    const contenedor = document.querySelector('.productos-carrusel');
+    
+    if (!selectOrdenar || !contenedor) return;
+    
+    // Guardamos el orden original de las tarjetas
+    const ordenOriginal = Array.from(contenedor.children);
+    
+    selectOrdenar.addEventListener('change', function() {
+        const criterio = this.value;
+        
+        // Si es "defecto", restauramos el orden original
+        if (criterio === 'defecto') {
+            ordenOriginal.forEach(tarjeta => contenedor.appendChild(tarjeta));
+            contenedor.scrollLeft = 0;
+            return;
+        }
+        
+        // Obtener todas las tarjetas como array
+        const tarjetas = Array.from(contenedor.children);
+        
+        // Ejecutar la función según el criterio seleccionado
+        switch(criterio) {
+            case 'az':
+                ordenarAZ(tarjetas, contenedor);
+                break;
+            case 'za':
+                ordenarZA(tarjetas, contenedor);
+                break;
+            case 'precio-asc':
+                ordenarPrecioAsc(tarjetas, contenedor);
+                break;
+            case 'precio-desc':
+                ordenarPrecioDesc(tarjetas, contenedor);
+                break;
+            case 'fecha-desc':
+                ordenarFechaDesc(tarjetas, contenedor);
+                break;
+            case 'fecha-asc':
+                ordenarFechaAsc(tarjetas, contenedor);
+                break;
+        }
+    });
+});
+
+// ─── Funciones de ordenación ────────────────────────────────────────
+
+function obtenerDatos(tarjeta) {
+    const btnEditar = tarjeta.querySelector('.btn-editar');
+    if (!btnEditar) return { titulo: '', precio: 0, fecha: null };
+    
+    return {
+        titulo: (btnEditar.dataset.titulo || '').toLowerCase(),
+        precio: parseFloat(btnEditar.dataset.precio) || 0,
+        fecha: btnEditar.dataset.fecha ? new Date(btnEditar.dataset.fecha) : null
+    };
+}
+
+function reinsertarTarjetas(tarjetas, contenedor) {
+    tarjetas.forEach(tarjeta => contenedor.appendChild(tarjeta));
+    contenedor.scrollLeft = 0;
+}
+
+// A – Z
+function ordenarAZ(tarjetas, contenedor) {
+    tarjetas.sort((a, b) => {
+        const tituloA = obtenerDatos(a).titulo;
+        const tituloB = obtenerDatos(b).titulo;
+        return tituloA.localeCompare(tituloB);
+    });
+    reinsertarTarjetas(tarjetas, contenedor);
+
+}
+
+// Z – A
+function ordenarZA(tarjetas, contenedor) {
+    tarjetas.sort((a, b) => {
+        const tituloA = obtenerDatos(a).titulo;
+        const tituloB = obtenerDatos(b).titulo;
+        return tituloB.localeCompare(tituloA);
+    });
+    reinsertarTarjetas(tarjetas, contenedor);
+}
+
+// Precio: menor a mayor
+function ordenarPrecioAsc(tarjetas, contenedor) {
+    tarjetas.sort((a, b) => {
+        const precioA = obtenerDatos(a).precio;
+        const precioB = obtenerDatos(b).precio;
+        return precioA - precioB;
+    });
+    reinsertarTarjetas(tarjetas, contenedor);
+}
+
+// Precio: mayor a menor
+function ordenarPrecioDesc(tarjetas, contenedor) {
+    tarjetas.sort((a, b) => {
+        const precioA = obtenerDatos(a).precio;
+        const precioB = obtenerDatos(b).precio;
+        return precioB - precioA;
+    });
+    reinsertarTarjetas(tarjetas, contenedor);
+}
+
+// Más reciente primero
+function ordenarFechaDesc(tarjetas, contenedor) {
+    tarjetas.sort((a, b) => {
+        const fechaA = obtenerDatos(a).fecha;
+        const fechaB = obtenerDatos(b).fecha;
+        
+        if (!fechaA && !fechaB) return 0;
+        if (!fechaA) return 1;
+        if (!fechaB) return -1;
+        return fechaB - fechaA;
+    });
+    reinsertarTarjetas(tarjetas, contenedor);
+}
+
+// Más antiguo primero
+function ordenarFechaAsc(tarjetas, contenedor) {
+    tarjetas.sort((a, b) => {
+        const fechaA = obtenerDatos(a).fecha;
+        const fechaB = obtenerDatos(b).fecha;
+        
+        if (!fechaA && !fechaB) return 0;
+        if (!fechaA) return 1;
+        if (!fechaB) return -1;
+        return fechaA - fechaB;
+    });
+    reinsertarTarjetas(tarjetas, contenedor);
 }
