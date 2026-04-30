@@ -38,13 +38,18 @@
                     <ul class="navbar-nav ms-auto mt-3 mt-lg-0 align-items-lg-center gap-2">
                         <!-- Opción Vender (siempre visible en móvil, en desktop dentro del dropdown? Mejor mantener consistencia) -->
                         <li class="nav-item d-lg-none">
+                            <a class="nav-link d-flex align-items-center gap-2" th:href="@{/home}">
+                                <i class="fas fa-home me-1"></i> Inicio
+                            </a>
+                        </li>
+                        <li class="nav-item d-lg-none">
                             <a class="nav-link d-flex align-items-center gap-2" th:href="@{/nuevo-producto}">
                                 <i class="fas fa-plus"></i> Añadir producto
                             </a>
                         </li>
                         <li class="nav-item d-lg-none">
                             <a class="nav-link d-flex align-items-center gap-2" th:href="@{/mis-productos}">
-                                <i class="fas fa-plus"></i> Mis productos
+                                <i class="fa-solid fa-box "></i> Mis productos
                             </a>
                         </li>
                         <li class="nav-item d-lg-none">
@@ -80,6 +85,9 @@
                                 <span class="small fw-semibold" th:text="${nombreCompletoUsuario}">Usuario</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow-sm mt-2" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/home}">
+                                    <i class="fas fa-home me-1"></i> Inicio</a></li>
+                                <li>
                                 <li><a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/nuevo-producto}">
                                     <i class="fa-solid fa-circle-plus"></i> Añadir producto</a></li>
                                 <li>

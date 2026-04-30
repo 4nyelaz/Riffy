@@ -72,7 +72,6 @@ public class ProductoController {
         return "misproductos";
     }
 
-    
     @GetMapping("/editarproducto/{id}")
     public String editarProducto(@PathVariable("id") @NonNull Long id_producto,
             HttpSession session,
@@ -221,7 +220,8 @@ public class ProductoController {
         // Mismas listas que editarProducto
         model.addAttribute("categorias", Arrays.asList("Vinilo", "CD"));
         model.addAttribute("formatos", Arrays.asList("Nuevo", "Muy Bueno", "Bueno", "Usado"));
-        // model.addAttribute("estados", Arrays.asList("Disponible", "Vendido", "Reservado"));
+        // model.addAttribute("estados", Arrays.asList("Disponible", "Vendido",
+        // "Reservado"));
 
         return "crearproducto";
     }
@@ -278,6 +278,59 @@ public class ProductoController {
         productoRepository.save(nuevoProducto);
 
         return "redirect:/home";
+    }
+
+    @SuppressWarnings("unchecked")
+    @GetMapping("/producto/{id}")
+    public String verProducto(@PathVariable("id") @NonNull Long id_producto,
+            HttpSession session,
+            Model model) {
+
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
+            return "redirect:/login";
+        }
+
+        ProductoEntity producto = productoRepository.findById(id_producto).orElse(null);
+        if (producto == null) {
+            return "redirect:/home";
+        }
+
+        // --- HISTORIAL (solo productos ajenos) ---
+        if (!producto.getPropietario().getIdUsuario().equals(usuarioId)) {
+
+            List<Long> historialIds = (List<Long>) session.getAttribute("historialIds");
+            if (historialIds == null)
+                historialIds = new ArrayList<>();
+
+            // Si ya estaba, lo quitamos para moverlo al principio
+            historialIds.remove(id_producto);
+
+            // Lo añadimos al principio
+            historialIds.add(0, id_producto);
+
+            // Máximo 10
+            if (historialIds.size() > 10) {
+                historialIds = historialIds.subList(0, 10);
+            }
+
+            session.setAttribute("historialIds", historialIds);
+        }
+
+        // --- IMAGENES ---
+        List<String> imgs;
+        if (producto.getImagenes() != null && !producto.getImagenes().trim().isEmpty()) {
+            imgs = Arrays.asList(producto.getImagenes().split(","));
+        } else {
+            imgs = Arrays.asList("sin_foto.png");
+        }
+
+        model.addAttribute("usuarioId", usuarioId);
+        model.addAttribute("nombreCompletoUsuario", session.getAttribute("nombreCompletoUsuario"));
+        model.addAttribute("producto", producto);
+        model.addAttribute("imagenes", imgs);
+
+        return "detalle-producto";
     }
 
 }

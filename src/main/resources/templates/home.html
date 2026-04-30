@@ -33,9 +33,9 @@
     <div th:replace="~{fragmentos/nav-home :: nav-home}"></div>
 
     <main class="home-main">
-        
-        <h1 th:text="${nombreCompletoUsuario}">Usuario</h1>
-
+        <!-- <div th:replace="~{fragmentos/sections :: bienvenida}"></div> -->
+        <div th:replace="~{fragmentos/sections :: vistos-recientemente}"></div>
+        <div th:replace="~{fragmentos/sections :: productos-categoria}"></div>
     </main>
 </body>
 

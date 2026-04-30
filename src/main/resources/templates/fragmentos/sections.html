@@ -211,101 +211,198 @@
         </div>
     </section>
 
-    <!-- Sección 4: Tarjetas producto Usuario Inicio Sesión -->
-    <section th:fragment="mis-productos" class="mis-productos-seccion text-start">
-        <div class="ps-md-5">
+    <!-- fragmento 1: Cabecera mis productos -->
+    <th:block th:fragment="cabecera-mis-productos">
+        <div class="mb-4 d-flex align-items-center justify-content-between pe-4">
+            <h2 class="display-5 fw-bold titulo-seccion mb-0">
+                <i class="fas fa-compact-disc me-2 icono-titulo"></i>
+                Mis productos
+            </h2>
+            <div class="d-flex align-items-center gap-2">
+                <select id="ordenarProductos"
+                    class="form-select rounded-pill filtro-ordenacion-select btn btn-sm btn-primary">
+                    <option value="defecto">Orden predeterminado</option>
+                    <option value="az">Nombre: A - Z</option>
+                    <option value="za">Nombre: Z - A</option>
+                    <option value="precio-asc">Precio: menor a mayor</option>
+                    <option value="precio-desc">Precio: mayor a menor</option>
+                    <option value="fecha-desc">Más reciente primero</option>
+                    <option value="fecha-asc">Más antiguo primero</option>
+                </select>
+                <a th:href="@{/nuevo-producto}" class="btn btn-sm rounded-pill btn-primary px-3 py-2 text-nowrap">
+                    <i class="fa-solid fa-circle-plus"></i> Añadir producto
+                </a>
+            </div>
+        </div>
+    </th:block>
 
-            <!-- Título -->
-            <div class="mb-4 d-flex align-items-center justify-content-between pe-4">
-                <h2 class="display-5 fw-bold titulo-seccion mb-0">
-                    <i class="fas fa-compact-disc me-2 icono-titulo"></i>
-                    Mis productos
-                </h2>
-                <div class="d-flex align-items-center gap-2">
-                    <!-- Desplegable de ordenación -->
-                    <select id="ordenarProductos" class="form-select rounded-pill filtro-ordenacion-select btn btn-sm btn-primary">
-                        <option value="defecto">Orden predeterminado</option>
-                        <option value="az">Nombre: A - Z</option>
-                        <option value="za">Nombre: Z - A</option>
-                        <option value="precio-asc">Precio: menor a mayor</option>
-                        <option value="precio-desc">Precio: mayor a menor</option>
-                        <option value="fecha-desc">Más reciente primero</option>
-                        <option value="fecha-asc">Más antiguo primero</option>
-                    </select>
 
-                    <!-- Botón añadir producto -->
-                    <a th:href="@{/nuevo-producto}" class="btn btn-sm rounded-pill btn-primary px-3 py-2 text-nowrap">
-                        <i class="fa-solid fa-circle-plus"></i> Añadir producto
-                    </a>
+    <!-- FRAGMENTO 2: Tarjeta producto (unificada) -->
+    <th:block th:fragment="tarjeta-producto(producto, imagenesMap, usuarioId)">
+        <div class="card h-100 shadow-sm border rounded-4 overflow-hidden paso-card producto-card">
+
+            <!-- Carrusel imágenes -->
+            <div th:id="|carousel-${producto.id_producto}|" class="carousel slide" data-bs-ride="false">
+                <div class="carousel-inner">
+                    <div class="carousel-item" th:each="img, iterStat : ${imagenesMap[producto.id_producto]}"
+                        th:classappend="${iterStat.first} ? 'active'">
+                        <img th:src="@{'/img/productos_img/' + ${img}}" class="card-img-top producto-img"
+                            alt="Imagen del producto" onerror="this.src='/img/productos_img/sin_foto.png'">
+                    </div>
                 </div>
+                <button class="carousel-control-prev" type="button"
+                    th:data-bs-target="|#carousel-${producto.id_producto}|" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button"
+                    th:data-bs-target="|#carousel-${producto.id_producto}|" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
 
-            <!-- Carrusel horizontal -->
+            <!-- Cuerpo -->
+            <div class="card-body">
+                <h5 class="card-title fw-bold producto-titulo" th:text="${producto.titulo}">Título</h5>
+                <p class="card-text small producto-descripcion" th:text="${producto.descripcion}">Descripción</p>
+            </div>
+
+            <!-- Info -->
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item small producto-info-item">
+                    <i class="fas fa-user me-1 icono-titulo"></i>
+                    <span th:text="${producto.artista}">Artista</span>
+                </li>
+                <li class="list-group-item small producto-info-item">
+                    <i class="fas fa-star me-1 icono-titulo"></i>
+                    <span th:text="${producto.estado}">Estado</span>
+                </li>
+                <li class="list-group-item small producto-info-item"
+                    th:if="${producto.propietario.idUsuario != usuarioId}">
+                    <i class="fas fa-tag me-1 icono-titulo"></i>
+                    <span th:text="${producto.precio} + ' €'">Precio</span>
+                </li>
+            </ul>
+
+            <!-- Acciones -->
+            <div class="card-body d-flex gap-2">
+                <th:block th:if="${producto.propietario.idUsuario == usuarioId}">
+                    <a href="#" class="btn btn-outline-primary btn-sm rounded-pill w-50 btn-editar"
+                        th:data-id="${producto.id_producto}" th:data-titulo="${producto.titulo}"
+                        th:data-artista="${producto.artista}" th:data-descripcion="${producto.descripcion}"
+                        th:data-precio="${producto.precio}" th:data-estado="${producto.estado}"
+                        th:data-categoria="${producto.categoria}" th:data-formato="${producto.formato}"
+                        th:data-fecha="${producto.fecha_edicion}">
+                        <i class="fas fa-edit me-1"></i> Editar
+                    </a>
+                    <a href="#" class="btn btn-sm rounded-pill w-50 btn-eliminar" th:data-id="${producto.id_producto}"
+                        th:data-titulo="${producto.titulo}">
+                        <i class="fas fa-trash me-1"></i> Eliminar
+                    </a>
+                </th:block>
+                <th:block th:if="${producto.propietario.idUsuario != usuarioId}">
+                    <a th:href="@{'/producto/' + ${producto.id_producto}}"
+                        class="btn btn-outline-primary btn-sm rounded-pill w-100">
+                        <i class="fas fa-eye me-1"></i> Ver producto
+                    </a>
+                </th:block>
+            </div>
+
+        </div>
+    </th:block>
+
+    <!-- FRAGMENTO 3: Sección mis productos completa -->
+    <section th:fragment="mis-productos" class="mis-productos-seccion text-start">
+        <div class="ps-md-5">
+            <div th:replace="~{fragmentos/sections :: cabecera-mis-productos}"></div>
             <div class="productos-carrusel">
-                <div class="card h-100 shadow-sm border rounded-4 overflow-hidden paso-card producto-card"
-                    th:each="producto : ${productos}">
-
-                    <!-- Carrusel imágenes -->
-                    <div th:id="|carousel-${producto.id_producto}|" class="carousel slide" data-bs-ride="false">
-                        <div class="carousel-inner">
-                            <div class="carousel-item active"
-                                th:each="img, iterStat : ${imagenesMap[producto.id_producto]}">
-                                <img th:src="@{'/img/productos_img/' + ${img}}" class="card-img-top producto-img"
-                                    alt="Imagen del producto" onerror="this.src='/img/productos_img/sin_foto.png'">
-                            </div>
-                        </div>
-                        <button class="carousel-control-prev" type="button"
-                            th:data-bs-target="|#carousel-${producto.id_producto}|" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Previous</span>
-                        </button>
-                        <button class="carousel-control-next" type="button"
-                            th:data-bs-target="|#carousel-${producto.id_producto}|" data-bs-slide="next">
-                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                            <span class="visually-hidden">Next</span>
-                        </button>
+                <th:block th:each="producto : ${productos}">
+                    <div
+                        th:replace="~{fragmentos/sections :: tarjeta-producto(${producto}, ${imagenesMap}, ${usuarioId})}">
                     </div>
+                </th:block>
+            </div>
+        </div>
+    </section>
 
-                    <!-- Cuerpo -->
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold producto-titulo" th:text="${producto.titulo}">Título</h5>
-                        <p class="card-text small producto-descripcion" th:text="${producto.descripcion}">Descripción
-                        </p>
+    <!-- FRAGMENTO: Bienvenida -->
+    <section th:fragment="bienvenida" class="bienvenida-seccion">
+        <div class="ps-md-5 pe-md-5 pt-4">
+            <h2 class="fw-bold titulo-seccion">
+                Bienvenido de nuevo, <span class="acento" th:text="${nombreCompletoUsuario}">Usuario</span> 👋
+            </h2>
+            <p class="text-muted">Esto es lo que hay de nuevo por aquí.</p>
+        </div>
+    </section>
+
+
+    <!-- FRAGMENTO: Vistos recientemente -->
+    <section th:fragment="vistos-recientemente" class="mis-productos-seccion text-start">
+        <div class="ps-md-5">
+            <div class="mb-4 pe-4">
+                <h2 class="display-5 fw-bold titulo-seccion mb-0">
+                    <i class="fas fa-clock me-2 icono-titulo"></i>
+                    Vistos recientemente
+                </h2>
+            </div>
+            <div th:if="${vistos == null or vistos.isEmpty()}" class="text-muted ps-2 pb-4">
+                <p>Todavía no has visto ningún producto.</p>
+            </div>
+            <div class="productos-carrusel" th:if="${vistos != null and !vistos.isEmpty()}">
+                <th:block th:each="producto : ${vistos}">
+                    <div
+                        th:replace="~{fragmentos/sections :: tarjeta-producto(${producto}, ${imagenesMap}, ${usuarioId})}">
                     </div>
+                </th:block>
+            </div>
+        </div>
+    </section>
 
-                    <!-- Info -->
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item small producto-info-item">
-                            <i class="fas fa-user me-1 icono-titulo"></i>
-                            <span th:text="${producto.artista}">Artista</span>
-                        </li>
-                        <li class="list-group-item small producto-info-item">
-                            <i class="fas fa-star me-1 icono-titulo"></i>
-                            <span th:text="${producto.estado}">Estado</span>
-                        </li>
-                    </ul>
 
-                    <!-- Acciones -->
-                    <div class="card-body d-flex gap-2">
-                        <a href="#" class="btn btn-outline-primary btn-sm rounded-pill w-50 btn-editar"
-                            th:data-id="${producto.id_producto}" th:data-titulo="${producto.titulo}"
-                            th:data-artista="${producto.artista}" th:data-descripcion="${producto.descripcion}"
-                            th:data-precio="${producto.precio}" th:data-estado="${producto.estado}"
-                            th:data-categoria="${producto.categoria}" th:data-formato="${producto.formato}" th:data-fecha="${producto.fecha_edicion}">
-                            
-                            <i class="fas fa-edit me-1"></i> Editar
-                        </a>
-                        <a href="#" class="btn btn-sm rounded-pill w-50 btn-eliminar"
-                            th:data-id="${producto.id_producto}" th:data-titulo="${producto.titulo}">
-                            <i class="fas fa-trash me-1"></i> Eliminar
-                        </a>
+    <!-- FRAGMENTO: Productos por categoría -->
+    <section th:fragment="productos-categoria" class="mis-productos-seccion text-start">
+        <div class="ps-md-5">
+
+            <!-- Vinilos -->
+            <div class="mb-4 pe-4">
+                <h2 class="display-5 fw-bold titulo-seccion mb-0">
+                    <i class="fas fa-record-vinyl me-2 icono-titulo"></i>
+                    Vinilos
+                </h2>
+            </div>
+            <div th:if="${vinilos == null or vinilos.isEmpty()}" class="text-muted ps-2 pb-4">
+                <p>No hay vinilos disponibles por el momento.</p>
+            </div>
+            <div class="productos-carrusel mb-5" th:if="${vinilos != null and !vinilos.isEmpty()}">
+                <th:block th:each="producto : ${vinilos}">
+                    <div
+                        th:replace="~{fragmentos/sections :: tarjeta-producto(${producto}, ${imagenesMap}, ${usuarioId})}">
                     </div>
+                </th:block>
+            </div>
 
-                </div>
+            <!-- CDs -->
+            <div class="mb-4 pe-4">
+                <h2 class="display-5 fw-bold titulo-seccion mb-0">
+                    <i class="fas fa-compact-disc me-2 icono-titulo"></i>
+                    CDs
+                </h2>
+            </div>
+            <div th:if="${cds == null or cds.isEmpty()}" class="text-muted ps-2 pb-4">
+                <p>No hay CDs disponibles por el momento.</p>
+            </div>
+            <div class="productos-carrusel" th:if="${cds != null and !cds.isEmpty()}">
+                <th:block th:each="producto : ${cds}">
+                    <div
+                        th:replace="~{fragmentos/sections :: tarjeta-producto(${producto}, ${imagenesMap}, ${usuarioId})}">
+                    </div>
+                </th:block>
             </div>
 
         </div>
     </section>
+
 </body>
 
 </html>
