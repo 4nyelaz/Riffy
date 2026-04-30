@@ -42,7 +42,7 @@ public class ProductoController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @GetMapping("/home")
+    @GetMapping("/mis-productos")
     public String home(HttpSession session, Model model) {
 
         Long usuarioId = (Long) session.getAttribute("usuarioId");
@@ -69,7 +69,7 @@ public class ProductoController {
         model.addAttribute("usuarioId", usuarioId);
         model.addAttribute("nombreCompletoUsuario", session.getAttribute("nombreCompletoUsuario"));
 
-        return "home";
+        return "misproductos";
     }
 
     
@@ -124,11 +124,11 @@ public class ProductoController {
         ProductoEntity productoExistente = productoRepository.findById(id_producto).orElse(null);
 
         if (productoExistente == null) {
-            return "redirect:/home";
+            return "redirect:/misproductos";
         }
 
         if (!productoExistente.getPropietario().getIdUsuario().equals(usuarioId)) {
-            return "redirect:/home";
+            return "redirect:/misproductos";
         }
 
         productoExistente.setTitulo(titulo);
@@ -166,7 +166,7 @@ public class ProductoController {
 
         productoRepository.save(productoExistente);
 
-        return "redirect:/home";
+        return "redirect:/misproductos";
     }
 
     @GetMapping("/eliminarproducto/{id}")
@@ -182,10 +182,10 @@ public class ProductoController {
 
         if (producto != null && producto.getPropietario().getIdUsuario().equals(usuarioId)) {
             productoRepository.delete(producto);
-            return "redirect:/home"; // TO DO: Poner que redirija a un error
+            return "redirect:/misproductos"; // TO DO: Poner que redirija a un error
         }
 
-        return "redirect:/home"; // TO DO: Poner que redirija a un error
+        return "redirect:/misproductos"; // TO DO: Poner que redirija a un error
     }
 
     @SuppressWarnings("null")
@@ -223,7 +223,7 @@ public class ProductoController {
         model.addAttribute("formatos", Arrays.asList("Nuevo", "Muy Bueno", "Bueno", "Usado"));
         // model.addAttribute("estados", Arrays.asList("Disponible", "Vendido", "Reservado"));
 
-        return "crear-producto";
+        return "crearproducto";
     }
 
     @PostMapping("/nuevo-producto")

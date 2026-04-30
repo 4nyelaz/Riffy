@@ -827,8 +827,8 @@ dialog::backdrop {
 }
 
 .producto-card {
-    min-width: 500px;
-    max-width: 500px;
+    min-width: 300px;
+    max-width: 300px;
     scroll-snap-align: start;
     flex-shrink: 0;
 }
