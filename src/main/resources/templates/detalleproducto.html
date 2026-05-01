@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Riffy</title>
+
+    <!-- Enlace Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Enlace boostrap CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Main-CSS -->
+    <link rel="stylesheet" th:href="@{/css/main-estilos.css}">
+
+    <!-- Enlace Boostrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+    <!-- Main JS -->
+    <script defer th:src="@{/js/js-main.js}"></script>
+
+    <!-- Riffy favicon -->
+    <link rel="icon" type="image/ico" th:href="@{/img/riffy_favicon.ico}">
+</head>
+
+<body>
+    <div th:replace="~{fragmentos/nav-home :: nav-home}"></div>
+
+    <main class="home-main">
+        <div class="container py-5">
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-10">
+                    <div class="bg-white rounded-4 shadow-sm p-4 p-md-5">
+                        <div class="row g-4">
+
+                            <!-- IZQUIERDA: Carrusel -->
+                            <div class="col-12 col-md-6">
+                                <div id="carousel-detalle" class="carousel slide rounded-4 overflow-hidden shadow-sm"
+                                    data-bs-ride="false">
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item" th:each="img, iterStat : ${imagenes}"
+                                            th:classappend="${iterStat.first} ? 'active'">
+                                            <img th:src="@{'/img/productos_img/' + ${img}}" class="d-block w-100"
+                                                style="max-height: 420px; object-fit: cover;" alt="Imagen del producto"
+                                                onerror="this.src='/img/productos_img/sin_foto.png'">
+                                        </div>
+                                    </div>
+                                    <button class="carousel-control-prev" type="button"
+                                        data-bs-target="#carousel-detalle" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button"
+                                        data-bs-target="#carousel-detalle" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- DERECHA: Info -->
+                            <div class="col-12 col-md-6 d-flex flex-column gap-3">
+
+                                <!-- Info del producto -->
+                                <div>
+                                    <h2 class="fw-bold titulo-seccion" th:text="${producto.titulo}">Título</h2>
+                                    <p class="text-muted mb-3" th:text="${producto.artista}">Artista</p>
+
+                                    <hr>
+
+                                    <ul class="list-unstyled d-flex flex-column gap-2">
+                                        <li>
+                                            <i class="fas fa-tag me-2 icono-titulo"></i>
+                                            <strong>Precio:</strong>
+                                            <span th:text="${producto.precio} + ' €'">0 €</span>
+                                        </li>
+                                        <li>
+                                            <i class="fas fa-star me-2 icono-titulo"></i>
+                                            <strong>Formato:</strong>
+                                            <span th:text="${producto.formato}">Formato</span>
+                                        </li>
+                                        <li>
+                                            <i class="fas fa-record-vinyl me-2 icono-titulo"></i>
+                                            <strong>Categoría:</strong>
+                                            <span th:text="${producto.categoria}">Categoría</span>
+                                        </li>
+                                        <li>
+                                            <i class="fas fa-circle-info me-2 icono-titulo"></i>
+                                            <strong>Estado:</strong>
+                                            <span th:text="${producto.estado}">Estado</span>
+                                        </li>
+                                        <li>
+                                            <i class="fas fa-calendar me-2 icono-titulo"></i>
+                                            <strong>Publicado:</strong>
+                                            <span th:text="${producto.fecha_edicion}">Fecha</span>
+                                        </li>
+                                    </ul>
+
+                                    <p class="mt-3 text-muted fst-italic" th:text="${producto.descripcion}">Descripción
+                                    </p>
+                                </div>
+
+                                <hr>
+
+                                <!-- Info del vendedor -->
+                                <div class="bg-light rounded-4 p-3 d-flex align-items-center gap-3">
+
+                                    <!-- Avatar con inicial -->
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                                        style="width: 52px; height: 52px; background-color: var(--color-accent);">
+                                        <span class="fw-bold fs-4 text-white"
+                                            th:text="${#strings.toUpperCase(#strings.substring(producto.propietario.nombre, 0, 1))}">U</span>
+                                    </div>
+
+                                    <!-- Nombre y usuario -->
+                                    <div>
+                                        <p class="fw-bold mb-0" th:text="${producto.propietario.nombre}">Nombre</p>
+                                        <p class="text-muted small mb-0">
+                                            <i class="fas fa-at me-1"></i>
+                                            <span th:text="${producto.propietario.usuario}">usuario</span>
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <hr>
+
+                                <!-- Botones -->
+                                <div class="d-flex gap-3">
+                                    <a th:if="${producto.estado == 'Disponible'}"
+                                        th:href="@{'/producto/comprar/' + ${producto.id_producto}}"
+                                        class="btn btn-primary rounded-pill w-50">
+                                        <i class="fas fa-shopping-cart me-2"></i> Comprar
+                                    </a>
+                                    <span th:if="${producto.estado != 'Disponible'}"
+                                        class="btn btn-secondary rounded-pill w-50 disabled">
+                                        <i class="fas fa-ban me-2"></i>
+                                        <span th:text="${producto.estado}">No disponible</span>
+                                    </span>
+                                    <!-- Botón Contactar (solo si no es el propietario) -->
+                                    <form th:action="@{/chat/iniciar}" method="post" class="w-50"
+                                        th:if="${producto.propietario.idUsuario != session.usuarioId}">
+                                        <input type="hidden" name="idProducto" th:value="${producto.id_producto}">
+                                        <button type="submit" class="btn btn-outline-primary rounded-pill w-100">
+                                            <i class="fas fa-comment me-2"></i> Contactar
+                                        </button>
+                                    </form>
+
+                                    <!-- Si es el propietario, mostrar botón deshabilitado -->
+                                    <button th:if="${producto.propietario.idUsuario == session.usuarioId}"
+                                        class="btn btn-outline-secondary rounded-pill w-50" disabled>
+                                        <i class="fas fa-comment me-2"></i> Producto propio
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>

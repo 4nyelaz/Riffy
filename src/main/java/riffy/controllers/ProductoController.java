@@ -123,11 +123,11 @@ public class ProductoController {
         ProductoEntity productoExistente = productoRepository.findById(id_producto).orElse(null);
 
         if (productoExistente == null) {
-            return "redirect:/misproductos";
+            return "redirect:/mis-productos";
         }
 
         if (!productoExistente.getPropietario().getIdUsuario().equals(usuarioId)) {
-            return "redirect:/misproductos";
+            return "redirect:/mis-productos";
         }
 
         productoExistente.setTitulo(titulo);
@@ -165,7 +165,7 @@ public class ProductoController {
 
         productoRepository.save(productoExistente);
 
-        return "redirect:/misproductos";
+        return "redirect:/mis-productos";
     }
 
     @GetMapping("/eliminarproducto/{id}")
@@ -181,10 +181,10 @@ public class ProductoController {
 
         if (producto != null && producto.getPropietario().getIdUsuario().equals(usuarioId)) {
             productoRepository.delete(producto);
-            return "redirect:/misproductos"; // TO DO: Poner que redirija a un error
+            return "redirect:/mis-productos"; // TO DO: Poner que redirija a un error
         }
 
-        return "redirect:/misproductos"; // TO DO: Poner que redirija a un error
+        return "redirect:/mis-productos"; // TO DO: Poner que redirija a un error
     }
 
     @SuppressWarnings("null")
@@ -330,7 +330,31 @@ public class ProductoController {
         model.addAttribute("producto", producto);
         model.addAttribute("imagenes", imgs);
 
-        return "detalle-producto";
+        return "detalleproducto";
+    }
+
+    @GetMapping("/producto/comprar/{id}")
+    public String comprarProducto(@PathVariable("id") @NonNull Long id_producto,
+            HttpSession session) {
+
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
+            return "redirect:/login";
+        }
+
+        ProductoEntity producto = productoRepository.findById(id_producto).orElse(null);
+
+        // Comprobaciones: existe, no es tuyo, y está disponible
+        if (producto == null
+                || producto.getPropietario().getIdUsuario().equals(usuarioId)
+                || !producto.getEstado().equals("Disponible")) {
+            return "redirect:/home";
+        }
+
+        producto.setEstado("Vendido");
+        productoRepository.save(producto);
+
+        return "redirect:/producto/" + id_producto;
     }
 
 }

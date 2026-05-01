@@ -74,6 +74,7 @@ public class MainController {
         model.addAttribute("vinilos", vinilos);
         model.addAttribute("cds", cds);
         model.addAttribute("imagenesMap", imagenesMap);
+        model.addAttribute("mostrarBuscador", true);
 
         return "home";
     }

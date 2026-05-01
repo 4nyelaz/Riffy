@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat - Riffy</title>
+
+    <!-- Enlace Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Enlace boostrap CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Main-CSS -->
+    <link rel="stylesheet" th:href="@{/css/main-estilos.css}">
+
+    <!-- Enlace Boostrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+
+    <!-- Main JS -->
+    <script defer th:src="@{/js/js-main.js}"></script>
+
+    <!-- Riffy favicon -->
+    <link rel="icon" type="image/ico" th:href="@{/img/riffy_favicon.ico}">
+    <style>
+        .chat-container {
+            max-width: 650px;
+            margin: 2rem auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: var(--color-second);
+            color: white;
+            padding: 1rem 1.5rem;
+        }
+
+        .chat-mensajes {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background: #f8fbfd;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .mensaje-item {
+            max-width: 70%;
+            padding: 0.6rem 1rem;
+            border-radius: 18px;
+            font-size: 0.95rem;
+        }
+
+        .mensaje-propio {
+            align-self: flex-end;
+            background: var(--color-accent);
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .mensaje-otro {
+            align-self: flex-start;
+            background: #e9ecef;
+            color: var(--color-first);
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-input-area {
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+
+<body>
+    <div th:replace="~{fragmentos/nav-home :: nav-home}"></div>
+
+    <main class="home-main">
+        <div class="chat-container">
+            <!-- Cabecera -->
+            <div class="chat-header d-flex align-items-center gap-3">
+                <a th:href="@{/chat/mis-conversaciones}" class="text-white">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <div>
+                    <h6 class="mb-0" th:text="${nombreOtro}">Usuario</h6>
+                    <small class="text-white-50" th:text="${tituloProducto}">Producto</small>
+                </div>
+            </div>
+
+            <!-- Mensajes -->
+            <div class="chat-mensajes" id="contenedorMensajes">
+                <div th:each="msg : ${mensajes}"
+                    th:class="'mensaje-item ' + (${msg.remitente.idUsuario == usuarioId} ? 'mensaje-propio' : 'mensaje-otro')">
+                    <div th:text="${msg.mensaje}"></div>
+                    <small class="opacity-50" th:text="${#temporals.format(msg.fechaEnvio, 'HH:mm')}"></small>
+                </div>
+                <div th:if="${#lists.isEmpty(mensajes)}" class="text-center text-muted py-5">
+                    No hay mensajes aún. ¡Envía el primero!
+                </div>
+            </div>
+
+            <!-- Formulario de envío -->
+            <div class="chat-input-area">
+                <form th:action="@{/chat/{id}/enviar(id=${idConversacion})}" method="post" class="d-flex gap-2">
+                    <input type="text" name="mensaje" class="form-control rounded-pill"
+                        placeholder="Escribe un mensaje..." required autocomplete="off">
+                    <button type="submit" class="btn btn-primary rounded-pill px-4">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Auto-scroll al último mensaje -->
+    <script>
+        window.onload = function () {
+            var contenedor = document.getElementById('contenedorMensajes');
+            contenedor.scrollTop = contenedor.scrollHeight;
+        };
+    </script>
+</body>
+
+</html>

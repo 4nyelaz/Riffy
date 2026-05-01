@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis conversaciones - Riffy</title>
+
+    <!-- Enlace Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Enlace Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Main-CSS -->
+    <link rel="stylesheet" th:href="@{/css/main-estilos.css}">
+
+    <!-- Enlace Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Riffy favicon -->
+    <link rel="icon" type="image/ico" th:href="@{/img/riffy_favicon.ico}">
+
+    <style>
+        .conversaciones-container {
+            max-width: 700px;
+            margin: 2rem auto;
+        }
+
+        .conversacion-item {
+            background: var(--color-bg);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 0.75rem;
+            border: 0.5px solid #d0dde8;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .conversacion-item:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+            border-color: var(--color-accent);
+        }
+
+        .conversacion-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--color-second);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .conversacion-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .conversacion-nombre {
+            font-weight: 600;
+            color: var(--color-first);
+            margin-bottom: 0.25rem;
+        }
+
+        .conversacion-producto {
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .conversacion-estado {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.25rem;
+            flex-shrink: 0;
+        }
+
+        .badge-activa {
+            background: #d4edda;
+            color: #155724;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 50px;
+        }
+
+        .badge-cerrada {
+            background: #f8d7da;
+            color: #721c24;
+            font-size: 0.7rem;
+            padding: 0.25rem 0.6rem;
+            border-radius: 50px;
+        }
+
+        .sin-conversaciones {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--color-text-secondary);
+        }
+
+        .sin-conversaciones i {
+            font-size: 3rem;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Fragmento de header -->
+    <div th:replace="~{fragmentos/nav-home :: nav-home}"></div>
+
+    <main class="home-main">
+        <div class="conversaciones-container px-3 px-md-0">
+
+            <!-- título -->
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h2 class="display-5 fw-bold titulo-seccion mb-0">
+                    <i class="fas fa-comments me-2 icono-titulo"></i>
+                    Mis conversaciones
+                </h2>
+                <a th:href="@{/home}" class="btn btn-outline-primary btn-sm rounded-pill">
+                    <i class="fas fa-arrow-left me-1"></i> Volver
+                </a>
+            </div>
+
+            <!-- como comprador -->
+            <h5 class="fw-bold titulo-seccion mb-3">
+                <i class="fas fa-shopping-cart me-2 icono-titulo"></i>
+                Como comprador
+            </h5>
+
+            <div th:if="${!comoComprador.isEmpty()}">
+                <a th:each="conv : ${comoComprador}" th:href="@{/chat/{id}(id=${conv.id_conversacion})}"
+                    class="conversacion-item">
+                    <div class="conversacion-avatar">
+                        <span th:text="${#strings.substring(conv.vendedor.nombre, 0, 1)}">V</span>
+                    </div>
+                    <div class="conversacion-info">
+                        <div class="conversacion-nombre" th:text="${conv.vendedor.nombre}">Vendedor</div>
+                        <div class="conversacion-producto" th:text="${conv.producto.titulo}">Producto</div>
+                    </div>
+                    <div class="conversacion-estado">
+                        <span th:if="${conv.conversacionActiva}" class="badge-activa">
+                            <i class="fas fa-circle me-1" style="font-size: 0.4rem;"></i> Activa
+                        </span>
+                        <span th:unless="${conv.conversacionActiva}" class="badge-cerrada">
+                            <i class="fas fa-lock me-1"></i> Cerrada
+                        </span>
+                        <small class="text-muted"
+                            th:text="${#temporals.format(conv.fechaCreacion, 'dd/MM/yyyy')}">Fecha</small>
+                    </div>
+                    <i class="fas fa-chevron-right text-muted ms-2"></i>
+                </a>
+            </div>
+            <div th:if="${comoComprador.isEmpty()}" class="text-muted ps-2 mb-4">
+                <p>No has iniciado ninguna conversación como comprador.</p>
+            </div>
+
+            <hr class="my-4">
+
+            <!-- como vendedor -->
+            <h5 class="fw-bold titulo-seccion mb-3">
+                <i class="fas fa-store me-2 icono-titulo"></i>
+                Como vendedor
+            </h5>
+
+            <div th:if="${!comoVendedor.isEmpty()}">
+                <a th:each="conv : ${comoVendedor}" th:href="@{/chat/{id}(id=${conv.id_conversacion})}"
+                    class="conversacion-item">
+                    <div class="conversacion-avatar">
+                        <span th:text="${#strings.substring(conv.comprador.nombre, 0, 1)}">C</span>
+                    </div>
+                    <div class="conversacion-info">
+                        <div class="conversacion-nombre" th:text="${conv.comprador.nombre}">Comprador</div>
+                        <div class="conversacion-producto" th:text="${conv.producto.titulo}">Producto</div>
+                    </div>
+                    <div class="conversacion-estado">
+                        <span th:if="${conv.conversacionActiva}" class="badge-activa">
+                            <i class="fas fa-circle me-1" style="font-size: 0.4rem;"></i> Activa
+                        </span>
+                        <span th:unless="${conv.conversacionActiva}" class="badge-cerrada">
+                            <i class="fas fa-lock me-1"></i> Cerrada
+                        </span>
+                        <small class="text-muted"
+                            th:text="${#temporals.format(conv.fechaCreacion, 'dd/MM/yyyy')}">Fecha</small>
+                    </div>
+                    <i class="fas fa-chevron-right text-muted ms-2"></i>
+                </a>
+            </div>
+            <div th:if="${comoVendedor.isEmpty()}" class="text-muted ps-2 mb-4">
+                <p>Todavía nadie ha contactado contigo como vendedor.</p>
+            </div>
+
+        </div>
+    </main>
+</body>
+
+</html>
