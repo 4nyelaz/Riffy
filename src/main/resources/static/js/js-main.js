@@ -553,3 +553,11 @@ function ordenarFechaAsc(tarjetas, contenedor) {
     });
     reinsertarTarjetas(tarjetas, contenedor);
 }
+
+
+// TOAST
+
+const toastLogout = document.querySelector("[data-toast-logout]");
+if (toastLogout) {
+    new Toast(toastLogout.dataset.mensaje, Toast.INFO, 3300);
+}
