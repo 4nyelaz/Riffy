@@ -21,7 +21,7 @@ public class ConversacionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_conversacion;
+    private Integer id_conversacion;
 
     @ManyToOne
     @JoinColumn(name = "id_producto")
@@ -45,11 +45,11 @@ public class ConversacionEntity {
     /* //////////////// getters y setters //////////////////////////////// */
     /* /////////////////////////////////////////////////////////////////// */
 
-    public Long getId_conversacion() {
+    public Integer getId_conversacion() {
         return id_conversacion;
     }
 
-    public void setId_conversacion(Long id_conversacion) {
+    public void setId_conversacion(Integer id_conversacion) {
         this.id_conversacion = id_conversacion;
     }
 

@@ -357,4 +357,48 @@ public class ProductoController {
         return "redirect:/producto/" + id_producto;
     }
 
+    @GetMapping("/buscar")
+    public String buscar(
+            @RequestParam(value = "q", required = false) String q,
+            @RequestParam(value = "categoria", required = false) String categoria,
+            @RequestParam(value = "estado", required = false) String estado,
+            @RequestParam(value = "precioMin", required = false) BigDecimal precioMin,
+            @RequestParam(value = "precioMax", required = false) BigDecimal precioMax,
+            HttpSession session,
+            Model model) {
+
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null)
+            return "redirect:/login";
+
+        // Limpiar q vacío para que el LIKE no filtre mal
+        String qFinal = (q != null && !q.isBlank()) ? q.trim() : null;
+        String catFinal = (categoria != null && !categoria.isBlank()) ? categoria : null;
+        String estFinal = (estado != null && !estado.isBlank()) ? estado : null;
+
+        List<ProductoEntity> resultados = productoRepository.buscar(qFinal, catFinal, estFinal, precioMin, precioMax);
+
+        // Construir imagenesMap igual que en los otros métodos
+        Map<Long, List<String>> imagenesMap = new HashMap<>();
+        for (ProductoEntity p : resultados) {
+            List<String> imgs = (p.getImagenes() != null && !p.getImagenes().isBlank())
+                    ? Arrays.asList(p.getImagenes().split(","))
+                    : Arrays.asList("sin_foto.png");
+            imagenesMap.put(p.getId_producto(), imgs);
+        }
+
+        model.addAttribute("productos", resultados);
+        model.addAttribute("imagenesMap", imagenesMap);
+        model.addAttribute("usuarioId", usuarioId);
+        model.addAttribute("nombreCompletoUsuario", session.getAttribute("nombreCompletoUsuario"));
+        model.addAttribute("q", q);
+        model.addAttribute("categoria", categoria);
+        model.addAttribute("estado", estado);
+        model.addAttribute("precioMin", precioMin);
+        model.addAttribute("precioMax", precioMax);
+        model.addAttribute("mostrarBuscador", true);
+
+        return "buscar";
+    }
+
 }
