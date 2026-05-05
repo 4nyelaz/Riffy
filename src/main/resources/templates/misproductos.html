@@ -18,6 +18,9 @@
         <div th:replace="~{fragmentos/sections :: mis-productos}"></div>
 
     </main>
+
+    <div th:if="${productoEliminado}" data-toast-productoEliminado th:data-mensaje="${productoEliminado}" hidden></div>
+    <div th:if="${productoNoEliminado}" data-toast-productoNoEliminado th:data-mensaje="${productoNoEliminado}" hidden></div>
 </body>
 
 </html>

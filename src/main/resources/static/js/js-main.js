@@ -566,3 +566,14 @@ const toastLogin = document.querySelector("[data-toast-login]");
 if (toastLogin) {
     new Toast(toastLogin.dataset.mensaje, Toast.ERROR, 4000);
 }
+
+const toastproductoEliminado = document.querySelector("[data-toast-productoEliminado]");
+if (toastproductoEliminado) {
+    new Toast(toastproductoEliminado.dataset.mensaje, Toast.INFO, 4000);
+}
+
+const toastproductoNoEliminado = document.querySelector("[data-toast-productoNoEliminado]");
+if (toastproductoNoEliminado) {
+    new Toast(toastproductoNoEliminado.dataset.mensaje, Toast.INFO, 4000);
+}
+

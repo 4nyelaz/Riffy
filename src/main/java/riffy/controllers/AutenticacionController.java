@@ -25,7 +25,7 @@ public class AutenticacionController {
     }
 
     /**
-     * @return vista de login
+     * @return redirige a login
      */
     @GetMapping("/login")
     public String login() {
@@ -36,8 +36,8 @@ public class AutenticacionController {
      * modelattribute recoge los datos del form, y los mete en el objeto usuario 
      * si hace registro, manda al login para iniciar sesion, si no es así, te manda de nuevo a registrarte
      * si no, lanza excepción -> flash attribute -> vista errorRegistro
-     * @param usuario
-     * @param redirect
+     * @param usuario objeto con los datos del formulario
+     * @param redirect mensajes flash de errores, o información adicional
      * @return
      */
     @PostMapping("/register")
@@ -57,9 +57,9 @@ public class AutenticacionController {
      * buscarPorUsuario devuelve boolean (puede o no existir)
      * si es así, te lleva a home
      * sino, error y direcciona a login
-     * @param usuario
-     * @param redirect
-     * @param session
+     * @param usuario objeto con los datos del formulario
+     * @param redirect mensajes flash de errores, o información adicional
+     * @param session session sesión HTTP del usuario actual
      * @return
      */
     @PostMapping("/login")
@@ -81,8 +81,8 @@ public class AutenticacionController {
     /**
      * invalida la sesión actual
      * guarda mensaje flash -> cerrar sesión
-     * @param session
-     * @param redirect
+     * @param session session sesión HTTP del usuario actual
+     * @param redirect mensajes flash de errores, o información adicional
      * @return redirige login
      */
     @GetMapping("/logout")
