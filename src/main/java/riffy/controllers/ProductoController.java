@@ -401,4 +401,45 @@ public class ProductoController {
         return "buscar";
     }
 
+    
+
+    @GetMapping("/explorar")
+    public String explorar(
+            @RequestParam(value = "categoria", required = false) String categoria,
+            @RequestParam(value = "estado", required = false) String estado,
+            @RequestParam(value = "precioMin", required = false) BigDecimal precioMin,
+            @RequestParam(value = "precioMax", required = false) BigDecimal precioMax,
+            HttpSession session,
+            Model model) {
+
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null)
+            return "redirect:/login";
+
+        String catFinal = (categoria != null && !categoria.isBlank()) ? categoria : null;
+        String estFinal = (estado != null && !estado.isBlank()) ? estado : null;
+
+        // Reutiliza el mismo método buscar del repositorio, sin texto (q = null)
+        List<ProductoEntity> resultados = productoRepository.buscar(null, catFinal, estFinal, precioMin, precioMax);
+
+        Map<Long, List<String>> imagenesMap = new HashMap<>();
+        for (ProductoEntity p : resultados) {
+            List<String> imgs = (p.getImagenes() != null && !p.getImagenes().isBlank())
+                    ? Arrays.asList(p.getImagenes().split(","))
+                    : Arrays.asList("sin_foto.png");
+            imagenesMap.put(p.getId_producto(), imgs);
+        }
+
+        model.addAttribute("productos", resultados);
+        model.addAttribute("imagenesMap", imagenesMap);
+        model.addAttribute("usuarioId", usuarioId);
+        model.addAttribute("nombreCompletoUsuario", session.getAttribute("nombreCompletoUsuario"));
+        model.addAttribute("categoria", categoria);
+        model.addAttribute("estado", estado);
+        model.addAttribute("precioMin", precioMin);
+        model.addAttribute("precioMax", precioMax);
+
+        return "explorar";
+    }
+
 }

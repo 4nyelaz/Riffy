@@ -839,6 +839,14 @@ dialog::backdrop {
     flex-shrink: 0;
 }
 
+/* explorar / buscar - grid vertical
+.row .producto-card {
+    min-width: unset;
+    max-width: unset;
+    flex-shrink: unset;
+    scroll-snap-align: unset;
+} */
+
 
 /* /////////////////////////////////////////////////////////////////// */
 /* ////////////////////// desplegable filtro ///////////////////////// */

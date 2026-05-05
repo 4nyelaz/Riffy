@@ -13,23 +13,33 @@ import riffy.services.UsuarioService;
 @Controller
 public class AutenticacionController {
 
-    private final UsuarioService usuarioService; // solo se puede usar aquí en este controller, y no es reasignable
+    // solo se puede usar aquí en este controller, y no es reasignable
+    private final UsuarioService usuarioService; 
 
-    // cada vez que spring arranca, comprueba este contructor
+    /**
+     * mete las dependencias por instructor
+     * @param usuarioService
+     */
     public AutenticacionController(UsuarioService usuarioService) {
         this.usuarioService = usuarioService;
     }
 
-    // redirección al login por GET
+    /**
+     * @return vista de login
+     */
     @GetMapping("/login")
     public String login() {
         return "autenticacion/login-signup";
     }
 
-    // modelattribute recoge los datos del form, y los mete en el objeto usuario
-    // si hace registro, manda al login para iniciar sesion, si no es así, te manda
-    // de nuevo a registrarte
-    // si no, lanza excepción -> flash attribute -> vista errorRegistro
+    /**
+     * modelattribute recoge los datos del form, y los mete en el objeto usuario 
+     * si hace registro, manda al login para iniciar sesion, si no es así, te manda de nuevo a registrarte
+     * si no, lanza excepción -> flash attribute -> vista errorRegistro
+     * @param usuario
+     * @param redirect
+     * @return
+     */
     @PostMapping("/register")
     public String registrar(@ModelAttribute UsuarioEntity usuario, RedirectAttributes redirect) {
         try {
@@ -41,9 +51,17 @@ public class AutenticacionController {
         }
     }
 
-    // modelattribute recoge los datos del form, y los mete en el objeto usuario
-    // buscarPorUsuario devuelve boolean (puede o no existir), si es así, te lleva a
-    // home y sino, error y direcciona a login
+
+    /**
+     * modelattribute recoge los datos del form, y los mete en el objeto usuario
+     * buscarPorUsuario devuelve boolean (puede o no existir)
+     * si es así, te lleva a home
+     * sino, error y direcciona a login
+     * @param usuario
+     * @param redirect
+     * @param session
+     * @return
+     */
     @PostMapping("/login")
     public String login(@ModelAttribute UsuarioEntity usuario, RedirectAttributes redirect, HttpSession session) {
         return usuarioService.buscarPorUsuario(usuario.getUsuario())
@@ -60,6 +78,13 @@ public class AutenticacionController {
                 });
     }
 
+    /**
+     * invalida la sesión actual
+     * guarda mensaje flash -> cerrar sesión
+     * @param session
+     * @param redirect
+     * @return redirige login
+     */
     @GetMapping("/logout")
     public String logout(HttpSession session, RedirectAttributes redirect) {
         session.invalidate();

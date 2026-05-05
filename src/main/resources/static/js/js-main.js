@@ -559,5 +559,10 @@ function ordenarFechaAsc(tarjetas, contenedor) {
 
 const toastLogout = document.querySelector("[data-toast-logout]");
 if (toastLogout) {
-    new Toast(toastLogout.dataset.mensaje, Toast.INFO, 3300);
+    new Toast(toastLogout.dataset.mensaje, Toast.INFO, 4000);
+}
+
+const toastLogin = document.querySelector("[data-toast-login]");
+if (toastLogin) {
+    new Toast(toastLogin.dataset.mensaje, Toast.ERROR, 4000);
 }
