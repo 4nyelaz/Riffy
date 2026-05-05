@@ -84,7 +84,7 @@ public class ProductoController {
         model.addAttribute("usuarioId", usuarioId);
         model.addAttribute("nombreCompletoUsuario", session.getAttribute("nombreCompletoUsuario"));
 
-        return "misproductos";
+        return "producto/misproductos";
     }
 
     @GetMapping("/editarproducto/{id}")
@@ -121,7 +121,7 @@ public class ProductoController {
         model.addAttribute("formatos", formatos);
         model.addAttribute("estados", estados);
 
-        return "formulario-producto";
+        return "producto/formulario-producto";
     }
 
     /**
@@ -305,7 +305,7 @@ public class ProductoController {
         model.addAttribute("categorias", Arrays.asList("Vinilo", "CD"));
         model.addAttribute("formatos", Arrays.asList("Nuevo", "Muy Bueno", "Bueno", "Usado"));
 
-        return "crearproducto";
+        return "producto/crearproducto";
     }
 
 
@@ -440,7 +440,7 @@ public class ProductoController {
         model.addAttribute("producto", producto);
         model.addAttribute("imagenes", imgs);
 
-        return "detalleproducto";
+        return "producto/detalleproducto";
     }
 
     /**
@@ -541,7 +541,7 @@ public class ProductoController {
         model.addAttribute("precioMax", precioMax);
         model.addAttribute("mostrarBuscador", true);
 
-        return "buscar";
+        return "producto/buscar";
     }
 
 
@@ -606,7 +606,7 @@ public class ProductoController {
         model.addAttribute("precioMin", precioMin);
         model.addAttribute("precioMax", precioMax);
 
-        return "explorar";
+        return "producto/explorar";
     }
 
 }

@@ -18,6 +18,7 @@ public class UsuarioService {
         this.usuarioRepositorio = usuarioRepositorio;
     }
 
+    // TODO
     public void registrar(UsuarioEntity usuario) {
         if (usuarioRepositorio.existsByUsuario(usuario.getUsuario())) {
             throw new RuntimeException("El nombre de usuario ya está en uso");

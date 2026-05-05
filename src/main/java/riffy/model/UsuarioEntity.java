@@ -1,7 +1,18 @@
 package riffy.model;
 
-import jakarta.persistence.*;
 import java.time.LocalDate;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.Table;
+
+/* /////////////////////////////////////////////////////////////////// */
+/* //////////////// entidad usuario ////////////////////////////////// */
+/* /////////////////////////////////////////////////////////////////// */
 
 @Entity
 @Table(name = "usuario")
@@ -27,7 +38,11 @@ public class UsuarioEntity {
     @Column(name = "rol")
     private String rol = "USER";
 
-    @PrePersist
+    /* /////////////////////////////////////////////////////////////////// */
+    /* //////////////// getters y setters //////////////////////////////// */
+    /* /////////////////////////////////////////////////////////////////// */
+
+    @PrePersist // TODO
     public void antesDeGuardar() {
         this.fechaRegistro = LocalDate.now();
     }

@@ -143,7 +143,7 @@ public class ChatController {
         model.addAttribute("usuarioId", usuarioId);
         model.addAttribute("nombreCompletoUsuario", session.getAttribute("nombreCompletoUsuario"));
 
-        return "chat";
+        return "chat/chat";
     }
 
     /**
@@ -224,6 +224,6 @@ public class ChatController {
         model.addAttribute("usuarioId", usuarioId);
         model.addAttribute("nombreCompletoUsuario", session.getAttribute("nombreCompletoUsuario"));
 
-        return "misconversaciones";
+        return "chat/misconversaciones";
     }
 }

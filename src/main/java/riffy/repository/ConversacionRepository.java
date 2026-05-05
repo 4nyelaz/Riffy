@@ -13,8 +13,7 @@ import riffy.model.UsuarioEntity;
 @Repository
 public interface ConversacionRepository extends JpaRepository<ConversacionEntity, Long> {
 
-    Optional<ConversacionEntity> findByProductoAndCompradorAndVendedor(
-            ProductoEntity producto, UsuarioEntity comprador, UsuarioEntity vendedor);
+    Optional<ConversacionEntity> findByProductoAndCompradorAndVendedor(ProductoEntity producto, UsuarioEntity comprador, UsuarioEntity vendedor);
 
     List<ConversacionEntity> findByCompradorOrVendedor(UsuarioEntity comprador, UsuarioEntity vendedor);
 
