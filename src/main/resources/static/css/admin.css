@@ -1,0 +1,116 @@
+/* /////////////////////////////////////////////////////////////////// */
+/* //////////////////////////// layout ////////////////////////////// */
+/* /////////////////////////////////////////////////////////////////// */
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* /////////////////////////////////////////////////////////////////// */
+/* //////////////////////////// sidebar ////////////////////////////// */
+/* /////////////////////////////////////////////////////////////////// */
+
+.sidebar {
+    width: 240px;
+    background: var(--color-first);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 16px;
+}
+
+.sidebar-logo {
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: white;
+    text-decoration: none;
+    margin-bottom: 30px;
+}
+
+.sidebar-nav {
+    flex: 1;
+}
+
+.nav-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin: 15px 0 8px;
+}
+
+.sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 8px;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.sidebar .nav-link:hover {
+    background: var(--color-accent);
+    color: white;
+}
+
+.sidebar .nav-link.active {
+    background: var(--color-accent);
+    color: white;
+}
+
+/* footer sidebar */
+
+.sidebar-footer {
+    margin-top: auto;
+    font-size: 0.85rem;
+}
+
+.btn-logout {
+    display: block;
+    margin-top: 10px;
+    text-decoration: none;
+    color: white;
+    opacity: 0.8;
+}
+
+.btn-logout:hover {
+    opacity: 1;
+}
+
+/* /////////////////////////////////////////////////////////////////// */
+/* ////////////////////////////// main /////////////////////////////// */
+/* /////////////////////////////////////////////////////////////////// */
+
+.main {
+    flex: 1;
+    background: var(--color-bg-alt);
+}
+
+/* /////////////////////////////////////////////////////////////////// */
+/* //////////////////////////// cards /////////////////////////////// */
+/* /////////////////////////////////////////////////////////////////// */
+
+.card {
+    border-radius: 16px;
+    border: 0.5px solid #d0dde8;
+    overflow: hidden;
+}
+
+.card-header {
+    background: white;
+    font-weight: 600;
+    color: var(--color-first);
+}
+
+/* /////////////////////////////////////////////////////////////////// */
+/* ////////////////////////// secciones ////////////////////////////// */
+/* /////////////////////////////////////////////////////////////////// */
+
+.seccion {
+    display: none;
+}
+
+.seccion.activa {
+    display: block;
+}
