@@ -1,7 +1,9 @@
 package riffy.services;
 
+import java.util.List;
 import java.util.Optional;
 
+import org.springframework.lang.NonNull;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,5 +35,20 @@ public class UsuarioService {
 
     public boolean comprobarContrasena(String contrasenaIntroducida, String contrasenaGuardada) {
         return encoder.matches(contrasenaIntroducida, contrasenaGuardada);
+    }
+
+    public List<UsuarioEntity> listarTodos() {
+        return usuarioRepositorio.findAll();
+    }
+
+    public void eliminar(@NonNull Long id) {
+        usuarioRepositorio.deleteById(id);
+    }
+
+    public void actualizarRol(@NonNull Long id, String rol) {
+        usuarioRepositorio.findById(id).ifPresent(u -> {
+            u.setRol(rol);
+            usuarioRepositorio.save(u);
+        });
     }
 }

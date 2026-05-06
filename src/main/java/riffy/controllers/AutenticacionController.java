@@ -14,10 +14,11 @@ import riffy.services.UsuarioService;
 public class AutenticacionController {
 
     // solo se puede usar aquí en este controller, y no es reasignable
-    private final UsuarioService usuarioService; 
+    private final UsuarioService usuarioService;
 
     /**
      * mete las dependencias por instructor
+     * 
      * @param usuarioService
      */
     public AutenticacionController(UsuarioService usuarioService) {
@@ -33,10 +34,12 @@ public class AutenticacionController {
     }
 
     /**
-     * modelattribute recoge los datos del form, y los mete en el objeto usuario 
-     * si hace registro, manda al login para iniciar sesion, si no es así, te manda de nuevo a registrarte
+     * modelattribute recoge los datos del form, y los mete en el objeto usuario
+     * si hace registro, manda al login para iniciar sesion, si no es así, te manda
+     * de nuevo a registrarte
      * si no, lanza excepción -> flash attribute -> vista errorRegistro
-     * @param usuario objeto con los datos del formulario
+     * 
+     * @param usuario  objeto con los datos del formulario
      * @param redirect mensajes flash de errores, o información adicional
      * @return
      */
@@ -51,15 +54,15 @@ public class AutenticacionController {
         }
     }
 
-
     /**
      * modelattribute recoge los datos del form, y los mete en el objeto usuario
      * buscarPorUsuario devuelve boolean (puede o no existir)
      * si es así, te lleva a home
      * sino, error y direcciona a login
-     * @param usuario objeto con los datos del formulario
+     * 
+     * @param usuario  objeto con los datos del formulario
      * @param redirect mensajes flash de errores, o información adicional
-     * @param session session sesión HTTP del usuario actual
+     * @param session  session sesión HTTP del usuario actual
      * @return
      */
     @PostMapping("/login")
@@ -70,6 +73,10 @@ public class AutenticacionController {
                     session.setAttribute("nombreCompletoUsuario", u.getNombre());
                     session.setAttribute("usuarioId", u.getIdUsuario());
                     session.setAttribute("nombreUsuario", u.getUsuario());
+                    session.setAttribute("rolUsuario", u.getRol());
+                    if ("ADMIN".equals(u.getRol())) {
+                        return "redirect:/admin/dashboard";
+                    }
                     return "redirect:/home";
                 })
                 .orElseGet(() -> {
@@ -81,7 +88,8 @@ public class AutenticacionController {
     /**
      * invalida la sesión actual
      * guarda mensaje flash -> cerrar sesión
-     * @param session session sesión HTTP del usuario actual
+     * 
+     * @param session  session sesión HTTP del usuario actual
      * @param redirect mensajes flash de errores, o información adicional
      * @return redirige login
      */

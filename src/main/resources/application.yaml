@@ -8,7 +8,7 @@ spring:
   application:
     name: riffy
   datasource:
-    url: jdbc:mysql://localhost:/riffy_db
+    url: jdbc:mysql://localhost:3306/riffy_db
     username: root
     password: ""
     driver-class-name: com.mysql.cj.jdbc.Driver

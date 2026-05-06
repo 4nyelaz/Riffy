@@ -2,6 +2,7 @@ package riffy.services;
 
 import java.util.List;
 
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 
 import riffy.model.ProductoEntity;
@@ -21,6 +22,10 @@ public class ProductoService {
 
     public List<ProductoEntity> findAll() {
         return productoRepositorio.findAll();
+    }
+
+    public void eliminar(@NonNull Long id) {
+        productoRepositorio.deleteById(id);
     }
 
 }
