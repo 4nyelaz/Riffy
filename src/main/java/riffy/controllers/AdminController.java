@@ -1,21 +1,20 @@
 package riffy.controllers;
 
-import java.util.Map;
-
-import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import jakarta.servlet.http.HttpSession;
+import riffy.model.ConversacionEntity;
+import riffy.model.UsuarioEntity;
 import riffy.repository.ConversacionRepository;
+import riffy.repository.MensajeRepository;
 import riffy.services.ProductoService;
 import riffy.services.UsuarioService;
 
@@ -28,44 +27,47 @@ public class AdminController {
     private final UsuarioService usuarioService;
     private final ProductoService productoService;
     private final ConversacionRepository conversacionRepository;
+    private final MensajeRepository mensajeRepository;
     // ---------------------------------------------------------------
 
-    /**
-     * inyección de dependencias por constructor
-     * 
-     * @param usuarioService         servicio de usuarios
-     * @param productoService        servicio de productos
-     * @param conversacionRepository repositorio de conversaciones
-     */
     public AdminController(UsuarioService usuarioService,
             ProductoService productoService,
-            ConversacionRepository conversacionRepository) {
+            ConversacionRepository conversacionRepository,
+            MensajeRepository mensajeRepository) {
         this.usuarioService = usuarioService;
         this.productoService = productoService;
         this.conversacionRepository = conversacionRepository;
+        this.mensajeRepository = mensajeRepository;
     }
 
-    /**
-     * comprueba si el usuario en sesión tiene rol ADMIN
-     * 
-     * @param session sesión HTTP del usuario actual
-     * @return true si es ADMIN, false si no lo es
-     */
+    // comprueba que quien llama es admin — si no lo es, fuera
     private boolean esAdmin(HttpSession session) {
         return "ADMIN".equals(session.getAttribute("rolUsuario"));
     }
 
+    // ---------------------------------------------------------------
+    // dashboard
+    // ---------------------------------------------------------------
+
     /**
-     * muestra el panel de administración
-     * si el usuario no es ADMIN redirige al login
+     * muestra el panel principal de administración
+     * carga usuarios, productos y conversaciones de una vez
+     * los mensajes se consultan aparte, por conversación
      * 
+     * @param model   modelo de Thymeleaf donde se inyectan los datos
      * @param session sesión HTTP del usuario actual
-     * @return plantilla admin/tablaadmin o redirección a login
+     * @return plantilla admin/tablaadmin, o redirección a login si no es ADMIN
      */
     @GetMapping("/dashboard")
-    public String dashboard(HttpSession session) {
+    public String dashboard(Model model, HttpSession session) {
         if (!esAdmin(session))
             return "redirect:/login";
+
+        // tres consultas, tres atributos — Thymeleaf hace el resto
+        model.addAttribute("usuarios", usuarioService.listarTodos());
+        model.addAttribute("productos", productoService.findAll());
+        model.addAttribute("conversaciones", conversacionRepository.findAll());
+
         return "admin/tablaadmin";
     }
 
@@ -74,65 +76,79 @@ public class AdminController {
     // ---------------------------------------------------------------
 
     /**
-     * devuelve la lista completa de usuarios registrados
-     * @param session sesión HTTP del usuario actual
-     * @return 200 con la lista de usuarios, o 403 si no es ADMIN
-     */
-    @GetMapping("/api/usuarios")
-    @ResponseBody
-
-    public Map<String, Object> listarUsuarios(
-            @RequestParam(value = "jtStartIndex", defaultValue = "0") int startIndex,
-            @RequestParam(value = "jtPageSize", defaultValue = "10") int pageSize,
-            @RequestParam(value = "jtSorting", required = false) String sorting,
-            HttpSession session) {
-
-        if (!esAdmin(session)) {
-            return Map.of("Result", "ERROR", "Message", "No autorizado");
-        }
-
-        return Map.of(
-                "Result", "OK",
-                "Records", usuarioService.listarTodos());
-    }
-
-    /**
-     * elimina un usuario por su id
+     * elimina un usuario de la plataforma de forma permanente
+     * cuidado con esto — no tiene vuelta atrás
      * 
      * @param id      id del usuario a eliminar
      * @param session sesión HTTP del usuario actual
-     * @return 200 si se eliminó correctamente, o 403 si no es ADMIN
+     * @return redirección al dashboard en la pestaña de usuarios, o login si no es
+     *         ADMIN
      */
-    @DeleteMapping("/api/usuarios/{id}")
-    @ResponseBody
-    public Map<String, Object> eliminarUsuario(@PathVariable @NonNull Long id, HttpSession session) {
-        if (!esAdmin(session)) {
-            return Map.of("Result", "ERROR");
-        }
-
+    @PostMapping("/usuarios/{id}/eliminar")
+    public String eliminarUsuario(@PathVariable @NonNull Long id, HttpSession session) {
+        if (!esAdmin(session))
+            return "redirect:/login";
         usuarioService.eliminar(id);
-
-        return Map.of("Result", "OK");
+        return "redirect:/admin/dashboard?seccion=usuarios";
     }
 
     /**
      * cambia el rol de un usuario entre USER y ADMIN
-     * espera un JSON con el campo rol en el cuerpo de la petición
+     * el rol llega como parámetro de formulario, sin AJAX
      * 
      * @param id      id del usuario a modificar
-     * @param body    mapa con la clave rol y el nuevo valor
+     * @param rol     nuevo rol, esperado USER o ADMIN
      * @param session sesión HTTP del usuario actual
-     * @return 200 si se actualizó correctamente, o 403 si no es ADMIN
+     * @return redirección al dashboard en la pestaña de usuarios, o login si no es
+     *         ADMIN
      */
-    @PatchMapping("/api/usuarios/{id}/rol")
-    @ResponseBody
-    public ResponseEntity<?> cambiarRol(@PathVariable @NonNull Long id,
-            @RequestBody Map<String, String> body,
+    @PostMapping("/usuarios/{id}/rol")
+    public String cambiarRol(@PathVariable @NonNull Long id,
+            @RequestParam String rol,
             HttpSession session) {
         if (!esAdmin(session))
-            return ResponseEntity.status(403).build();
-        usuarioService.actualizarRol(id, body.get("rol"));
-        return ResponseEntity.ok().build();
+            return "redirect:/login";
+        usuarioService.actualizarRol(id, rol);
+        return "redirect:/admin/dashboard?seccion=usuarios";
+    }
+
+    /**
+     * muestra el formulario para dar de alta a un nuevo usuario interno
+     * pensado para empleados nuevos que necesitan acceso desde el primer día
+     * flujo separado del registro público — aquí el admin controla el rol
+     * directamente
+     * 
+     * @param session sesión HTTP del usuario actual
+     * @param model   modelo donde se inyecta el objeto vacío del formulario
+     * @return plantilla admin/nuevo-usuario, o login si no es ADMIN
+     */
+    @GetMapping("/usuarios/nuevo")
+    public String formularioNuevoUsuario(HttpSession session, Model model) {
+        if (!esAdmin(session))
+            return "redirect:/login";
+        model.addAttribute("usuario", new UsuarioEntity());
+        return "admin/nuevo-usuario";
+    }
+
+    /**
+     * procesa el alta de un nuevo usuario interno desde el panel
+     * la contraseña se hashea igual que en el registro normal
+     * sin verificación de email ni nada de eso — es un alta directa
+     * 
+     * @param usuario objeto con nombre, email y contraseña del formulario
+     * @param rol     rol a asignar, esperado USER o ADMIN
+     * @param session sesión HTTP del usuario actual
+     * @return redirección al dashboard en la pestaña de usuarios, o login si no es
+     *         ADMIN
+     */
+    @PostMapping("/usuarios/nuevo")
+    public String crearUsuario(@ModelAttribute UsuarioEntity usuario,
+            @RequestParam String rol,
+            HttpSession session) {
+        if (!esAdmin(session))
+            return "redirect:/login";
+        usuarioService.crearUsuarioAdmin(usuario, rol);
+        return "redirect:/admin/dashboard?seccion=usuarios";
     }
 
     // ---------------------------------------------------------------
@@ -140,37 +156,20 @@ public class AdminController {
     // ---------------------------------------------------------------
 
     /**
-     * devuelve la lista completa de productos publicados en la plataforma
-     * 
-     * @param session sesión HTTP del usuario actual
-     * @return 200 con la lista de productos, o 403 si no es ADMIN
-     */
-    @GetMapping("/api/productos")
-    @ResponseBody
-    public Map<String, Object> listarProductos(HttpSession session) {
-        if (!esAdmin(session)) {
-            return Map.of("Result", "ERROR", "Message", "No autorizado");
-        }
-
-        return Map.of(
-                "Result", "OK",
-                "Records", productoService.findAll());
-    }
-
-    /**
-     * elimina un producto por su id
+     * elimina un producto de la plataforma
+     * para moderar contenido inapropiado o erróneo — también permanente
      * 
      * @param id      id del producto a eliminar
      * @param session sesión HTTP del usuario actual
-     * @return 200 si se eliminó correctamente, o 403 si no es ADMIN
+     * @return redirección al dashboard en la pestaña de productos, o login si no es
+     *         ADMIN
      */
-    @DeleteMapping("/api/productos/{id}")
-    @ResponseBody
-    public ResponseEntity<?> eliminarProducto(@PathVariable @NonNull Long id, HttpSession session) {
+    @PostMapping("/productos/{id}/eliminar")
+    public String eliminarProducto(@PathVariable @NonNull Long id, HttpSession session) {
         if (!esAdmin(session))
-            return ResponseEntity.status(403).build();
+            return "redirect:/login";
         productoService.eliminar(id);
-        return ResponseEntity.ok().build();
+        return "redirect:/admin/dashboard?seccion=productos";
     }
 
     // ---------------------------------------------------------------
@@ -178,40 +177,59 @@ public class AdminController {
     // ---------------------------------------------------------------
 
     /**
-     * devuelve la lista completa de conversaciones entre usuarios
-     * 
-     * @param session sesión HTTP del usuario actual
-     * @return 200 con la lista de conversaciones, o 403 si no es ADMIN
-     */
-    @GetMapping("/api/conversaciones")
-    @ResponseBody
-    public Map<String, Object> listarConversaciones(HttpSession session) {
-        if (!esAdmin(session)) {
-            return Map.of("Result", "ERROR", "Message", "No autorizado");
-        }
-
-        return Map.of(
-                "Result", "OK",
-                "Records", conversacionRepository.findAll());
-    }
-
-    /**
-     * activa o desactiva una conversación según su estado actual
+     * alterna el estado de una conversación entre activa y cerrada
      * si estaba activa la cierra, si estaba cerrada la reactiva
+     * útil para mediar conflictos sin tener que eliminar nada
      * 
      * @param id      id de la conversación a modificar
      * @param session sesión HTTP del usuario actual
-     * @return 200 si se cambió el estado, o 403 si no es ADMIN
+     * @return redirección al dashboard en la pestaña de conversaciones, o login si
+     *         no es ADMIN
      */
-    @PatchMapping("/api/conversaciones/{id}/estado")
-    @ResponseBody
-    public ResponseEntity<?> toggleConversacion(@PathVariable @NonNull Long id, HttpSession session) {
+    @PostMapping("/conversaciones/{id}/toggle")
+    public String toggleConversacion(@PathVariable @NonNull Long id, HttpSession session) {
         if (!esAdmin(session))
-            return ResponseEntity.status(403).build();
+            return "redirect:/login";
+
+        // si no existe simplemente no hace nada — sin explosiones
         conversacionRepository.findById(id).ifPresent(c -> {
             c.setConversacionActiva(!c.getConversacionActiva());
             conversacionRepository.save(c);
         });
-        return ResponseEntity.ok().build();
+
+        return "redirect:/admin/dashboard?seccion=conversaciones";
+    }
+
+    // ---------------------------------------------------------------
+    // mensajes (solo lectura)
+    // ---------------------------------------------------------------
+
+    /**
+     * muestra los mensajes de una conversación concreta
+     * el admin puede leerlos para contextualizar una denuncia, pero no tocar nada
+     * se abre en página aparte para no saturar el dashboard con todos los mensajes
+     * 
+     * @param id      id de la conversación cuyos mensajes se quieren ver
+     * @param model   modelo donde se inyectan la conversación y sus mensajes
+     * @param session sesión HTTP del usuario actual
+     * @return plantilla admin/mensajes, o login si no es ADMIN
+     */
+    @GetMapping("/conversaciones/{id}/mensajes")
+    public String verMensajes(@PathVariable @NonNull Long id,
+            Model model,
+            HttpSession session) {
+        if (!esAdmin(session))
+            return "redirect:/login";
+
+        // si la conversación no existe, de vuelta al dashboard
+        ConversacionEntity conv = conversacionRepository.findById(id).orElse(null);
+        if (conv == null)
+            return "redirect:/admin/dashboard?seccion=conversaciones";
+
+        // el repo necesita la entidad entera, no solo el id
+        model.addAttribute("conversacion", conv);
+        model.addAttribute("mensajes", mensajeRepository.findByConversacionOrderByFechaEnvioAsc(conv));
+
+        return "admin/mensajes";
     }
 }

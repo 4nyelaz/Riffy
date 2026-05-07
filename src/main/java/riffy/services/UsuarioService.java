@@ -51,4 +51,10 @@ public class UsuarioService {
             usuarioRepositorio.save(u);
         });
     }
+
+    public void crearUsuarioAdmin(UsuarioEntity usuario, String rol) {
+        usuario.setContrasena(encoder.encode(usuario.getContrasena()));
+        usuario.setRol(rol);
+        usuarioRepositorio.save(usuario);
+    }
 }

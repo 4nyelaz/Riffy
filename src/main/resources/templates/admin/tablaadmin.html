@@ -1,50 +1,187 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Riffy - Admin</title>
-
     <th:block th:replace="~{fragmentos/sections :: head}"></th:block>
-    
-    <script defer th:src="@{/js/jtable.js}"></script>
-
+    <script defer th:src="@{/js/admin.js}"></script>
 </head>
-
 <body>
-
     <div th:replace="~{fragmentos/nav-admin :: nav-admin}"></div>
-
     <main class="home-main">
-
         <div class="container py-4">
 
+            <!-- navegación entre secciones -->
+            <div class="d-flex gap-2 mb-4">
+                <button class="btn btn-admin active" data-seccion="usuarios">Usuarios</button>
+                <button class="btn btn-admin" data-seccion="productos">Productos</button>
+                <button class="btn btn-admin" data-seccion="conversaciones">Conversaciones</button>
+            </div>
+
+            <!-- ── usuarios ────────────────────────────────────────── -->
             <div id="seccion-usuarios" class="seccion activa">
                 <div class="card">
-                    <div class="card-header">Usuarios</div>
-                    <div id="tabla-usuarios"></div>
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Usuarios</span>
+                        <a th:href="@{/admin/usuarios/nuevo}" class="btn btn-sm btn-success">+ Nuevo usuario</a>
+                    </div>
+                    <div class="card-body p-0">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Usuario</th>
+                                    <th>Registro</th>
+                                    <th>Rol</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="u : ${usuarios}">
+                                    <td th:text="${u.idUsuario}"></td>
+                                    <td th:text="${u.nombre}"></td>
+                                    <td th:text="'@' + ${u.usuario}"></td>
+                                    <td th:text="${u.fechaRegistro}"></td>
+                                    <td>
+                                        <span th:classappend="${u.rol == 'ADMIN'} ? 'badge-admin' : 'badge-user'"
+                                              class="badge"
+                                              th:text="${u.rol}">
+                                        </span>
+                                    </td>
+                                    <td class="d-flex gap-1">
+                                        <!-- cambiar rol -->
+                                        <form th:action="@{/admin/usuarios/{id}/rol(id=${u.idUsuario})}" method="post">
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-secondary"
+                                                    th:name="rol"
+                                                    th:value="${u.rol == 'ADMIN'} ? 'USER' : 'ADMIN'"
+                                                    th:text="${u.rol == 'ADMIN'} ? 'Quitar admin' : 'Hacer admin'">
+                                            </button>
+                                        </form>
+                                        <!-- eliminar -->
+                                        <form th:action="@{/admin/usuarios/{id}/eliminar(id=${u.idUsuario})}" method="post"
+                                              onsubmit="return confirm('¿Eliminar este usuario? No tiene vuelta atrás.')">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <!-- si no hay usuarios -->
+                                <tr th:if="${#lists.isEmpty(usuarios)}">
+                                    <td colspan="6" class="text-center text-muted py-3">No hay usuarios registrados</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
+            <!-- ── productos ───────────────────────────────────────── -->
             <div id="seccion-productos" class="seccion">
                 <div class="card">
                     <div class="card-header">Productos</div>
-                    <div id="tabla-productos"></div>
+                    <div class="card-body p-0">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Título</th>
+                                    <th>Artista</th>
+                                    <th>Formato</th>
+                                    <th>Precio</th>
+                                    <th>Estado</th>
+                                    <th>Categoría</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="p : ${productos}">
+                                    <td th:text="${p.id_producto}"></td>
+                                    <td th:text="${p.titulo}"></td>
+                                    <td th:text="${p.artista}"></td>
+                                    <td th:text="${p.formato}"></td>
+                                    <td th:text="${p.precio} + ' €'"></td>
+                                    <td>
+                                        <span th:classappend="${p.estado == 'Disponible'} ? 'badge-disponible' : 'badge-vendido'"
+                                              class="badge"
+                                              th:text="${p.estado}">
+                                        </span>
+                                    </td>
+                                    <td th:text="${p.categoria}"></td>
+                                    <td>
+                                        <form th:action="@{/admin/productos/{id}/eliminar(id=${p.id_producto})}" method="post"
+                                              onsubmit="return confirm('¿Eliminar este producto?')">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(productos)}">
+                                    <td colspan="8" class="text-center text-muted py-3">No hay productos publicados</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
+            <!-- ── conversaciones ──────────────────────────────────── -->
             <div id="seccion-conversaciones" class="seccion">
                 <div class="card">
                     <div class="card-header">Conversaciones</div>
-                    <div id="tabla-conversaciones"></div>
+                    <div class="card-body p-0">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Producto</th>
+                                    <th>Comprador</th>
+                                    <th>Vendedor</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="c : ${conversaciones}">
+                                    <td th:text="${c.id_conversacion}"></td>
+                                    <td th:text="${c.producto != null} ? ${c.producto.titulo} : '-'"></td>
+                                    <td th:text="${c.comprador != null} ? '@' + ${c.comprador.usuario} : '-'"></td>
+                                    <td th:text="${c.vendedor != null} ? '@' + ${c.vendedor.usuario} : '-'"></td>
+                                    <td th:text="${c.fechaCreacion}"></td>
+                                    <td>
+                                        <span th:classappend="${c.conversacionActiva} ? 'badge-activa' : 'badge-cerrada'"
+                                              class="badge"
+                                              th:text="${c.conversacionActiva} ? 'Activa' : 'Cerrada'">
+                                        </span>
+                                    </td>
+                                    <td class="d-flex gap-1">
+                                        <!-- abrir/cerrar conversación -->
+                                        <form th:action="@{/admin/conversaciones/{id}/toggle(id=${c.id_conversacion})}" method="post">
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-primary"
+                                                    th:text="${c.conversacionActiva} ? 'Cerrar' : 'Reabrir'">
+                                            </button>
+                                        </form>
+                                        <!-- ver mensajes -->
+                                        <a th:href="@{/admin/conversaciones/{id}/mensajes(id=${c.id_conversacion})}"
+                                           class="btn btn-sm btn-outline-secondary">
+                                            Ver mensajes
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(conversaciones)}">
+                                    <td colspan="7" class="text-center text-muted py-3">No hay conversaciones</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
         </div>
-
     </main>
 
+    
 </body>
-
 </html>
