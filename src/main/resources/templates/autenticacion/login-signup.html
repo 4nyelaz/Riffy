@@ -12,9 +12,10 @@
 
 <body>
     <div class="cabecera-auth">
-        <a th:href="@{/home}">
+        <a th:href="@{/}">
             <img th:src="@{/img/riffy_logo.png}" alt="Riffy" class="logo-auth" />
         </a>
+
         <a th:href="@{/}" class="enlace-volver">
             <i class="fas fa-arrow-left"></i>
             Volver al inicio
@@ -54,27 +55,28 @@
                     <form th:action="@{/register}" method="post">
                         <div class="campo-formulario">
                             <label>Nombre completo</label>
-                            <input type="text" name="nombre" placeholder="Tu nombre" required />
+                            <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required />
+                            <small class="mensaje-validacion" id="validacion-nombre"></small>
                         </div>
+
                         <div class="campo-formulario">
                             <label>Usuario</label>
-                            <input type="text" name="usuario" placeholder="Elige un nombre de usuario" required />
+                            <input type="text" id="usuario" name="usuario" placeholder="Elige un nombre de usuario"
+                                required />
+                            <small class="mensaje-validacion" id="validacion-usuario"></small>
                         </div>
+
                         <div class="campo-formulario">
                             <label>Contraseña</label>
-                            <input type="password" name="contrasena" placeholder="••••••••" required />
+                            <input type="password" id="contrasena" name="contrasena" placeholder="••••••••" required />
+                            <small class="mensaje-validacion" id="validacion-contrasena"></small>
                         </div>
                         <div class="row m-1">
                             <div class="col-sm-10">
                                 <div class="form-check">
                                     <input class="form-check-input" type="checkbox" id="gridCheck1" required>
                                     <label class="form-check-label" for="gridCheck1">
-                                        <small>He leído y acepto los
-                                            <a th:href="@{/terminos}" class="enlace-politicas">Términos y
-                                                condiciones</a>
-                                            y la
-                                            <a th:href="@{/privacidad}" class="enlace-politicas">Política de
-                                                privacidad</a>
+                                        <small>He leído y acepto los Términos ycondiciones y la Política de privacidad
                                         </small>
                                     </label>
                                 </div>
@@ -90,7 +92,16 @@
     </div>
 
     <div th:if="${mensajeLogout}" data-toast-logout th:data-mensaje="${mensajeLogout}" hidden></div>
+
     <div th:if="${errorLogin}" data-toast-login th:data-mensaje="${errorLogin}" hidden></div>
+
+    <div th:if="${errorRegistro}" data-toast-error th:data-mensaje="${errorRegistro}" hidden></div>
+
+    <div th:if="${registroExito}" data-toast-success th:data-mensaje="${registroExito}" hidden></div>
+
+    <!-- <p th:if="${errorRegistro}" th:text="${errorRegistro}">test</p>
+    <p th:if="${registroExito}" th:text="${registroExito}">test</p> -->
+
 
 </body>
 

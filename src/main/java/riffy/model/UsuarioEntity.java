@@ -10,6 +10,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 /* /////////////////////////////////////////////////////////////////// */
 /* //////////////// entidad usuario ////////////////////////////////// */
 /* /////////////////////////////////////////////////////////////////// */
@@ -23,13 +27,18 @@ public class UsuarioEntity {
     @Column(name = "id_usuario")
     private Long idUsuario;
 
-    @Column(name = "nombre", nullable = false)
+    @NotBlank
+    @Size(min = 3)
     private String nombre;
 
-    @Column(name = "usuario", nullable = false, unique = true)
+    @NotBlank
+    @Size(min = 4)
+    @Pattern(regexp = "^[a-zA-Z0-9_]+$")
     private String usuario;
 
-    @Column(name = "contrasena", nullable = false)
+    @NotBlank
+    @Size(min = 8)
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9]).+$")
     private String contrasena;
 
     @Column(name = "fecha_registro")

@@ -1,75 +1,145 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Riffy - Admin</title>
-    <th:block th:replace="~{fragmentos/sections :: head}"></th:block>
-    <script defer th:src="@{/js/admin.js}"></script>
-</head>
-<body>
-    <div th:replace="~{fragmentos/nav-admin :: nav-admin}"></div>
-    <main class="home-main">
-        <div class="container py-4">
 
-            <!-- navegación entre secciones -->
-            <div class="d-flex gap-2 mb-4">
-                <button class="btn btn-admin active" data-seccion="usuarios">Usuarios</button>
-                <button class="btn btn-admin" data-seccion="productos">Productos</button>
-                <button class="btn btn-admin" data-seccion="conversaciones">Conversaciones</button>
+<head>
+    <title>Panel de Administración – Riffy</title>
+    <div th:replace="~{fragmentos/sections :: head}"></div>
+    <link rel="stylesheet" th:href="@{/css/admin.css}">
+
+    <!-- Lógica principal de la aplicación -->
+    <script th:src="@{/js/admin.js}" defer></script>
+</head>
+
+<body>
+
+    <div th:replace="~{fragmentos/nav-admin :: nav-admin}"></div>
+
+    <div class="admin-wrapper">
+        <div class="admin-container">
+
+            <!-- ── CABECERA ── -->
+            <div class="admin-header">
+                <div>
+                    <h1><i class="fas fa-shield-alt me-2"></i>Panel de <span>administración</span></h1>
+                    <p>Gestiona usuarios, productos y conversaciones de la plataforma</p>
+                </div>
             </div>
 
-            <!-- ── usuarios ────────────────────────────────────────── -->
-            <div id="seccion-usuarios" class="seccion activa">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <span>Usuarios</span>
-                        <a th:href="@{/admin/usuarios/nuevo}" class="btn btn-sm btn-success">+ Nuevo usuario</a>
+            <!-- ── ESTADÍSTICAS ── -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon azul"><i class="fas fa-users"></i></div>
+                    <div class="stat-info">
+                        <div class="num" th:text="${usuarios != null ? usuarios.size() : 0}">0</div>
+                        <div class="lbl">Usuarios registrados</div>
                     </div>
-                    <div class="card-body p-0">
-                        <table class="table table-hover mb-0">
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon rojo"><i class="fas fa-compact-disc"></i></div>
+                    <div class="stat-info">
+                        <div class="num" th:text="${productos != null ? productos.size() : 0}">0</div>
+                        <div class="lbl">Productos publicados</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon verde"><i class="fas fa-comments"></i></div>
+                    <div class="stat-info">
+                        <div class="num" th:text="${conversaciones != null ? conversaciones.size() : 0}">0</div>
+                        <div class="lbl">Conversaciones</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ── PESTAÑAS ── -->
+            <div class="admin-tabs" role="tablist">
+                <button class="admin-tab"
+                    th:classappend="${param.seccion == null or param.seccion[0] == 'usuarios'} ? 'active'"
+                    onclick="mostrarPanel('usuarios', this)">
+                    <i class="fas fa-users"></i> Usuarios
+                </button>
+                <button class="admin-tab"
+                    th:classappend="${param.seccion != null and param.seccion[0] == 'productos'} ? 'active'"
+                    onclick="mostrarPanel('productos', this)">
+                    <i class="fas fa-compact-disc"></i> Productos
+                </button>
+                <button class="admin-tab"
+                    th:classappend="${param.seccion != null and param.seccion[0] == 'conversaciones'} ? 'active'"
+                    onclick="mostrarPanel('conversaciones', this)">
+                    <i class="fas fa-comments"></i> Conversaciones
+                </button>
+            </div>
+
+            <!-- ══════════════════════════════════════════ -->
+            <!-- PANEL: USUARIOS                            -->
+            <!-- ══════════════════════════════════════════ -->
+            <div id="panel-usuarios" class="admin-panel"
+                th:classappend="${param.seccion == null or param.seccion[0] == 'usuarios'} ? 'active'">
+                <div class="tabla-card">
+                    <div class="tabla-card-header">
+                        <h2><i class="fas fa-users me-2" style="color:var(--color-accent)"></i>Usuarios</h2>
+                        <a th:href="@{/admin/usuarios/nuevo}" class="btn-nuevo">
+                            <i class="fas fa-user-plus"></i> Nuevo usuario
+                        </a>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="admin-table">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Nombre</th>
                                     <th>Usuario</th>
-                                    <th>Registro</th>
-                                    <th>Rol</th>
+                                    <th>Rol actual</th>
+                                    <th>Cambiar rol</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:each="u : ${usuarios}">
-                                    <td th:text="${u.idUsuario}"></td>
-                                    <td th:text="${u.nombre}"></td>
-                                    <td th:text="'@' + ${u.usuario}"></td>
-                                    <td th:text="${u.fechaRegistro}"></td>
-                                    <td>
-                                        <span th:classappend="${u.rol == 'ADMIN'} ? 'badge-admin' : 'badge-user'"
-                                              class="badge"
-                                              th:text="${u.rol}">
+                                    <td data-label="Usuario">
+                                        <div class="usuario-cell">
+                                            <div class="avatar-initials"
+                                                th:text="${#strings.substring(u.nombre, 0, 1)}">A</div>
+                                            <div>
+                                                <div class="usuario-nombre" th:text="${u.nombre}">Nombre Usuario</div>
+                                                <div class="usuario-email" th:text="${u.usuario}">email@ejemplo.com
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td data-label="Rol">
+                                        <span class="badge-rol"
+                                            th:classappend="${u.rol == 'ADMIN'} ? 'badge-admin' : 'badge-user'">
+                                            <i th:class="${u.rol == 'ADMIN'} ? 'fas fa-crown' : 'fas fa-user'"></i>
+                                            <span th:text="${u.rol}">USER</span>
                                         </span>
                                     </td>
-                                    <td class="d-flex gap-1">
-                                        <!-- cambiar rol -->
-                                        <form th:action="@{/admin/usuarios/{id}/rol(id=${u.idUsuario})}" method="post">
-                                            <button type="submit"
-                                                    class="btn btn-sm btn-outline-secondary"
-                                                    th:name="rol"
-                                                    th:value="${u.rol == 'ADMIN'} ? 'USER' : 'ADMIN'"
-                                                    th:text="${u.rol == 'ADMIN'} ? 'Quitar admin' : 'Hacer admin'">
+                                    <td data-label="Cambiar rol">
+                                        <form th:action="@{'/admin/usuarios/' + ${u.idUsuario} + '/rol'}" method="post"
+                                            style="display:flex;gap:0.4rem;align-items:center;">
+                                            <select name="rol" class="select-rol">
+                                                <option value="USER" th:selected="${u.rol == 'USER'}">USER</option>
+                                                <option value="ADMIN" th:selected="${u.rol == 'ADMIN'}">ADMIN</option>
+                                            </select>
+                                            <button type="submit" class="btn-accion btn-accion-neutro">
+                                                <i class="fas fa-check"></i>
                                             </button>
                                         </form>
-                                        <!-- eliminar -->
-                                        <form th:action="@{/admin/usuarios/{id}/eliminar(id=${u.idUsuario})}" method="post"
-                                              onsubmit="return confirm('¿Eliminar este usuario? No tiene vuelta atrás.')">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
+                                    </td>
+                                    <td data-label="Acciones">
+                                        <form th:action="@{'/admin/usuarios/' + ${u.idUsuario} + '/eliminar'}"
+                                            method="post">
+                                            <button type="submit" class="btn-accion btn-accion-peligro">
+                                                <i class="fas fa-trash"></i> Eliminar
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>
-                                <!-- si no hay usuarios -->
-                                <tr th:if="${#lists.isEmpty(usuarios)}">
-                                    <td colspan="6" class="text-center text-muted py-3">No hay usuarios registrados</td>
+                                <tr th:if="${usuarios == null or usuarios.isEmpty()}">
+                                    <td colspan="4">
+                                        <div class="empty-state">
+                                            <i class="fas fa-users"></i>
+                                            <p>No hay usuarios registrados.</p>
+                                        </div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -77,47 +147,73 @@
                 </div>
             </div>
 
-            <!-- ── productos ───────────────────────────────────────── -->
-            <div id="seccion-productos" class="seccion">
-                <div class="card">
-                    <div class="card-header">Productos</div>
-                    <div class="card-body p-0">
-                        <table class="table table-hover mb-0">
+            <!-- ══════════════════════════════════════════ -->
+            <!-- PANEL: PRODUCTOS                           -->
+            <!-- ══════════════════════════════════════════ -->
+            <div id="panel-productos" class="admin-panel"
+                th:classappend="${param.seccion != null and param.seccion[0] == 'productos'} ? 'active'">
+                <div class="tabla-card">
+                    <div class="tabla-card-header">
+                        <h2><i class="fas fa-compact-disc me-2" style="color:var(--color-accent)"></i>Productos</h2>
+                        <span class="cell-muted"
+                            th:text="${productos != null ? productos.size() : 0} + ' productos en total'"></span>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="admin-table">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Título</th>
-                                    <th>Artista</th>
+                                    <th>Producto</th>
                                     <th>Formato</th>
                                     <th>Precio</th>
+                                    <th>Vendedor</th>
                                     <th>Estado</th>
-                                    <th>Categoría</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:each="p : ${productos}">
-                                    <td th:text="${p.id_producto}"></td>
-                                    <td th:text="${p.titulo}"></td>
-                                    <td th:text="${p.artista}"></td>
-                                    <td th:text="${p.formato}"></td>
-                                    <td th:text="${p.precio} + ' €'"></td>
-                                    <td>
-                                        <span th:classappend="${p.estado == 'Disponible'} ? 'badge-disponible' : 'badge-vendido'"
-                                              class="badge"
-                                              th:text="${p.estado}">
-                                        </span>
+                                    <td data-label="Producto">
+                                        <div class="producto-cell">
+                                            <div class="producto-nombre" th:text="${p.titulo}">Título</div>
+                                            <div class="producto-artista" th:text="${p.artista}">Artista</div>
+                                        </div>
                                     </td>
-                                    <td th:text="${p.categoria}"></td>
-                                    <td>
-                                        <form th:action="@{/admin/productos/{id}/eliminar(id=${p.id_producto})}" method="post"
-                                              onsubmit="return confirm('¿Eliminar este producto?')">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar</button>
-                                        </form>
+                                    <td data-label="Formato">
+                                        <span class="badge-rol badge-user" th:text="${p.formato}">Vinilo</span>
+                                    </td>
+                                    <td data-label="Precio">
+                                        <strong th:text="${p.precio} + ' €'">0 €</strong>
+                                    </td>
+                                    <td data-label="Vendedor">
+                                        <span class="cell-muted"
+                                            th:text="${p.propietario != null ? p.propietario.nombre : '—'}">Vendedor</span>
+                                    </td>
+                                    <td data-label="Estado">
+                                        <span class="cell-muted" th:text="${p.estado}">Disponible</span>
+                                    </td>
+                                    <td data-label="Acciones">
+                                        <div class="acciones">
+                                            <a th:href="@{'/producto/' + ${p.id_producto}}"
+                                                class="btn-accion btn-accion-neutro">
+                                                <i class="fas fa-eye"></i> Ver
+                                            </a>
+                                            <form th:action="@{'/admin/productos/' + ${p.id_producto} + '/eliminar'}"
+                                                method="post">
+                                                <button type="submit" class="btn-accion btn-accion-peligro">
+                                                    <i class="fas fa-trash"></i> Eliminar
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
-                                <tr th:if="${#lists.isEmpty(productos)}">
-                                    <td colspan="8" class="text-center text-muted py-3">No hay productos publicados</td>
+                                <tr th:if="${productos == null or productos.isEmpty()}">
+                                    <td colspan="6">
+                                        <div class="empty-state">
+                                            <i class="fas fa-compact-disc"></i>
+                                            <p>No hay productos publicados.</p>
+                                        </div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -125,53 +221,87 @@
                 </div>
             </div>
 
-            <!-- ── conversaciones ──────────────────────────────────── -->
-            <div id="seccion-conversaciones" class="seccion">
-                <div class="card">
-                    <div class="card-header">Conversaciones</div>
-                    <div class="card-body p-0">
-                        <table class="table table-hover mb-0">
+            <!-- ══════════════════════════════════════════ -->
+            <!-- PANEL: CONVERSACIONES                      -->
+            <!-- ══════════════════════════════════════════ -->
+            <div id="panel-conversaciones" class="admin-panel"
+                th:classappend="${param.seccion != null and param.seccion[0] == 'conversaciones'} ? 'active'">
+                <div class="tabla-card">
+                    <div class="tabla-card-header">
+                        <h2><i class="fas fa-comments me-2" style="color:var(--color-accent)"></i>Conversaciones</h2>
+                        <span class="cell-muted"
+                            th:text="${conversaciones != null ? conversaciones.size() : 0} + ' en total'"></span>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="admin-table">
                             <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>Participantes</th>
                                     <th>Producto</th>
-                                    <th>Comprador</th>
-                                    <th>Vendedor</th>
-                                    <th>Fecha</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:each="c : ${conversaciones}">
-                                    <td th:text="${c.id_conversacion}"></td>
-                                    <td th:text="${c.producto != null} ? ${c.producto.titulo} : '-'"></td>
-                                    <td th:text="${c.comprador != null} ? '@' + ${c.comprador.usuario} : '-'"></td>
-                                    <td th:text="${c.vendedor != null} ? '@' + ${c.vendedor.usuario} : '-'"></td>
-                                    <td th:text="${c.fechaCreacion}"></td>
-                                    <td>
-                                        <span th:classappend="${c.conversacionActiva} ? 'badge-activa' : 'badge-cerrada'"
-                                              class="badge"
-                                              th:text="${c.conversacionActiva} ? 'Activa' : 'Cerrada'">
+                                    <td data-label="ID">
+                                        <div style="display:flex;align-items:center;gap:0.5rem;">
+                                            <div class="conv-icon"><i class="fas fa-hashtag"></i></div>
+                                            <strong th:text="${c.id_conversacion}">#1</strong>
+                                        </div>
+                                    </td>
+                                    <td data-label="Participantes">
+                                        <div class="cell-muted">
+                                            <span
+                                                th:text="${c.comprador != null ? c.comprador.nombre : '—'}">Comprador</span>
+                                            <i class="fas fa-arrows-left-right mx-1"
+                                                style="opacity:0.4;font-size:0.7rem;"></i>
+                                            <span
+                                                th:text="${c.vendedor != null ? c.vendedor.nombre : '—'}">Vendedor</span>
+                                        </div>
+                                    </td>
+                                    <td data-label="Producto">
+                                        <span class="cell-muted"
+                                            th:text="${c.producto != null ? c.producto.titulo : '—'}">Título
+                                            producto</span>
+                                    </td>
+                                    <td data-label="Estado">
+                                        <span class="badge-rol"
+                                            th:classappend="${c.conversacionActiva} ? 'badge-activa' : 'badge-cerrada'">
+                                            <i th:class="${c.conversacionActiva} ? 'fas fa-circle' : 'fas fa-ban'"
+                                                style="font-size:0.6rem;"></i>
+                                            <span th:text="${c.conversacionActiva} ? 'Activa' : 'Cerrada'">Activa</span>
                                         </span>
                                     </td>
-                                    <td class="d-flex gap-1">
-                                        <!-- abrir/cerrar conversación -->
-                                        <form th:action="@{/admin/conversaciones/{id}/toggle(id=${c.id_conversacion})}" method="post">
-                                            <button type="submit"
-                                                    class="btn btn-sm btn-outline-primary"
-                                                    th:text="${c.conversacionActiva} ? 'Cerrar' : 'Reabrir'">
-                                            </button>
-                                        </form>
-                                        <!-- ver mensajes -->
-                                        <a th:href="@{/admin/conversaciones/{id}/mensajes(id=${c.id_conversacion})}"
-                                           class="btn btn-sm btn-outline-secondary">
-                                            Ver mensajes
-                                        </a>
+                                    <td data-label="Acciones">
+                                        <div class="acciones">
+                                            <a th:href="@{'/admin/conversaciones/' + ${c.id_conversacion} + '/mensajes'}"
+                                                class="btn-accion btn-accion-neutro">
+                                                <i class="fas fa-envelope-open-text"></i> Mensajes
+                                            </a>
+                                            <form
+                                                th:action="@{'/admin/conversaciones/' + ${c.id_conversacion} + '/toggle'}"
+                                                method="post">
+                                                <button type="submit"
+                                                    th:class="${c.conversacionActiva} ? 'btn-accion btn-accion-peligro' : 'btn-accion btn-accion-exito'">
+                                                    <i
+                                                        th:class="${c.conversacionActiva} ? 'fas fa-ban' : 'fas fa-play'"></i>
+                                                    <span
+                                                        th:text="${c.conversacionActiva} ? 'Cerrar' : 'Reabrir'">Cerrar</span>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
-                                <tr th:if="${#lists.isEmpty(conversaciones)}">
-                                    <td colspan="7" class="text-center text-muted py-3">No hay conversaciones</td>
+                                <tr th:if="${conversaciones == null or conversaciones.isEmpty()}">
+                                    <td colspan="5">
+                                        <div class="empty-state">
+                                            <i class="fas fa-comments"></i>
+                                            <p>No hay conversaciones registradas.</p>
+                                        </div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -180,8 +310,8 @@
             </div>
 
         </div>
-    </main>
+    </div>
 
-    
 </body>
+
 </html>

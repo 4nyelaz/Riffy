@@ -1,8 +1,49 @@
 "use strict";
 
 /* ------------------------------------------------------------------ */
-/* acordeón por hash
+/* Boton desplegables INDEX
 /* ------------------------------------------------------------------ */
+
+// function abrirAcordeonDesdeHash() {
+//     const hash = window.location.hash;
+
+//     if (hash) {
+//         const accordionItem = document.querySelector(hash);
+
+//         if (accordionItem) {
+//             const button = accordionItem.querySelector('.accordion-button');
+//             const collapseElement = accordionItem.querySelector('.accordion-collapse');
+
+//             if (button && collapseElement) {
+//                 // cerramos todos primero
+//                 document.querySelectorAll('.accordion-collapse').forEach(el => {
+//                     const bsCollapse = bootstrap.Collapse.getInstance(el);
+//                     if (bsCollapse) bsCollapse.hide();
+//                 });
+
+//                 // abrimos el que toca
+//                 const bsCollapse = new bootstrap.Collapse(collapseElement, {
+//                     toggle: false
+//                 });
+//                 bsCollapse.show();
+
+//                 // scroll suave al elemento
+//                 setTimeout(() => {
+//                     accordionItem.scrollIntoView({
+//                         behavior: 'smooth',
+//                         block: 'center'
+//                     });
+//                 }, 300);
+//             }
+//         }
+//     }
+// }
+
+// // al cargar la página
+// document.addEventListener('DOMContentLoaded', abrirAcordeonDesdeHash);
+
+// // y también si cambia el hash sin recargar
+// window.addEventListener('hashchange', abrirAcordeonDesdeHash);
 
 function abrirAcordeonDesdeHash() {
     const hash = window.location.hash;
@@ -15,6 +56,7 @@ function abrirAcordeonDesdeHash() {
             const collapseElement = accordionItem.querySelector('.accordion-collapse');
 
             if (button && collapseElement) {
+
                 // cerramos todos primero
                 document.querySelectorAll('.accordion-collapse').forEach(el => {
                     const bsCollapse = bootstrap.Collapse.getInstance(el);
@@ -25,15 +67,26 @@ function abrirAcordeonDesdeHash() {
                 const bsCollapse = new bootstrap.Collapse(collapseElement, {
                     toggle: false
                 });
+
                 bsCollapse.show();
 
                 // scroll suave al elemento
                 setTimeout(() => {
+
                     accordionItem.scrollIntoView({
                         behavior: 'smooth',
                         block: 'center'
                     });
+
+                    // limpiar URL
+                    history.replaceState(
+                        null,
+                        null,
+                        window.location.pathname
+                    );
+
                 }, 300);
+
             }
         }
     }
@@ -45,9 +98,8 @@ document.addEventListener('DOMContentLoaded', abrirAcordeonDesdeHash);
 // y también si cambia el hash sin recargar
 window.addEventListener('hashchange', abrirAcordeonDesdeHash);
 
-
 /* ------------------------------------------------------------------ */
-/* login / registro
+/* ir a login o resgistro desde index
 /* ------------------------------------------------------------------ */
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -95,6 +147,128 @@ document.addEventListener('DOMContentLoaded', function () {
     else cambiarSeccion('login');
 
 });
+
+/* ------------------------------------------------------------------ */
+/* validaciones
+/* ------------------------------------------------------------------ */
+document.addEventListener("DOMContentLoaded", () => {
+
+    const nombre = document.getElementById("nombre");
+    const usuario = document.getElementById("usuario");
+    const contrasena = document.getElementById("contrasena");
+
+    // ── helpers ────────────────────────────────────────────────────────
+    function ok(el, texto) {
+        el.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${texto}`;
+        el.style.color = "#4CAF50";
+    }
+
+    function err(el, texto) {
+        el.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> ${texto}`;
+        el.style.color = "#ff4d4d";
+    }
+
+    function limpiar(el) {
+        el.innerHTML = "";
+    }
+
+    // ── NOMBRE ─────────────────────────────────────────────────────────
+    const msgNombre = document.getElementById("validacion-nombre");
+
+    nombre.addEventListener("focus", () => limpiar(msgNombre));
+
+    nombre.addEventListener("input", () => {
+        if (nombre.value.length >= 3) {
+            ok(msgNombre, "Nombre válido");
+        } else {
+            err(msgNombre, "Mínimo 3 caracteres");
+        }
+    });
+
+    // ── USUARIO ────────────────────────────────────────────────────────
+    const msgUsuario = document.getElementById("validacion-usuario");
+    const regex = /^[a-zA-Z0-9_]+$/;
+    let debounceTimer;
+
+    usuario.addEventListener("focus", () => limpiar(msgUsuario));
+
+    usuario.addEventListener("input", async () => {
+        const valor = usuario.value;
+
+        // 1. Validación local primero
+        if (valor.length < 4 || !regex.test(valor)) {
+            err(msgUsuario, "Solo letras, números y _ (mín. 4)");
+            clearTimeout(debounceTimer);
+            return;
+        }
+
+        // 2. Pasa la local → comprobar en servidor con debounce
+        msgUsuario.innerHTML = "Comprobando…";
+        msgUsuario.style.color = "var(--color-text-secondary, #888)";
+
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(async () => {
+            try {
+                const res = await fetch(`/api/usuario-existe?usuario=${encodeURIComponent(valor)}`);
+                const existe = await res.json();
+
+                if (existe) {
+                    err(msgUsuario, "Usuario ya en uso");
+                } else {
+                    ok(msgUsuario, "Usuario disponible");
+                }
+            } catch {
+                err(msgUsuario, "Error al comprobar disponibilidad");
+            }
+        }, 400);
+    });
+
+    // ── CONTRASEÑA ────────────────────────────────────────────────────
+    const msgContrasena = document.getElementById("validacion-contrasena");
+
+    contrasena.addEventListener("focus", () => limpiar(msgContrasena));
+
+    contrasena.addEventListener("input", () => {
+        const tieneMayus = /[A-Z]/.test(contrasena.value);
+        const tieneNumero = /[0-9]/.test(contrasena.value);
+
+        if (contrasena.value.length >= 8 && tieneMayus && tieneNumero) {
+            ok(msgContrasena, "Contraseña segura");
+        } else {
+            err(msgContrasena, "8 caracteres, 1 mayúscula y 1 número");
+        }
+    });
+
+    // ── SUBMIT ───────────────────────────────────────────────────────
+    const form = document.querySelector("#sec-registro form");
+
+    form.addEventListener("submit", (e) => {
+        let valido = true;
+
+        if (nombre.value.length < 3) {
+            err(msgNombre, "Mínimo 3 caracteres");
+            valido = false;
+        }
+
+        if (usuario.value.length < 4 || !regex.test(usuario.value)) {
+            err(msgUsuario, "Solo letras, números y _ (mín. 4)");
+            valido = false;
+        }
+
+        const tieneMayus = /[A-Z]/.test(contrasena.value);
+        const tieneNumero = /[0-9]/.test(contrasena.value);
+        if (contrasena.value.length < 8 || !tieneMayus || !tieneNumero) {
+            err(msgContrasena, "8 caracteres, 1 mayúscula y 1 número");
+            valido = false;
+        }
+
+        if (!valido) {
+            e.preventDefault();
+            new Toast("Revisa los campos del formulario", Toast.ERROR, 4000);
+        }
+    });
+});
+
 
 
 /* ------------------------------------------------------------------ */
@@ -203,7 +377,7 @@ contenedorPreview.style.cssText = 'display:flex; flex-wrap:wrap; gap:6px; margin
 
 inputImagenesVisible.addEventListener('change', () => {
     contenedorPreview.innerHTML = '';
-    
+
     // Convertir FileList a array para poder filtrar
     let archivosSeleccionados = Array.from(inputImagenesVisible.files);
 
@@ -220,7 +394,7 @@ inputImagenesVisible.addEventListener('change', () => {
             cruz.type = 'button';
             cruz.innerHTML = '&times;';
             cruz.style.cssText = 'background:none; border:none; color:var(--color-accent); font-size:14px; cursor:pointer; padding:0; line-height:1;';
-            
+
             cruz.addEventListener('click', () => {
                 archivosSeleccionados.splice(index, 1);
 
@@ -421,30 +595,30 @@ if (inputImagenesCrear) {
 /* ------------------------------------------------------------------ */
 /* imagenes - crear producto */
 /* ------------------------------------------------------------------ */
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const selectOrdenar = document.getElementById('ordenarProductos');
     const contenedor = document.querySelector('.productos-carrusel');
-    
+
     if (!selectOrdenar || !contenedor) return;
-    
+
     // Guardamos el orden original de las tarjetas
     const ordenOriginal = Array.from(contenedor.children);
-    
-    selectOrdenar.addEventListener('change', function() {
+
+    selectOrdenar.addEventListener('change', function () {
         const criterio = this.value;
-        
+
         // Si es "defecto", restauramos el orden original
         if (criterio === 'defecto') {
             ordenOriginal.forEach(tarjeta => contenedor.appendChild(tarjeta));
             contenedor.scrollLeft = 0;
             return;
         }
-        
+
         // Obtener todas las tarjetas como array
         const tarjetas = Array.from(contenedor.children);
-        
+
         // Ejecutar la función según el criterio seleccionado
-        switch(criterio) {
+        switch (criterio) {
             case 'az':
                 ordenarAZ(tarjetas, contenedor);
                 break;
@@ -472,7 +646,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function obtenerDatos(tarjeta) {
     const btnEditar = tarjeta.querySelector('.btn-editar');
     if (!btnEditar) return { titulo: '', precio: 0, fecha: null };
-    
+
     return {
         titulo: (btnEditar.dataset.titulo || '').toLowerCase(),
         precio: parseFloat(btnEditar.dataset.precio) || 0,
@@ -531,7 +705,7 @@ function ordenarFechaDesc(tarjetas, contenedor) {
     tarjetas.sort((a, b) => {
         const fechaA = obtenerDatos(a).fecha;
         const fechaB = obtenerDatos(b).fecha;
-        
+
         if (!fechaA && !fechaB) return 0;
         if (!fechaA) return 1;
         if (!fechaB) return -1;
@@ -545,7 +719,7 @@ function ordenarFechaAsc(tarjetas, contenedor) {
     tarjetas.sort((a, b) => {
         const fechaA = obtenerDatos(a).fecha;
         const fechaB = obtenerDatos(b).fecha;
-        
+
         if (!fechaA && !fechaB) return 0;
         if (!fechaA) return 1;
         if (!fechaB) return -1;
@@ -557,23 +731,20 @@ function ordenarFechaAsc(tarjetas, contenedor) {
 
 // TOAST
 
-const toastLogout = document.querySelector("[data-toast-logout]");
-if (toastLogout) {
-    new Toast(toastLogout.dataset.mensaje, Toast.INFO, 4000);
-}
+document.addEventListener("DOMContentLoaded", () => {
 
-const toastLogin = document.querySelector("[data-toast-login]");
-if (toastLogin) {
-    new Toast(toastLogin.dataset.mensaje, Toast.ERROR, 4000);
-}
+    const show = (selector, type) => {
+        const el = document.querySelector(selector);
 
-const toastproductoEliminado = document.querySelector("[data-toast-productoEliminado]");
-if (toastproductoEliminado) {
-    new Toast(toastproductoEliminado.dataset.mensaje, Toast.INFO, 4000);
-}
+        if (el && el.dataset.mensaje) {
+            new Toast(el.dataset.mensaje, type, 4000);
+        }
+    };
 
-const toastproductoNoEliminado = document.querySelector("[data-toast-productoNoEliminado]");
-if (toastproductoNoEliminado) {
-    new Toast(toastproductoNoEliminado.dataset.mensaje, Toast.INFO, 4000);
-}
+    show("[data-toast-logout]", Toast.INFO);
+    show("[data-toast-login]", Toast.ERROR);
+    show("[data-toast-error]", Toast.ERROR);
+    show("[data-toast-success]", Toast.SUCCESS);
+
+});
 

@@ -1,28 +1,64 @@
-// lee el parámetro ?seccion= de la URL para volver a la pestaña correcta tras una acción
-document.addEventListener('DOMContentLoaded', function () {
+/**
+ * Panel de Administración - Riffy
+ * Controla las pestañas y la navegación del panel
+ */
 
-    const botones  = document.querySelectorAll('[data-seccion]');
-    const secciones = document.querySelectorAll('.seccion');
+// ── lógica de pestañas ──
+function mostrarPanel(seccion, tabEl) {
+    // ocultar todos los paneles
+    document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
 
-    function activar(nombre) {
-        secciones.forEach(s => s.classList.remove('activa'));
-        botones.forEach(b => b.classList.remove('active'));
-
-        const seccion = document.getElementById('seccion-' + nombre);
-        const boton   = document.querySelector('[data-seccion="' + nombre + '"]');
-
-        if (seccion) seccion.classList.add('activa');
-        if (boton)   boton.classList.add('active');
+    // mostrar el elegido
+    const panel = document.getElementById('panel-' + seccion);
+    if (panel) {
+        panel.classList.add('active');
     }
+    if (tabEl) {
+        tabEl.classList.add('active');
+    }
+}
 
-    // si el controller redirige con ?seccion=productos, abre esa pestaña directamente
+// ── activar pestaña correcta según param ?seccion= al cargar ──
+function activarPestanaPorURL() {
     const params = new URLSearchParams(window.location.search);
-    const seccionParam = params.get('seccion');
-    if (seccionParam) activar(seccionParam);
+    const seccion = params.get('seccion') || 'usuarios';
+    
+    let tab = null;
+    if (seccion === 'usuarios') {
+        tab = document.querySelector('.admin-tab[onclick*="usuarios"]');
+    } else if (seccion === 'productos') {
+        tab = document.querySelector('.admin-tab[onclick*="productos"]');
+    } else if (seccion === 'conversaciones') {
+        tab = document.querySelector('.admin-tab[onclick*="conversaciones"]');
+    }
+    
+    if (tab) {
+        document.querySelectorAll('.admin-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.admin-tab').forEach(t => t.classList.remove('active'));
+        
+        const panel = document.getElementById('panel-' + seccion);
+        if (panel) {
+            panel.classList.add('active');
+        }
+        tab.classList.add('active');
+    }
+}
 
-    // clicks normales
-    botones.forEach(b => {
-        b.addEventListener('click', () => activar(b.dataset.seccion));
+// ── confirmación para eliminar (mejora la experiencia) ──
+function initConfirmaciones() {
+    // Usuarios
+    document.querySelectorAll('form[action*="/eliminar"]').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            if (!confirm('¿Estás seguro? Esta acción no tiene vuelta atrás.')) {
+                e.preventDefault();
+            }
+        });
     });
+}
 
+// ── inicializar cuando el DOM esté listo ──
+document.addEventListener('DOMContentLoaded', function() {
+    activarPestanaPorURL();
+    initConfirmaciones();
 });

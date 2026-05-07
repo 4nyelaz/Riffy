@@ -87,6 +87,9 @@ body {
     transform: translateY(-2px);
 }
 
+.btn-accent-text {
+    color: var(--color-accent) !important;
+}
 
 /* /////////////////////////////////////////////////////////////////// */
 /* /////////////////////////////// nav /////////////////////////////// */
@@ -518,6 +521,17 @@ footer {
     text-decoration: underline;
 }
 
+.mensaje-validacion {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: 0.2s ease;
+}
+
+.mensaje-validacion i {
+    margin-right: 4px;
+}
 
 /* /////////////////////////////////////////////////////////////////// */
 /* /////////////////////////// home nav ////////////////////////////// */

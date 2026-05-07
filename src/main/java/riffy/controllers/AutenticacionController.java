@@ -1,10 +1,15 @@
 package riffy.controllers;
 
 import org.springframework.stereotype.Controller; // Anotación: maneja peticiones HTTP y devuelve HTML
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute; // Anotación: coge los datos de un form y los mete en un obj Java
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes; // Anotación: permite mandar datos omitiendolo en la URL
+import jakarta.validation.Valid;
+
 
 import jakarta.servlet.http.HttpSession;
 import riffy.model.UsuarioEntity;
@@ -44,14 +49,53 @@ public class AutenticacionController {
      * @return
      */
     @PostMapping("/register")
-    public String registrar(@ModelAttribute UsuarioEntity usuario, RedirectAttributes redirect) {
-        try {
-            usuarioService.registrar(usuario);
-            return "redirect:/login?section=login";
-        } catch (RuntimeException e) {
-            redirect.addFlashAttribute("errorRegistro", e.getMessage());
+    public String registrar(
+            @Valid @ModelAttribute UsuarioEntity usuario,
+            BindingResult result,
+            RedirectAttributes redirect) {
+
+        
+        if (result.hasErrors()) {
+
+            redirect.addFlashAttribute(
+                    "errorRegistro",
+                    "Revisa los campos del formulario.");
+
+            redirect.addFlashAttribute(
+                    "org.springframework.validation.BindingResult.usuario",
+                    result);
+
+            redirect.addFlashAttribute("usuario", usuario);
+
             return "redirect:/login?section=register";
         }
+
+        
+        if (usuarioService.existeUsuario(usuario.getUsuario())) {
+
+            redirect.addFlashAttribute(
+                    "errorRegistro",
+                    "Este usuario ya está registrado. Elige otro nombre.");
+
+            redirect.addFlashAttribute("usuario", usuario);
+
+            return "redirect:/login?section=register";
+        }
+
+        
+        usuarioService.registrar(usuario);
+
+        redirect.addFlashAttribute(
+                "registroExito",
+                "Cuenta creada correctamente. Ya puedes iniciar sesión.");
+
+        return "redirect:/login?section=login";
+    }
+
+    @GetMapping("/api/usuario-existe")
+    @ResponseBody
+    public boolean usuarioExiste(@RequestParam String usuario) {
+        return usuarioService.existeUsuario(usuario);
     }
 
     /**
@@ -74,6 +118,11 @@ public class AutenticacionController {
                     session.setAttribute("usuarioId", u.getIdUsuario());
                     session.setAttribute("nombreUsuario", u.getUsuario());
                     session.setAttribute("rolUsuario", u.getRol());
+
+                    redirect.addFlashAttribute(
+                            "loginExito",
+                            "Bienvenido de nuevo, " + u.getNombre());
+
                     if ("ADMIN".equals(u.getRol())) {
                         return "redirect:/admin/dashboard";
                     }

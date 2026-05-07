@@ -20,14 +20,11 @@ public class UsuarioService {
         this.usuarioRepositorio = usuarioRepositorio;
     }
 
-    // TODO
     public void registrar(UsuarioEntity usuario) {
-        if (usuarioRepositorio.existsByUsuario(usuario.getUsuario())) {
-            throw new RuntimeException("El nombre de usuario ya está en uso");
-        }
-        usuario.setContrasena(encoder.encode(usuario.getContrasena()));
-        usuarioRepositorio.save(usuario);
-    }
+    usuario.setContrasena(encoder.encode(usuario.getContrasena()));
+    usuario.setRol("USER");           
+    usuarioRepositorio.save(usuario);
+}
 
     public Optional<UsuarioEntity> buscarPorUsuario(String usuario) {
         return usuarioRepositorio.findByUsuario(usuario);
@@ -57,4 +54,8 @@ public class UsuarioService {
         usuario.setRol(rol);
         usuarioRepositorio.save(usuario);
     }
+
+    public boolean existeUsuario(String usuario) {
+    return usuarioRepositorio.existsByUsuario(usuario);
+}
 }
