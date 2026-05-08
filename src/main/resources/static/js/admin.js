@@ -1,3 +1,4 @@
+"use strict";
 /**
  * Panel de Administración - Riffy
  * Controla las pestañas y la navegación del panel

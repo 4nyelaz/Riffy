@@ -9,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
-
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -47,11 +46,17 @@ public class UsuarioEntity {
     @Column(name = "rol")
     private String rol = "USER";
 
+    @Column(name = "email")
+    private String email;
+
+    @Column(name = "foto_perfil")
+    private String fotoPerfil;
+
     /* /////////////////////////////////////////////////////////////////// */
     /* //////////////// getters y setters //////////////////////////////// */
     /* /////////////////////////////////////////////////////////////////// */
 
-    @PrePersist // TODO
+    @PrePersist
     public void antesDeGuardar() {
         this.fechaRegistro = LocalDate.now();
     }
@@ -102,6 +107,22 @@ public class UsuarioEntity {
 
     public void setRol(String rol) {
         this.rol = rol;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFotoPerfil() {
+        return fotoPerfil;
+    }
+
+    public void setFotoPerfil(String fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
     }
 
 }

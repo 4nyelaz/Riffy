@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar perfil - Riffy</title>
+    <div th:replace="~{fragmentos/sections :: head}"></div>
+</head>
+
+<body>
+    <div th:replace="~{fragmentos/nav-home :: nav-home}"></div>
+
+    <main class="home-main">
+        <section class="mis-productos-seccion">
+            <div class="container contenedor-crear-producto">
+
+                <div class="mb-4">
+                    <h2 class="h3 fw-bold titulo-seccion">
+                        <i class="fas fa-user-edit me-2 icono-titulo"></i>
+                        Editar perfil
+                    </h2>
+                </div>
+
+                <form th:action="@{/perfil/editar}" method="post" enctype="multipart/form-data">
+                    <div class="card rounded-4 shadow-sm border-0">
+                        <div class="card-body p-4">
+
+                            <!-- Foto de perfil -->
+                            <div class="d-flex align-items-center gap-4 mb-4">
+                                <div class="position-relative flex-shrink-0">
+                                    <!-- Con foto -->
+                                    <img th:if="${usuario.fotoPerfil != null and !#strings.isEmpty(usuario.fotoPerfil)}"
+                                        th:src="@{'/img/fotoperfil_img/' + ${usuario.fotoPerfil}}" id="avatarPreview"
+                                        class="rounded-circle object-fit-cover"
+                                        style="width:80px; height:80px; border: 3px solid var(--color-accent);"
+                                        alt="Foto de perfil">
+                                    <!-- Sin foto: inicial -->
+                                    <div th:if="${usuario.fotoPerfil == null or #strings.isEmpty(usuario.fotoPerfil)}"
+                                        id="avatarPreview"
+                                        class="rounded-circle d-flex align-items-center justify-content-center"
+                                        style="width:80px; height:80px; background: var(--color-accent);">
+                                        <span class="fw-bold fs-2 text-white"
+                                            th:text="${#strings.toUpperCase(#strings.substring(usuario.nombre, 0, 1))}">U</span>
+                                    </div>
+                                    <!-- Botón cámara -->
+                                    <label for="fotoPerfil"
+                                        class="position-absolute bottom-0 end-0 rounded-circle d-flex align-items-center justify-content-center"
+                                        style="width:26px; height:26px; background: var(--color-first); cursor:pointer;">
+                                        <i class="fas fa-camera" style="font-size:11px; color:white;"></i>
+                                    </label>
+                                    <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" class="d-none"
+                                        onchange="previewFoto(this)">
+                                </div>
+                                <div>
+                                    <p class="fw-bold mb-0" style="color: var(--color-first);"
+                                        th:text="${usuario.nombre}">Nombre</p>
+                                    <p class="text-muted small mb-0">
+                                        <i class="fas fa-at me-1"></i>
+                                        <span th:text="${usuario.usuario}">usuario</span>
+                                    </p>
+                                </div>
+                            </div>
+
+                            <hr class="my-3">
+
+                            <!-- Nombre -->
+                            <div class="campo-formulario">
+                                <label for="nombre">Nombre</label>
+                                <input type="text" id="nombre" name="nombre" th:value="${usuario.nombre}"
+                                    placeholder="Tu nombre" required>
+                            </div>
+
+                            <!-- Usuario -->
+                            <div class="campo-formulario">
+                                <label for="usuario">Nombre de usuario</label>
+                                <input type="text" id="usuario" name="usuario" th:value="${usuario.usuario}"
+                                    placeholder="@usuario" required>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="campo-formulario">
+                                <label for="email">Correo electrónico</label>
+                                <input type="email" id="email" name="email" th:value="${usuario.email}"
+                                    placeholder="correo@ejemplo.com">
+                            </div>
+
+                            <hr class="my-3">
+
+                            <!-- Contraseña -->
+                            <div class="campo-formulario">
+                                <label for="contrasenaActual">Contraseña actual</label>
+                                <input type="password" id="contrasenaActual" name="contrasenaActual"
+                                    placeholder="Introduce tu contraseña actual">
+                            </div>
+                            <div class="campo-formulario mb-0">
+                                <label for="contrasenaNueva">
+                                    Nueva contraseña
+                                    <span class="text-muted" style="font-size:11px;">(dejar vacío para no
+                                        cambiar)</span>
+                                </label>
+                                <input type="password" id="contrasenaNueva" name="contrasenaNueva"
+                                    placeholder="Nueva contraseña">
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer bg-light d-flex justify-content-end gap-2 px-4 py-3 rounded-bottom-4">
+                            <a th:href="@{/home}" class="btn btn-outline-secondary btn-sm rounded-pill">Cancelar</a>
+                            <button type="submit" class="btn btn-primary btn-sm rounded-pill px-3">
+                                <i class="fas fa-save me-1"></i> Guardar cambios
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

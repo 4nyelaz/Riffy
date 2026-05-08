@@ -203,9 +203,10 @@ body {
     background-color: var(--color-bg-alt);
 }
 
-/* -- titulos -- */
 .titulo-seccion {
-    color: var(--color-first);
+    color: var(--color-first); /* azul marino #0d1b2a */
+    font-size: 2.5rem;         /* más proporcionado que display-5 */
+    font-weight: 700;
 }
 
 .icono-titulo {

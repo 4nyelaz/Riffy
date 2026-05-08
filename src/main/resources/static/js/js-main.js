@@ -4,47 +4,6 @@
 /* Boton desplegables INDEX
 /* ------------------------------------------------------------------ */
 
-// function abrirAcordeonDesdeHash() {
-//     const hash = window.location.hash;
-
-//     if (hash) {
-//         const accordionItem = document.querySelector(hash);
-
-//         if (accordionItem) {
-//             const button = accordionItem.querySelector('.accordion-button');
-//             const collapseElement = accordionItem.querySelector('.accordion-collapse');
-
-//             if (button && collapseElement) {
-//                 // cerramos todos primero
-//                 document.querySelectorAll('.accordion-collapse').forEach(el => {
-//                     const bsCollapse = bootstrap.Collapse.getInstance(el);
-//                     if (bsCollapse) bsCollapse.hide();
-//                 });
-
-//                 // abrimos el que toca
-//                 const bsCollapse = new bootstrap.Collapse(collapseElement, {
-//                     toggle: false
-//                 });
-//                 bsCollapse.show();
-
-//                 // scroll suave al elemento
-//                 setTimeout(() => {
-//                     accordionItem.scrollIntoView({
-//                         behavior: 'smooth',
-//                         block: 'center'
-//                     });
-//                 }, 300);
-//             }
-//         }
-//     }
-// }
-
-// // al cargar la página
-// document.addEventListener('DOMContentLoaded', abrirAcordeonDesdeHash);
-
-// // y también si cambia el hash sin recargar
-// window.addEventListener('hashchange', abrirAcordeonDesdeHash);
-
 function abrirAcordeonDesdeHash() {
     const hash = window.location.hash;
 
@@ -728,6 +687,39 @@ function ordenarFechaAsc(tarjetas, contenedor) {
     reinsertarTarjetas(tarjetas, contenedor);
 }
 
+const bellBtn = document.getElementById('bellBtn');
+const notifPanel = document.getElementById('notifPanel');
+if (bellBtn) {
+    bellBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        notifPanel.style.display = notifPanel.style.display === 'none' ? 'block' : 'none';
+    });
+    document.addEventListener('click', e => {
+        if (!document.getElementById('bellContainer').contains(e.target))
+            notifPanel.style.display = 'none';
+    });
+}
+
+
+function previewFoto(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            const preview = document.getElementById('avatarPreview');
+            if (preview.tagName === 'DIV') {
+                // era la inicial, la reemplazamos por img
+                const img = document.createElement('img');
+                img.id = 'avatarPreview';
+                img.className = 'rounded-circle object-fit-cover';
+                img.style.cssText = 'width:80px; height:80px; border: 3px solid var(--color-accent);';
+                img.alt = 'Foto de perfil';
+                preview.replaceWith(img);
+            }
+            document.getElementById('avatarPreview').src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
 
 // TOAST
 

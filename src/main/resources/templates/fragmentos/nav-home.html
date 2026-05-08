@@ -7,66 +7,107 @@
             <div class="container-fluid px-4 position-relative">
 
                 <!-- logo -->
-                <a class="navbar-brand fw-bold d-flex align-items-center gap-2" th:href="@{/home}" title="Riffy">
-                    <img th:src="@{/img/riffy_logo.png}" alt="Logo de Riffy" id="logoRiffy" style="height: 32px;">
+                <a class="navbar-brand fw-bold" th:href="@{/home}" title="Riffy" id="pack_riffy_logo">
+                    <img th:src="@{/img/riffy_logo.png}" alt="Logo de Riffy" id="logoRiffy">
                     Riffy
                 </a>
 
-                <!-- botón hamburguesa -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                <!-- hamburguesa -->
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
                     aria-label="Toggle navigation">
-                    <i class="fas fa-bars"></i>
+                    <i class="fas fa-bars" style="color: var(--color-first);"></i>
                 </button>
 
-                <!-- contenido colapsable -->
                 <div class="collapse navbar-collapse" id="navbarResponsive">
 
-                    <!-- buscador centrado absolutamente en desktop -->
+                    <!-- buscador centrado desktop -->
                     <div th:if="${mostrarBuscador}"
                         class="d-none d-lg-block position-absolute start-50 translate-middle-x" style="width: 35%;">
                         <form class="nav-search-form d-flex" th:action="@{/buscar}" method="get">
                             <div class="input-group">
-                                <span class="input-group-text bg-white border-end-0">
-                                    <i class="fas fa-search text-muted"></i>
+                                <span class="input-group-text border-end-0"
+                                    style="background:white; border-color:#dee2e6;">
+                                    <i class="fas fa-search" style="color: var(--color-accent);"></i>
                                 </span>
-                                <input class="form-control border-start-0 ps-0" type="search" name="q"
-                                    placeholder="Buscar CDs, vinilos..." aria-label="Buscar">
+                                <input class="form-control border-start-0 ps-0" style="border-color:#dee2e6;"
+                                    type="search" name="q" placeholder="Buscar CDs, vinilos..." aria-label="Buscar">
                             </div>
                         </form>
                     </div>
 
-                    <!-- Menú de usuario (dropdown) y enlaces móviles -->
                     <ul class="navbar-nav ms-auto mt-3 mt-lg-0 align-items-lg-center gap-2">
-                        <!-- Opción Vender (siempre visible en móvil, en desktop dentro del dropdown? Mejor mantener consistencia) -->
+
+                        <!-- ===== MÓVIL ===== -->
                         <li class="nav-item d-lg-none">
                             <a class="nav-link d-flex align-items-center gap-2" th:href="@{/home}">
-                                <i class="fas fa-home me-1"></i> Inicio
+                                <i class="fas fa-home" style="color: var(--color-accent);"></i> Inicio
                             </a>
                         </li>
                         <li class="nav-item d-lg-none">
                             <a class="nav-link d-flex align-items-center gap-2" th:href="@{/nuevo-producto}">
-                                <i class="fas fa-plus"></i> Añadir producto
+                                <i class="fa-solid fa-circle-plus" style="color: var(--color-accent);"></i> Añadir
+                                producto
                             </a>
                         </li>
                         <li class="nav-item d-lg-none">
                             <a class="nav-link d-flex align-items-center gap-2" th:href="@{/mis-productos}">
-                                <i class="fa-solid fa-box "></i> Mis productos
+                                <i class="fa-solid fa-box" style="color: var(--color-accent);"></i> Mis productos
                             </a>
                         </li>
                         <li class="nav-item d-lg-none">
                             <a class="nav-link d-flex align-items-center gap-2" th:href="@{/chat/mis-conversaciones}">
-                                <i class="fas fa-comments"></i> Mis chats
+                                <i class="fas fa-comments" style="color: var(--color-accent);"></i> Mis chats
+                            </a>
+                        </li>
+
+                        <!-- campana móvil -->
+                        <li class="nav-item d-lg-none">
+                            <a class="nav-link d-flex align-items-center gap-2" href="#" data-bs-toggle="collapse"
+                                data-bs-target="#notifMobile">
+                                <i class="fas fa-bell" style="color: var(--color-accent);"></i>
+                                Pedidos pendientes
+                                <span th:if="${pedidosPendientes != null and !pedidosPendientes.isEmpty()}"
+                                    class="badge rounded-pill ms-1" style="background: var(--color-accent);"
+                                    th:text="${pedidosPendientes.size()}">0</span>
+                            </a>
+                            <div class="collapse px-3" id="notifMobile">
+                                <div th:if="${pedidosPendientes == null or pedidosPendientes.isEmpty()}"
+                                    class="text-muted small py-2">Sin pedidos pendientes</div>
+                                <div th:each="producto : ${pedidosPendientes}" class="border-bottom py-2">
+                                    <p class="fw-semibold mb-1 small" style="color: var(--color-first);"
+                                        th:text="${producto.titulo}">Título</p>
+                                    <p class="mb-2" style="font-size:12px; color: var(--color-text-secondary);"
+                                        th:text="${producto.precio} + ' €'">0 €</p>
+                                    <div class="d-flex gap-2 mb-2">
+                                        <form th:action="@{'/producto/' + ${producto.id_producto} + '/aceptar'}"
+                                            method="post">
+                                            <button type="submit" class="btn btn-sm rounded-pill px-3 text-white"
+                                                style="background: var(--color-accent); border: none; font-size:12px;">
+                                                <i class="fas fa-check me-1"></i>Aceptar
+                                            </button>
+                                        </form>
+                                        <form th:action="@{'/producto/' + ${producto.id_producto} + '/rechazar'}"
+                                            method="post">
+                                            <button type="submit"
+                                                class="btn btn-sm rounded-pill px-3 btn-outline-secondary"
+                                                style="font-size:12px;">
+                                                Rechazar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="nav-item d-lg-none">
+                            <a class="nav-link d-flex align-items-center gap-2" th:href="@{/perfil/editar}">
+                                <i class="fas fa-user-edit" style="color: var(--color-accent);"></i> Editar perfil
                             </a>
                         </li>
                         <li class="nav-item d-lg-none">
                             <a class="nav-link d-flex align-items-center gap-2" th:href="@{/configuracion}">
-                                <i class="fas fa-cog"></i> Configuración
-                            </a>
-                        </li>
-                        <li class="nav-item d-lg-none">
-                            <a class="nav-link d-flex align-items-center gap-2" th:href="@{/perfil/editar}">
-                                <i class="fas fa-user-edit"></i> Editar perfil
+                                <i class="fas fa-cog" style="color: var(--color-accent);"></i> Configuración
                             </a>
                         </li>
                         <li class="nav-item d-lg-none">
@@ -78,50 +119,144 @@
                             </a>
                         </li>
 
-                        <!-- Dropdown para desktop (solo visible en lg) -->
+                        <!-- ===== DESKTOP ===== -->
+
+                        <!-- chats -->
+                        <li class="nav-item d-none d-lg-block">
+                            <a th:href="@{/chat/mis-conversaciones}"
+                                class="btn rounded-circle p-0 d-flex align-items-center justify-content-center"
+                                style="width:38px; height:38px; background: transparent; border: 1px solid #dee2e6;"
+                                title="Mis chats">
+                                <i class="fas fa-comments" style="font-size:16px; color: var(--color-accent);"></i>
+                            </a>
+                        </li>
+
+                        <!-- campana -->
+                        <li class="nav-item d-none d-lg-block position-relative" id="bellContainer">
+                            <button id="bellBtn" aria-label="Notificaciones"
+                                class="btn rounded-circle p-0 d-flex align-items-center justify-content-center position-relative"
+                                style="width:38px; height:38px; background: transparent; border: 1px solid #dee2e6;"
+                                title="Notificaciones">
+                                <i class="fas fa-bell" style="font-size:16px; color: var(--color-accent);"></i>
+                                <span th:if="${pedidosPendientes != null and !pedidosPendientes.isEmpty()}"
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill"
+                                    style="font-size:10px; background: var(--color-accent);"
+                                    th:text="${pedidosPendientes.size()}">0</span>
+                            </button>
+
+                            <div id="notifPanel" class="bg-white border rounded-4 shadow-sm"
+                                style="display:none; position:absolute; right:0; top:48px; width:300px; z-index:1050;">
+                                <div class="px-3 py-2 border-bottom d-flex align-items-center justify-content-between">
+                                    <span class="fw-semibold small" style="color: var(--color-first);">
+                                        <i class="fas fa-bell me-1" style="color: var(--color-accent);"></i>
+                                        Pedidos pendientes
+                                    </span>
+                                    <span th:if="${pedidosPendientes != null and !pedidosPendientes.isEmpty()}"
+                                        class="badge rounded-pill" style="background: var(--color-accent);"
+                                        th:text="${pedidosPendientes.size()}">0</span>
+                                </div>
+                                <div th:if="${pedidosPendientes == null or pedidosPendientes.isEmpty()}"
+                                    class="text-center py-4">
+                                    <i class="fas fa-bell-slash mb-2 d-block"
+                                        style="font-size:22px; color: var(--color-accent); opacity:.4;"></i>
+                                    <span class="small text-muted">Sin pedidos pendientes</span>
+                                </div>
+                                <div th:each="producto : ${pedidosPendientes}" class="border-bottom px-3 py-3">
+                                    <p class="fw-semibold mb-0 small" style="color: var(--color-first);"
+                                        th:text="${producto.titulo}">Título</p>
+                                    <p class="mb-2" style="font-size:12px; color: var(--color-text-secondary);"
+                                        th:text="${producto.precio} + ' €'">0 €</p>
+                                    <div class="d-flex gap-2">
+                                        <form th:action="@{'/producto/' + ${producto.id_producto} + '/aceptar'}"
+                                            method="post">
+                                            <button type="submit" class="btn btn-sm rounded-pill px-3 text-white"
+                                                style="background: var(--color-accent); border: none; font-size:12px;">
+                                                <i class="fas fa-check me-1"></i>Aceptar
+                                            </button>
+                                        </form>
+                                        <form th:action="@{'/producto/' + ${producto.id_producto} + '/rechazar'}"
+                                            method="post">
+                                            <button type="submit"
+                                                class="btn btn-sm rounded-pill px-3 btn-outline-secondary"
+                                                style="font-size:12px;">
+                                                Rechazar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <!-- dropdown usuario -->
                         <li class="nav-item dropdown d-none d-lg-block">
-                            <button
-                                class="btn btn-outline-secondary rounded-pill px-3 d-flex align-items-center gap-2 dropdown-toggle"
+                            <button class="btn rounded-pill px-3 d-flex align-items-center gap-2 dropdown-toggle"
+                                style="border: 1px solid #dee2e6; color: var(--color-first); background: transparent;"
                                 type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fas fa-user-circle nav-user-icon"></i>
+
+                                <!-- Mostrar avatar según si tiene foto o no -->
+                                <th:block th:if="${usuario != null}">
+                                    <!-- Con foto -->
+                                    <img th:if="${usuario.fotoPerfil != null and !#strings.isEmpty(usuario.fotoPerfil)}"
+                                        th:src="@{'/img/fotoperfil_img/' + ${usuario.fotoPerfil}}"
+                                        class="rounded-circle object-fit-cover"
+                                        style="width:25px; height:25px; object-fit: cover;" alt="Foto perfil">
+
+                                    <!-- Sin foto: iniciales -->
+                                    <div th:unless="${usuario.fotoPerfil != null and !#strings.isEmpty(usuario.fotoPerfil)}"
+                                        class="rounded-circle d-flex align-items-center justify-content-center"
+                                        style="width:25px; height:25px; background: var(--color-accent);">
+                                        <span class="fw-bold text-white" style="font-size: 14px;"
+                                            th:text="${!#strings.isEmpty(usuario.nombre) ? #strings.toUpperCase(#strings.substring(usuario.nombre,0,1)) : 'U'}">
+                                            U
+                                        </span>
+                                    </div>
+                                </th:block>
+
+                                <!-- Placeholder si no hay usuario (no debería ocurrir) -->
+                                <div th:if="${usuario == null}"
+                                    class="rounded-circle d-flex align-items-center justify-content-center"
+                                    style="width:25px; height:25px; background: #dee2e6;">
+                                    <span class="fw-bold text-white">?</span>
+                                </div>
+
                                 <span class="small fw-semibold" th:text="${nombreCompletoUsuario}">Usuario</span>
                             </button>
+
+                            <!-- Resto del dropdown menu... -->
                             <ul class="dropdown-menu dropdown-menu-end shadow-sm mt-2" aria-labelledby="userDropdown">
                                 <li><a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/home}">
-                                        <i class="fas fa-home me-1"></i> Inicio</a></li>
-                                <li>
+                                        <i class="fas fa-home" style="color: var(--color-accent);"></i> Inicio</a></li>
                                 <li><a class="dropdown-item d-flex align-items-center gap-2"
                                         th:href="@{/nuevo-producto}">
-                                        <i class="fa-solid fa-circle-plus"></i> Añadir producto</a></li>
-                                <li>
+                                        <i class="fa-solid fa-circle-plus" style="color: var(--color-accent);"></i>
+                                        Añadir producto</a></li>
                                 <li><a class="dropdown-item d-flex align-items-center gap-2"
                                         th:href="@{/mis-productos}">
-                                        <i class="fa-solid fa-box "></i> Mis productos</a></li>
-                                <li>
-                                <li><a class="dropdown-item d-flex align-items-center gap-2"
-                                        th:href="@{/chat/mis-conversaciones}">
-                                        <i class="fas fa-comments"></i> Mis chats</a></li>
+                                        <i class="fa-solid fa-box" style="color: var(--color-accent);"></i> Mis
+                                        productos</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li><a class="dropdown-item d-flex align-items-center gap-2"
-                                        th:href="@{/configuracion}"><i class="fas fa-cog"></i> Configuración</a></li>
-                                <li><a class="dropdown-item d-flex align-items-center gap-2"
-                                        th:href="@{/perfil/editar}"><i class="fas fa-user-edit"></i> Editar perfil</a>
-                                </li>
+                                        th:href="@{/perfil/editar}">
+                                        <i class="fas fa-user-edit" style="color: var(--color-accent);"></i> Editar
+                                        perfil</a></li>
+                                <li>
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li><a class="dropdown-item d-flex align-items-center gap-2 text-danger"
-                                        th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
+                                        th:href="@{/logout}">
+                                        <i class="fas fa-sign-out-alt"></i> Cerrar sesión</a></li>
                             </ul>
                         </li>
+
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
 
-    
+
 </body>
 
 </html>

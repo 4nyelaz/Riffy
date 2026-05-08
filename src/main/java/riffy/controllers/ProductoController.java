@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import riffy.model.ProductoEntity;
 import riffy.model.UsuarioEntity;
@@ -48,6 +49,7 @@ public class ProductoController {
 
     /**
      * metodo de los productos del usuario en sesión
+     * 
      * @param session  sesión HTTP del usuario actual
      * @param model    modelo para pasar atributos a la vista
      * @param redirect mensajes flash de errores, o información adicional
@@ -63,6 +65,11 @@ public class ProductoController {
             return "redirect:/login";
         }
         // ------------------------------------------------------------------
+
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null)
+            return "redirect:/home";
+
 
         // recoge todos los productos del usuario en sesión
         List<ProductoEntity> productos = productoRepository.findByPropietarioId(usuarioId);
@@ -82,13 +89,15 @@ public class ProductoController {
         model.addAttribute("productos", productos);
         model.addAttribute("imagenesMap", imagenesMap);
         model.addAttribute("usuarioId", usuarioId);
+        model.addAttribute("usuario", usuario);
         model.addAttribute("nombreCompletoUsuario", session.getAttribute("nombreCompletoUsuario"));
 
         return "producto/misproductos";
     }
 
     @GetMapping("/editarproducto/{id}")
-    public String editarProducto(@PathVariable("id") @NonNull Long id_producto, HttpSession session, Model model, RedirectAttributes redirect) {
+    public String editarProducto(@PathVariable("id") @NonNull Long id_producto, HttpSession session, Model model,
+            RedirectAttributes redirect) {
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
         Long usuarioId = (Long) session.getAttribute("usuarioId");
@@ -99,7 +108,8 @@ public class ProductoController {
         // ------------------------------------------------------------------
 
         // guarda en un obj producto
-        // si en el repositorio se encuentra el id pasado por parámetro o sino, devuelve null
+        // si en el repositorio se encuentra el id pasado por parámetro o sino, devuelve
+        // null
         ProductoEntity producto = productoRepository.findById(id_producto).orElse(null);
 
         // si no existe, redirige a home
@@ -126,16 +136,17 @@ public class ProductoController {
 
     /**
      * actualiza un producto existente del usuario en sesión
+     * 
      * @param id_producto identificador del producto a editar
-     * @param titulo nuevo título del producto
-     * @param artista nueva artista del producto
-     * @param formato nuevo formato del producto
+     * @param titulo      nuevo título del producto
+     * @param artista     nueva artista del producto
+     * @param formato     nuevo formato del producto
      * @param descripcion nueva descripcion del producto
-     * @param precio nuevo precio del producto
-     * @param estado nuevo estado del producto
-     * @param categoria nueva categoria del producto
-     * @param imagenes nueva/nuevas imagene del producto
-     * @param session session sesión HTTP del usuario actual
+     * @param precio      nuevo precio del producto
+     * @param estado      nuevo estado del producto
+     * @param categoria   nueva categoria del producto
+     * @param imagenes    nueva/nuevas imagene del producto
+     * @param session     session sesión HTTP del usuario actual
      * @return Todo correcto: redirección al misproductos; Error: login/home
      */
     @PostMapping("/editarproducto/{id}")
@@ -159,7 +170,8 @@ public class ProductoController {
         // ------------------------------------------------------------------
 
         // guarda en un obj producto
-        // si en el repositorio se encuentra el id pasado por parámetro o sino, devuelve null
+        // si en el repositorio se encuentra el id pasado por parámetro o sino, devuelve
+        // null
         ProductoEntity producto = productoRepository.findById(id_producto).orElse(null);
 
         // si no existe, redirige a home
@@ -183,14 +195,15 @@ public class ProductoController {
         producto.setFecha_edicion(LocalDate.now());
 
         // guarda imagenes si se han subido
-        
+
         if (imagenes != null && !imagenes.isEmpty() && !imagenes.get(0).isEmpty()) {
             System.out.println("Imágenes recibidas: " + imagenes.size());
             for (MultipartFile img : imagenes) {
                 System.out.println("Archivo: " + img.getOriginalFilename() + " | Tamaño: " + img.getSize());
             }
 
-            // recorre todas las imágenes del formulario y las guarda en el sistema de archivos
+            // recorre todas las imágenes del formulario y las guarda en el sistema de
+            // archivos
             List<String> nombresImagenes = new ArrayList<>();
             for (MultipartFile img : imagenes) {
                 if (!img.isEmpty()) {
@@ -221,13 +234,15 @@ public class ProductoController {
 
     /**
      * elimina un producto de la base de datos
+     * 
      * @param id_producto identificador del producto a eliminar
-     * @param session sesión HTTP del usuario actual
-     * @param redirect mensajes flash de errores, o información adicional
+     * @param session     sesión HTTP del usuario actual
+     * @param redirect    mensajes flash de errores, o información adicional
      * @return Todo correcto: redirección al misproductos; Error: login
      */
     @GetMapping("/eliminarproducto/{id}")
-    public String eliminarProducto(@PathVariable("id") @NonNull Long id_producto, HttpSession session, RedirectAttributes redirect) {
+    public String eliminarProducto(@PathVariable("id") @NonNull Long id_producto, HttpSession session,
+            RedirectAttributes redirect) {
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
         Long usuarioId = (Long) session.getAttribute("usuarioId");
@@ -238,14 +253,15 @@ public class ProductoController {
         // ------------------------------------------------------------------
 
         // guarda en un obj producto
-        // si en el repositorio se encuentra el id pasado por parámetro o sino, devuelve null
+        // si en el repositorio se encuentra el id pasado por parámetro o sino, devuelve
+        // null
         ProductoEntity producto = productoRepository.findById(id_producto).orElse(null);
 
         // comprueba que el producto pertenece al usuario de la sesión
         if (producto != null && producto.getPropietario().getIdUsuario().equals(usuarioId)) {
             productoRepository.delete(producto);
             redirect.addFlashAttribute("productoEliminado", "El producto ha sido eliminado correctamente.");
-            return "redirect:/mis-productos"; 
+            return "redirect:/mis-productos";
         }
 
         redirect.addFlashAttribute("productoNoEliminado", "El producto no ha sido eliminado.");
@@ -254,6 +270,7 @@ public class ProductoController {
 
     /**
      * sirve imágenes de productos desde el sistema de archivos
+     * 
      * @param filename nombre del archivo de imagen a servir
      * @return Todo correcot: ResponseEntity con la imagen; Error: 404
      * @throws IOException si hay error al leer el archivo
@@ -263,7 +280,8 @@ public class ProductoController {
     @ResponseBody
     public ResponseEntity<Resource> servirImagen(@PathVariable String filename) throws IOException {
         // construimos la ruta completa, con user.dir nos dice la raíz del proyecto
-        Path ruta = Paths.get(System.getProperty("user.dir") + "/src/main/resources/static/img/productos_img/" + filename);
+        Path ruta = Paths
+                .get(System.getProperty("user.dir") + "/src/main/resources/static/img/productos_img/" + filename);
         // !! wrapper: añade métodos útiles al obj Path
         FileSystemResource resource = new FileSystemResource(ruta);
 
@@ -279,9 +297,10 @@ public class ProductoController {
 
     /**
      * elimina un producto de la base de datos
+     * 
      * @param id_producto identificador del producto a eliminar
-     * @param session sesión HTTP del usuario actual
-     * @param redirect mensajes flash de errores, o información adicional
+     * @param session     sesión HTTP del usuario actual
+     * @param redirect    mensajes flash de errores, o información adicional
      * @return Todo correcto: redirección a misproductos; Error: login
      */
     @GetMapping("/nuevo-producto")
@@ -307,7 +326,6 @@ public class ProductoController {
 
         return "producto/crearproducto";
     }
-
 
     @PostMapping("/nuevo-producto")
     public String crearProducto(@RequestParam("titulo") String titulo, RedirectAttributes redirect,
@@ -346,7 +364,8 @@ public class ProductoController {
 
         // guardar imágenes si se han subido
         if (imagenes != null && !imagenes.isEmpty() && !imagenes.get(0).isEmpty()) {
-            // recorre todas las imágenes del formulario y las guarda en el sistema de archivos
+            // recorre todas las imágenes del formulario y las guarda en el sistema de
+            // archivos
             List<String> nombresImagenes = new ArrayList<>();
             for (MultipartFile img : imagenes) {
                 if (!img.isEmpty()) {
@@ -374,15 +393,17 @@ public class ProductoController {
 
     /**
      * visualización de informacion de producto
+     * 
      * @param id_producto identificador del producto a comprar
-     * @param redirect mensajes flash de errores, o información adicional
-     * @param session sesión HTTP del usuario actual
-     * @param model modelo para pasar atributos a la vista
+     * @param redirect    mensajes flash de errores, o información adicional
+     * @param session     sesión HTTP del usuario actual
+     * @param model       modelo para pasar atributos a la vista
      * @return Todo correcto: redirección al detalleproducto; Error: login
      */
     @SuppressWarnings("unchecked")
     @GetMapping("/producto/{id}")
-    public String verProducto(@PathVariable("id") @NonNull Long id_producto, RedirectAttributes redirect, HttpSession session, Model model) {
+    public String verProducto(@PathVariable("id") @NonNull Long id_producto, RedirectAttributes redirect,
+            HttpSession session, Model model) {
 
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
@@ -394,7 +415,8 @@ public class ProductoController {
         // ------------------------------------------------------------------
 
         // guarda en un obj producto
-        // si en el repositorio se encuentra el id pasado por parámetro o sino, devuelve null
+        // si en el repositorio se encuentra el id pasado por parámetro o sino, devuelve
+        // null
         ProductoEntity producto = productoRepository.findById(id_producto).orElse(null);
 
         // si no existe, redirige a home
@@ -402,7 +424,7 @@ public class ProductoController {
             return "redirect:/home";
         }
 
-        // conf de historial 
+        // conf de historial
         if (!producto.getPropietario().getIdUsuario().equals(usuarioId)) {
 
             // recupera el historial actual de la sesión
@@ -445,13 +467,15 @@ public class ProductoController {
 
     /**
      * SIMULACIÓN DE COMPRA -> marca un producto como vendido
+     * 
      * @param id_producto identificador del producto a comprar
-     * @param session sesión HTTP del usuario actual
-     * @param redirect mensajes flash de errores, o información adicional
+     * @param session     sesión HTTP del usuario actual
+     * @param redirect    mensajes flash de errores, o información adicional
      * @return Todo correcto: redirige detalle del producto, Error: login/home
-    */
+     */
     @GetMapping("/producto/comprar/{id}")
-    public String comprarProducto(@PathVariable("id") @NonNull Long id_producto, HttpSession session, RedirectAttributes redirect) {
+    public String comprarProducto(@PathVariable("id") @NonNull Long id_producto, HttpSession session,
+            RedirectAttributes redirect) {
 
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
@@ -463,17 +487,19 @@ public class ProductoController {
         // ------------------------------------------------------------------
 
         // guarda en un obj producto
-        // si en el repositorio se encuentra el id pasado por parámetro o sino, devuelve null
+        // si en el repositorio se encuentra el id pasado por parámetro o sino, devuelve
+        // null
         ProductoEntity producto = productoRepository.findById(id_producto).orElse(null);
 
         // comprobaciones: existe, no es tuyo, y está disponible
-        if (producto == null || producto.getPropietario().getIdUsuario().equals(usuarioId) || !producto.getEstado().equals("Disponible")) {
+        if (producto == null || producto.getPropietario().getIdUsuario().equals(usuarioId)
+                || !producto.getEstado().equals("Disponible")) {
             return "redirect:/home";
         }
 
         // cambia el estado del producto de disponible a venidido
         // lo guarda en la bd
-        producto.setEstado("Vendido");
+        producto.setEstado("Reservado");
         productoRepository.save(producto);
 
         return "redirect:/producto/" + id_producto;
@@ -481,16 +507,17 @@ public class ProductoController {
 
     /**
      * busca productos por texto, categoría, estado y rango de precios
-     * @param q término de búsqueda
+     * 
+     * @param q         término de búsqueda
      * @param categoria filtro por categoría
-     * @param estado filtro por estado
+     * @param estado    filtro por estado
      * @param precioMin precio mínimo para filtrar
      * @param precioMax precio máximo para filtrar
-     * @param session sesión HTTP del usuario actual
-     * @param model modelo para pasar atributos a la vista
-     * @param redirect mensajes flash de errores, o información adicional
+     * @param session   sesión HTTP del usuario actual
+     * @param model     modelo para pasar atributos a la vista
+     * @param redirect  mensajes flash de errores, o información adicional
      * @return vista con los resultados de búsqueda
-    */
+     */
     @GetMapping("/buscar")
     public String buscar(
             @RequestParam(required = false) String q,
@@ -544,19 +571,19 @@ public class ProductoController {
         return "producto/buscar";
     }
 
-
     /**
      * explora productos con filtros
      * similar a buscar pero sin el parámetro q
+     * 
      * @param categoria filtro por categoría
-     * @param estado filtro por estado
+     * @param estado    filtro por estado
      * @param precioMin precio mínimo para filtrar
      * @param precioMax precio máximo para filtrar
-     * @param session sesión HTTP del usuario actual
-     * @param model modelo para pasar atributos a la vista
-     * @param redirect mensajes flash de errores, o información adicional
+     * @param session   sesión HTTP del usuario actual
+     * @param model     modelo para pasar atributos a la vista
+     * @param redirect  mensajes flash de errores, o información adicional
      * @return vista con los productos filtrados
-    */
+     */
     @GetMapping("/explorar")
     public String explorar(
             @RequestParam(required = false) String categoria,
@@ -565,10 +592,9 @@ public class ProductoController {
             @RequestParam(required = false) BigDecimal precioMax,
             HttpSession session,
             Model model,
-            RedirectAttributes redirect
-        ) {
+            RedirectAttributes redirect) {
 
-         // ------------------------------------------------------------------
+        // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
         Long usuarioId = (Long) session.getAttribute("usuarioId");
         if (usuarioId == null) {
@@ -607,6 +633,30 @@ public class ProductoController {
         model.addAttribute("precioMax", precioMax);
 
         return "producto/explorar";
+    }
+
+
+    // Notificaciones para el vendedor
+    @PostMapping("/producto/{id}/aceptar")
+    public String aceptarProducto(@PathVariable("id") @NonNull Long id, HttpSession session, HttpServletRequest request) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        ProductoEntity producto = productoRepository.findById(id).orElse(null);
+        if (producto != null && producto.getPropietario().getIdUsuario().equals(usuarioId)) {
+            producto.setEstado("Vendido");
+            productoRepository.save(producto);
+        }
+        return "redirect:" + request.getHeader("Referer");
+    }
+
+    @PostMapping("/producto/{id}/rechazar")
+    public String rechazarProducto(@PathVariable("id") @NonNull Long id, HttpSession session, HttpServletRequest request) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        ProductoEntity producto = productoRepository.findById(id).orElse(null);
+        if (producto != null && producto.getPropietario().getIdUsuario().equals(usuarioId)) {
+            producto.setEstado("Disponible");
+            productoRepository.save(producto);
+        }
+        return "redirect:" + request.getHeader("Referer");
     }
 
 }

@@ -14,7 +14,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
 import riffy.model.ProductoEntity;
+import riffy.model.UsuarioEntity;
 import riffy.repository.ProductoRepository;
+import riffy.repository.UsuarioRepository;
 
 @Controller
 public class MainController {
@@ -23,10 +25,14 @@ public class MainController {
     // solo se puede usar aquí en este controller, y no es reasignable
     @Autowired
     private ProductoRepository productoRepository;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
     // ---------------------------------------------------------------
 
     /**
      * página principal de la aplicación
+     * 
      * @return redirige a index -> pagina sin login
      */
     @GetMapping("/")
@@ -37,8 +43,9 @@ public class MainController {
     /**
      * home del usuario después de iniciar sesión
      * muestra productos vistos recientemente y productos por categoría
+     * 
      * @param session sesión HTTP del usuario actual
-     * @param model modelo para pasar atributos a la vista
+     * @param model   modelo para pasar atributos a la vista
      * @return Todo correcto: redirección al home; Error: login
      */
     @SuppressWarnings({ "unchecked", "null" })
@@ -52,6 +59,11 @@ public class MainController {
             return "redirect:/login";
         }
         // ------------------------------------------------------------------
+
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null) {
+            return "redirect:/login";
+        }
 
         // Vistos recientemente -> Sesión
         // recupera historial de id de productos vistos en sesión
@@ -108,6 +120,7 @@ public class MainController {
 
         // añade atributos para mostrarlos en la vista
         model.addAttribute("usuarioId", usuarioId);
+        model.addAttribute("usuario", usuario);
         model.addAttribute("nombreCompletoUsuario", session.getAttribute("nombreCompletoUsuario"));
         model.addAttribute("vistos", vistos);
         model.addAttribute("vinilos", vinilos);
