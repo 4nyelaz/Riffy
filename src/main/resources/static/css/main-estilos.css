@@ -204,8 +204,10 @@ body {
 }
 
 .titulo-seccion {
-    color: var(--color-first); /* azul marino #0d1b2a */
-    font-size: 2.5rem;         /* más proporcionado que display-5 */
+    color: var(--color-first);
+    /* azul marino #0d1b2a */
+    font-size: 2.5rem;
+    /* más proporcionado que display-5 */
     font-weight: 700;
 }
 
@@ -324,6 +326,9 @@ footer {
     color: var(--color-accent);
 }
 
+.footer-logo-nombre {
+    color: white;
+}
 
 /* /////////////////////////////////////////////////////////////////// */
 /* ////////////////////////////// auth /////////////////////////////// */
@@ -589,6 +594,80 @@ footer {
     padding-bottom: 0.75rem;
 }
 
+.nav-accent-icon {
+    color: var(--color-accent);
+}
+
+.nav-btn-icon {
+    width: 38px;
+    height: 38px;
+    background: transparent;
+    border: 1px solid #dee2e6;
+}
+
+.nav-badge {
+    font-size: 10px;
+    background: var(--color-accent);
+}
+
+.nav-notif-panel {
+    position: absolute;
+    right: 0;
+    top: 48px;
+    width: 300px;
+    z-index: 1050;
+}
+
+.nav-notif-header span {
+    color: var(--color-first);
+}
+
+.nav-notif-producto {
+    color: var(--color-first);
+}
+
+.nav-notif-precio {
+    font-size: 12px;
+    color: var(--color-text-secondary);
+}
+
+.nav-btn-aceptar {
+    background: var(--color-accent);
+    border: none;
+    font-size: 12px;
+}
+
+.nav-btn-rechazar {
+    font-size: 12px;
+}
+
+.nav-avatar-small {
+    width: 25px;
+    height: 25px;
+    background: var(--color-accent);
+}
+
+.nav-avatar-small span {
+    font-size: 14px;
+}
+
+.nav-avatar-placeholder {
+    width: 25px;
+    height: 25px;
+    background: #dee2e6;
+}
+
+.nav-foto-small {
+    width: 25px;
+    height: 25px;
+    object-fit: cover;
+}
+
+.nav-user-btn {
+    border: 1px solid #dee2e6;
+    color: var(--color-first);
+    background: transparent;
+}
 
 /* /////////////////////////////////////////////////////////////////// */
 /* ////////////////////////// home main ////////////////////////////// */
@@ -597,6 +676,115 @@ footer {
     padding-top: 58px;
     min-height: 100vh;
     background-color: var(--color-bg-alt);
+}
+
+/* /////////////////////////////////////////////////////////////////// */
+/* ///////////////////////// editar perfil /////////////////////////// */
+/* /////////////////////////////////////////////////////////////////// */
+
+.avatar-preview-img {
+    width: 80px;
+    height: 80px;
+    border: 3px solid var(--color-accent);
+    object-fit: cover;
+}
+
+.avatar-preview-inicial {
+    width: 80px;
+    height: 80px;
+    background: var(--color-accent);
+}
+
+.avatar-camara-btn {
+    width: 26px;
+    height: 26px;
+    background: var(--color-first);
+    cursor: pointer;
+}
+
+.avatar-camara-btn i {
+    font-size: 11px;
+    color: white;
+}
+
+/* /////////////////////////////////////////////////////////////////// */
+/* //////////////////////// chat //////////////////////////// */
+/* /////////////////////////////////////////////////////////////////// */
+
+.chat-container {
+    max-width: 650px;
+    margin: 2rem auto;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-header {
+    background: var(--color-second);
+    color: white;
+    padding: 1rem 1.5rem;
+}
+
+.chat-mensajes {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    background: #f8fbfd;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.mensaje-item {
+    max-width: 70%;
+    padding: 0.6rem 1rem;
+    border-radius: 18px;
+    font-size: 0.95rem;
+}
+
+.mensaje-propio {
+    align-self: flex-end;
+    background: var(--color-accent);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.mensaje-otro {
+    align-self: flex-start;
+    background: #e9ecef;
+    color: var(--color-first);
+    border-bottom-left-radius: 4px;
+}
+
+.chat-input-area {
+    padding: 1rem;
+    background: white;
+    border-top: 1px solid #dee2e6;
+}
+
+/* /////////////////////////////////////////////////////////////////// */
+/* //////////////////////// detalle producto ///////////////////////// */
+/* /////////////////////////////////////////////////////////////////// */
+
+.detalle-vendedor-avatar {
+    width: 52px;
+    height: 52px;
+    object-fit: cover;
+}
+
+.detalle-vendedor-inicial {
+    width: 52px;
+    height: 52px;
+    background-color: var(--color-accent);
+}
+
+.detalle-img {
+    max-height: 420px;
+    object-fit: cover;
 }
 
 
@@ -618,7 +806,7 @@ footer {
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2;
-    line-clamp: 2;   
+    line-clamp: 2;
     -webkit-box-orient: vertical;
 }
 
@@ -628,7 +816,7 @@ footer {
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 3;
-    line-clamp: 2;   
+    line-clamp: 2;
     -webkit-box-orient: vertical;
 }
 
@@ -744,6 +932,12 @@ footer {
     color: var(--color-accent);
     margin-bottom: 1rem;
     display: block;
+}
+
+.conv-foto-avatar {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
 }
 
 /* /////////////////////////////////////////////////////////////////// */
@@ -1071,7 +1265,8 @@ dialog::backdrop {
 
     /* -- home: padding general -- */
     .home-main {
-        padding-top: 68px; /* nav en móvil suele ser más alto */
+        padding-top: 68px;
+        /* nav en móvil suele ser más alto */
     }
 
     /* -- mis productos: cabecera -- */
@@ -1085,7 +1280,8 @@ dialog::backdrop {
         flex-direction: column;
         align-items: flex-start !important;
         gap: 0.75rem;
-        padding-right: 0 !important; /* quita el pe-4 en móvil */
+        padding-right: 0 !important;
+        /* quita el pe-4 en móvil */
     }
 
     /* select + botón añadir en fila, ocupan todo el ancho */

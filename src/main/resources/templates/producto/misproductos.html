@@ -26,4 +26,8 @@
     <div th:if="${productoNoEliminado}" data-toast-productoNoEliminado th:data-mensaje="${productoNoEliminado}" hidden></div>
 </body>
 
+<div th:if="${toastExito}" data-toast-productoExito th:data-mensaje="${toastExito}" hidden></div>
+<div th:if="${toastError}" data-toast-productoError th:data-mensaje="${toastError}" hidden></div>
+<div th:if="${sesionCaducada}" data-toast-sesionCaducada th:data-mensaje="${sesionCaducada}" hidden></div>
+
 </html>

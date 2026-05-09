@@ -313,4 +313,7 @@
 
 </body>
 
+<div th:if="${toastExito}" data-toast-adminExito th:data-mensaje="${toastExito}" hidden></div>
+<div th:if="${sesionCaducada}" data-toast-sesionCaducada th:data-mensaje="${sesionCaducada}" hidden></div>
+
 </html>

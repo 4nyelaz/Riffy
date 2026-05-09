@@ -753,7 +753,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const show = (selector, type) => {
         const el = document.querySelector(selector);
-
         if (el && el.dataset.mensaje) {
             new Toast(el.dataset.mensaje, type, 4000);
         }
@@ -762,7 +761,15 @@ document.addEventListener("DOMContentLoaded", () => {
     show("[data-toast-logout]", Toast.INFO);
     show("[data-toast-login]", Toast.ERROR);
     show("[data-toast-error]", Toast.ERROR);
-    show("[data-toast-success]", Toast.SUCCESS);
-
+    show("[data-toast-success]", Toast.INFO);
+    show("[data-toast-perfil]", Toast.INFO);
+    show("[data-toast-productoExito]", Toast.INFO);
+    show("[data-toast-productoError]", Toast.ERROR);
+    show("[data-toast-adminExito]", Toast.INFO);
+    show("[data-toast-sesionCaducada]", Toast.ERROR);
 });
 
+window.onload = function () {
+    var contenedor = document.getElementById('contenedorMensajes');
+    contenedor.scrollTop = contenedor.scrollHeight;
+};

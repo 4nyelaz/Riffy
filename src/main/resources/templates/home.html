@@ -23,4 +23,7 @@
     </main>
 </body>
 
+<div th:if="${productoEliminado}" data-toast-productoExito th:data-mensaje="${productoEliminado}" hidden></div>
+<div th:if="${productoNoEliminado}" data-toast-productoError th:data-mensaje="${productoNoEliminado}" hidden></div>
+
 </html>

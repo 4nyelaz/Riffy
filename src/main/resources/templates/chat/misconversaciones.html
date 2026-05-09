@@ -45,7 +45,7 @@
                         <!-- Con foto -->
                         <img th:if="${conv.vendedor.fotoPerfil != null and !#strings.isEmpty(conv.vendedor.fotoPerfil)}"
                             th:src="@{'/img/fotoperfil_img/' + ${conv.vendedor.fotoPerfil}}"
-                            class="rounded-circle object-fit-cover" style="width:50px; height:50px; object-fit: cover;"
+                            class="rounded-circle conv-foto-avatar"
                             alt="Foto perfil">
 
                         <div th:unless="${conv.vendedor.fotoPerfil != null and !#strings.isEmpty(conv.vendedor.fotoPerfil)}"
@@ -88,7 +88,7 @@
                     class="conversacion-item">
                     <img th:if="${conv.comprador.fotoPerfil != null and !#strings.isEmpty(conv.comprador.fotoPerfil)}"
                         th:src="@{'/img/fotoperfil_img/' + ${conv.comprador.fotoPerfil}}"
-                        class="rounded-circle object-fit-cover" style="width:50px; height:50px; object-fit: cover;"
+                        class="rounded-circle conv-foto-avatar"
                         alt="Foto perfil">
 
                     <div th:unless="${conv.comprador.fotoPerfil != null and !#strings.isEmpty(conv.comprador.fotoPerfil)}"

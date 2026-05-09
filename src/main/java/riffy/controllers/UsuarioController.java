@@ -2,11 +2,11 @@ package riffy.controllers;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.nio.file.Path;
-
+import java.nio.file.Paths;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +27,9 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     // ---------------------------------------------------------------
     @GetMapping("/perfil/editar")
     public String editarPerfil(HttpSession session, Model model, RedirectAttributes redirect) {
@@ -40,6 +43,7 @@ public class UsuarioController {
             return "redirect:/home";
 
         model.addAttribute("usuario", usuario);
+        model.addAttribute("fotoPerfil", session.getAttribute("fotoPerfil"));
         model.addAttribute("nombreCompletoUsuario", session.getAttribute("nombreCompletoUsuario"));
         return "usuario/editarperfil";
     }
@@ -71,8 +75,9 @@ public class UsuarioController {
 
         // contraseña solo si rellena ambos campos y la actual es correcta
         if (contrasenaNueva != null && !contrasenaNueva.isBlank()
-                && contrasenaActual != null && contrasenaActual.equals(u.getContrasena())) {
-            u.setContrasena(contrasenaNueva);
+                && contrasenaActual != null
+                && passwordEncoder.matches(contrasenaActual, u.getContrasena())) {
+            u.setContrasena(passwordEncoder.encode(contrasenaNueva));
         }
 
         // foto de perfil — igual que productos
@@ -82,6 +87,7 @@ public class UsuarioController {
             try {
                 Files.write(ruta, fotoPerfil.getBytes());
                 u.setFotoPerfil(nombreArchivo);
+                session.setAttribute("fotoPerfil", nombreArchivo);
             } catch (IOException e) {
                 e.printStackTrace();
             }

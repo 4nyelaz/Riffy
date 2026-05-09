@@ -36,22 +36,20 @@
                                     <!-- Con foto -->
                                     <img th:if="${usuario.fotoPerfil != null and !#strings.isEmpty(usuario.fotoPerfil)}"
                                         th:src="@{'/img/fotoperfil_img/' + ${usuario.fotoPerfil}}" id="avatarPreview"
-                                        class="rounded-circle object-fit-cover"
-                                        style="width:80px; height:80px; border: 3px solid var(--color-accent);"
-                                        alt="Foto de perfil">
+                                        class="rounded-circle avatar-preview-img" alt="Foto de perfil">
+
                                     <!-- Sin foto: inicial -->
                                     <div th:if="${usuario.fotoPerfil == null or #strings.isEmpty(usuario.fotoPerfil)}"
                                         id="avatarPreview"
-                                        class="rounded-circle d-flex align-items-center justify-content-center"
-                                        style="width:80px; height:80px; background: var(--color-accent);">
+                                        class="rounded-circle d-flex align-items-center justify-content-center avatar-preview-inicial">
                                         <span class="fw-bold fs-2 text-white"
                                             th:text="${#strings.toUpperCase(#strings.substring(usuario.nombre, 0, 1))}">U</span>
                                     </div>
+
                                     <!-- Botón cámara -->
                                     <label for="fotoPerfil"
-                                        class="position-absolute bottom-0 end-0 rounded-circle d-flex align-items-center justify-content-center"
-                                        style="width:26px; height:26px; background: var(--color-first); cursor:pointer;">
-                                        <i class="fas fa-camera" style="font-size:11px; color:white;"></i>
+                                        class="position-absolute bottom-0 end-0 rounded-circle d-flex align-items-center justify-content-center avatar-camara-btn">
+                                        <i class="fas fa-camera"></i>
                                     </label>
                                     <input type="file" id="fotoPerfil" name="fotoPerfil" accept="image/*" class="d-none"
                                         onchange="previewFoto(this)">
@@ -122,5 +120,8 @@
         </section>
     </main>
 </body>
+
+<div th:if="${perfilActualizado}" data-toast-perfil th:data-mensaje="${perfilActualizado}" hidden></div>
+<div th:if="${sesionCaducada}" data-toast-sesionCaducada th:data-mensaje="${sesionCaducada}" hidden></div>
 
 </html>

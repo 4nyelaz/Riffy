@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes; // Anotación: permite mandar datos omitiendolo en la URL
 import jakarta.validation.Valid;
 
-
 import jakarta.servlet.http.HttpSession;
 import riffy.model.UsuarioEntity;
 import riffy.services.UsuarioService;
@@ -54,35 +53,26 @@ public class AutenticacionController {
             BindingResult result,
             RedirectAttributes redirect) {
 
-        
         if (result.hasErrors()) {
-
             redirect.addFlashAttribute(
                     "errorRegistro",
                     "Revisa los campos del formulario.");
-
             redirect.addFlashAttribute(
                     "org.springframework.validation.BindingResult.usuario",
                     result);
-
             redirect.addFlashAttribute("usuario", usuario);
 
             return "redirect:/login?section=register";
         }
 
-        
         if (usuarioService.existeUsuario(usuario.getUsuario())) {
-
             redirect.addFlashAttribute(
                     "errorRegistro",
                     "Este usuario ya está registrado. Elige otro nombre.");
-
             redirect.addFlashAttribute("usuario", usuario);
-
             return "redirect:/login?section=register";
         }
 
-        
         usuarioService.registrar(usuario);
 
         redirect.addFlashAttribute(
