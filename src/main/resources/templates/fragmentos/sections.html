@@ -303,7 +303,7 @@
 
             <!-- Acciones -->
             <div class="card-body d-flex gap-2">
-                <th:block th:if="${producto.propietario.idUsuario == usuarioId}">
+                <th:block th:if="${producto.propietario.idUsuario = = usuarioId}">
                     <a href="#" class="btn btn-outline-primary btn-sm rounded-pill w-50 btn-editar"
                         th:data-id="${producto.id_producto}" th:data-titulo="${producto.titulo}"
                         th:data-artista="${producto.artista}" th:data-descripcion="${producto.descripcion}"
@@ -361,7 +361,7 @@
                     Vistos recientemente
                 </h2>
             </div>
-            <div th:if="${vistos == null or vistos.isEmpty()}" class="text-muted ps-2 pb-4">
+            <div th:if="${vistos = = null or vistos.isEmpty()}" class="text-muted ps-2 pb-4">
                 <p>Todavía no has visto ningún producto.</p>
             </div>
             <div class="productos-carrusel" th:if="${vistos != null and !vistos.isEmpty()}">
@@ -385,7 +385,7 @@
                     Vinilos
                 </h2>
             </div>
-            <div th:if="${vinilos == null or vinilos.isEmpty()}" class="text-muted ps-2 pb-4">
+            <div th:if="${vinilos = = null or vinilos.isEmpty()}" class="text-muted ps-2 pb-4">
                 <p>No hay vinilos disponibles por el momento.</p>
             </div>
             <div class="productos-carrusel mb-5" th:if="${vinilos != null and !vinilos.isEmpty()}">
@@ -403,7 +403,7 @@
                     CDs
                 </h2>
             </div>
-            <div th:if="${cds == null or cds.isEmpty()}" class="text-muted ps-2 pb-4">
+            <div th:if="${cds = = null or cds.isEmpty()}" class="text-muted ps-2 pb-4">
                 <p>No hay CDs disponibles por el momento.</p>
             </div>
             <div class="productos-carrusel" th:if="${cds != null and !cds.isEmpty()}">

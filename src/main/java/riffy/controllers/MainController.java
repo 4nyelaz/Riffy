@@ -53,30 +53,30 @@ public class MainController {
     public String home(HttpSession session, Model model, RedirectAttributes redirect) {
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
-        Long usuarioId = (Long) session.getAttribute("usuarioId");
-        if (usuarioId == null) {
+        Long usuarioId =  (Long) session.getAttribute("usuarioId");
+        if (usuarioId = = null) {
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
         // ------------------------------------------------------------------
 
-        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
-        if (usuario == null) {
+        UsuarioEntity usuario =  usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario = = null) {
             return "redirect:/login";
         }
 
         // Vistos recientemente -> Sesión
         // recupera historial de id de productos vistos en sesión
         // si no existe -> nueva lista
-        List<Long> historialIds = (List<Long>) session.getAttribute("historialIds");
-        if (historialIds == null) {
-            historialIds = new ArrayList<>();
+        List<Long> historialIds =  (List<Long>) session.getAttribute("historialIds");
+        if (historialIds = = null) {
+            historialIds =  new ArrayList<>();
         }
 
         // los id del historial los convierte en un obj producto
         // coge cada id, y si existe, lo mete a la lista
         // también comprueba que el producto no sea del usuario que esté en sesión
-        List<ProductoEntity> vistos = new ArrayList<>();
+        List<ProductoEntity> vistos =  new ArrayList<>();
         for (Long id : historialIds) {
             productoRepository.findById(id).ifPresent(p -> {
                 if (!p.getPropietario().getIdUsuario().equals(usuarioId)) {
@@ -87,21 +87,21 @@ public class MainController {
 
         // busca productos de categoría vinilo que no sean del usuario actual
         // el usuario en sesion no le salen sus productos en esa sección
-        List<ProductoEntity> vinilos = productoRepository.findByCategoriaAndPropietarioIdUsuarioNot("Vinilo",
+        List<ProductoEntity> vinilos =  productoRepository.findByCategoriaAndPropietarioIdUsuarioNot("Vinilo",
                 usuarioId);
 
         // busca productos de categoría cd que no sean del usuario actual
         // el usuario en sesion no le salen sus productos en esa sección
-        List<ProductoEntity> cds = productoRepository.findByCategoriaAndPropietarioIdUsuarioNot("CD", usuarioId);
+        List<ProductoEntity> cds =  productoRepository.findByCategoriaAndPropietarioIdUsuarioNot("CD", usuarioId);
 
         // reunir todos las listas para mostrarlas en home
-        List<ProductoEntity> todos = new ArrayList<>();
+        List<ProductoEntity> todos =  new ArrayList<>();
         todos.addAll(vistos);
         todos.addAll(vinilos);
         todos.addAll(cds);
 
         // crea un mapa que asocia cada producto con su lista de imágenes
-        Map<Long, List<String>> imagenesMap = new HashMap<>();
+        Map<Long, List<String>> imagenesMap =  new HashMap<>();
 
         for (ProductoEntity p : todos) {
             // procesa si el id no está ya en el mapa
@@ -109,9 +109,9 @@ public class MainController {
                 // sólo si es un producto nuevo
                 List<String> imgs;
                 if (p.getImagenes() != null && !p.getImagenes().trim().isEmpty()) {
-                    imgs = Arrays.asList(p.getImagenes().split(","));
+                    imgs =  Arrays.asList(p.getImagenes().split(","));
                 } else {
-                    imgs = Arrays.asList("sin_foto.png");
+                    imgs =  Arrays.asList("sin_foto.png");
                 }
                 imagenesMap.put(p.getId_producto(), imgs);
             }

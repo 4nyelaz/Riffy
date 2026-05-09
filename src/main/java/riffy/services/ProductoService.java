@@ -13,7 +13,7 @@ public class ProductoService {
     private final ProductoRepository productoRepositorio;
 
     public ProductoService(ProductoRepository productoRepositorio) {
-        this.productoRepositorio = productoRepositorio;
+        this.productoRepositorio =  productoRepositorio;
     }
 
     public List<ProductoEntity> findByPropietarioId(Long propietarioId) {

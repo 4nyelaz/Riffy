@@ -26,7 +26,7 @@ public class AutenticacionController {
      * @param usuarioService
      */
     public AutenticacionController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
+        this.usuarioService =  usuarioService;
     }
 
     /**

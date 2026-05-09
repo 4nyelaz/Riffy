@@ -32,8 +32,8 @@
                             <label class="form-label small fw-semibold">Categoría</label>
                             <select name="categoria" class="form-select form-select-sm rounded-pill">
                                 <option value="">Todas</option>
-                                <option value="Vinilo" th:selected="${categoria == 'Vinilo'}">Vinilo</option>
-                                <option value="CD" th:selected="${categoria == 'CD'}">CD</option>
+                                <option value="Vinilo" th:selected="${categoria = = 'Vinilo'}">Vinilo</option>
+                                <option value="CD" th:selected="${categoria = = 'CD'}">CD</option>
                             </select>
                         </div>
 
@@ -42,10 +42,10 @@
                             <label class="form-label small fw-semibold">Estado del disco</label>
                             <select name="formato" class="form-select form-select-sm rounded-pill">
                                 <option value="">Cualquiera</option>
-                                <option value="Nuevo" th:selected="${formato == 'Nuevo'}">Nuevo</option>
-                                <option value="Muy Bueno" th:selected="${formato == 'Muy Bueno'}">Muy Bueno</option>
-                                <option value="Bueno" th:selected="${formato == 'Bueno'}">Bueno</option>
-                                <option value="Usado" th:selected="${formato == 'Usado'}">Usado</option>
+                                <option value="Nuevo" th:selected="${formato = = 'Nuevo'}">Nuevo</option>
+                                <option value="Muy Bueno" th:selected="${formato = = 'Muy Bueno'}">Muy Bueno</option>
+                                <option value="Bueno" th:selected="${formato = = 'Bueno'}">Bueno</option>
+                                <option value="Usado" th:selected="${formato = = 'Usado'}">Usado</option>
                             </select>
                         </div>
 
@@ -80,7 +80,7 @@
                         <i class="fas fa-search me-2 icono-titulo"></i>
                         Resultados para "<span class="acento" th:text="${q}"></span>"
                     </h2>
-                    <h2 class="fw-bold titulo-seccion mb-0" th:if="${q == null or q.isBlank()}">
+                    <h2 class="fw-bold titulo-seccion mb-0" th:if="${q = = null or q.isBlank()}">
                         <i class="fas fa-compact-disc me-2 icono-titulo"></i>
                         Todos los productos
                     </h2>

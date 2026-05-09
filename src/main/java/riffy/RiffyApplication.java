@@ -21,7 +21,7 @@ public class RiffyApplication {
 		return args -> {
 			// Crear ADMIN
 			try {
-				UsuarioEntity admin = new UsuarioEntity();
+				UsuarioEntity admin =  new UsuarioEntity();
 				admin.setNombre("Administrador");
 				admin.setUsuario("admin");
 				admin.setContrasena("admin");
@@ -35,7 +35,7 @@ public class RiffyApplication {
 
 			// Crear Usuario 1: Javier Mancera
 			try {
-				UsuarioEntity javier = new UsuarioEntity();
+				UsuarioEntity javier =  new UsuarioEntity();
 				javier.setNombre("Javier Mancera");
 				javier.setUsuario("ihavenomouth");
 				javier.setContrasena("ihavenomouth");
@@ -49,7 +49,7 @@ public class RiffyApplication {
 
 			// Crear Usuario 2: Juan de Dios Álvarez
 			try {
-				UsuarioEntity juan = new UsuarioEntity();
+				UsuarioEntity juan =  new UsuarioEntity();
 				juan.setNombre("Juan de Dios Álvarez");
 				juan.setUsuario("juande");
 				juan.setContrasena("juande");
@@ -63,7 +63,7 @@ public class RiffyApplication {
 
 			// Crear Usuario 3: Antonio Ladesa
 			try {
-				UsuarioEntity antonio = new UsuarioEntity();
+				UsuarioEntity antonio =  new UsuarioEntity();
 				antonio.setNombre("Antonio Ladesa");
 				antonio.setUsuario("antolade");
 				antonio.setContrasena("antolade");

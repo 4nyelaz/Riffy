@@ -31,17 +31,17 @@
             <!-- ── PESTAÑAS ── -->
             <div class="admin-tabs" role="tablist">
                 <button class="admin-tab"
-                    th:classappend="${param.seccion == null or param.seccion[0] == 'usuarios'} ? 'active'"
+                    th:classappend="${param.seccion = = null or param.seccion[0] = = 'usuarios'} ? 'active'"
                     onclick="mostrarPanel('usuarios', this)">
                     <i class="fas fa-users"></i> Usuarios
                 </button>
                 <button class="admin-tab"
-                    th:classappend="${param.seccion != null and param.seccion[0] == 'productos'} ? 'active'"
+                    th:classappend="${param.seccion != null and param.seccion[0] = = 'productos'} ? 'active'"
                     onclick="mostrarPanel('productos', this)">
                     <i class="fas fa-compact-disc"></i> Productos
                 </button>
                 <button class="admin-tab"
-                    th:classappend="${param.seccion != null and param.seccion[0] == 'conversaciones'} ? 'active'"
+                    th:classappend="${param.seccion != null and param.seccion[0] = = 'conversaciones'} ? 'active'"
                     onclick="mostrarPanel('conversaciones', this)">
                     <i class="fas fa-comments"></i> Conversaciones
                 </button>
@@ -51,7 +51,7 @@
             <!-- PANEL: USUARIOS                            -->
             <!-- ══════════════════════════════════════════ -->
             <div id="panel-usuarios" class="admin-panel"
-                th:classappend="${param.seccion == null or param.seccion[0] == 'usuarios'} ? 'active'">
+                th:classappend="${param.seccion = = null or param.seccion[0] = = 'usuarios'} ? 'active'">
                 <div class="tabla-card">
                     <div class="tabla-card-header">
                         <h2><i class="fas fa-users me-2" style="color:var(--color-accent)"></i>Usuarios</h2>
@@ -105,8 +105,8 @@
                                         <form th:action="@{'/admin/usuarios/' + ${u.idUsuario} + '/rol'}" method="post"
                                             style="display:flex; gap:0.4rem; align-items:center;">
                                             <select name="rol" class="select-rol">
-                                                <option value="USER" th:selected="${u.rol == 'USER'}">USER</option>
-                                                <option value="ADMIN" th:selected="${u.rol == 'ADMIN'}">ADMIN</option>
+                                                <option value="USER" th:selected="${u.rol = = 'USER'}">USER</option>
+                                                <option value="ADMIN" th:selected="${u.rol = = 'ADMIN'}">ADMIN</option>
                                             </select>
                                             <button type="submit" class="btn-accion btn-accion-neutro">
                                                 <i class="fas fa-check"></i>
@@ -139,7 +139,7 @@
                                     </td>
 
                                 </tr>
-                                <tr th:if="${usuarios == null or usuarios.isEmpty()}">
+                                <tr th:if="${usuarios = = null or usuarios.isEmpty()}">
                                     <td colspan="6">
                                         <div class="empty-state">
                                             <i class="fas fa-users"></i>
@@ -157,7 +157,7 @@
             <!-- PANEL: PRODUCTOS                           -->
             <!-- ══════════════════════════════════════════ -->
             <div id="panel-productos" class="admin-panel"
-                th:classappend="${param.seccion != null and param.seccion[0] == 'productos'} ? 'active'">
+                th:classappend="${param.seccion != null and param.seccion[0] = = 'productos'} ? 'active'">
                 <div class="tabla-card">
                     <div class="tabla-card-header">
                         <h2><i class="fas fa-compact-disc me-2" style="color:var(--color-accent)"></i>Productos</h2>
@@ -210,7 +210,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr th:if="${productos == null or productos.isEmpty()}">
+                                <tr th:if="${productos = = null or productos.isEmpty()}">
                                     <td colspan="6">
                                         <div class="empty-state">
                                             <i class="fas fa-compact-disc"></i>
@@ -228,7 +228,7 @@
             <!-- PANEL: CONVERSACIONES                      -->
             <!-- ══════════════════════════════════════════ -->
             <div id="panel-conversaciones" class="admin-panel"
-                th:classappend="${param.seccion != null and param.seccion[0] == 'conversaciones'} ? 'active'">
+                th:classappend="${param.seccion != null and param.seccion[0] = = 'conversaciones'} ? 'active'">
                 <div class="tabla-card">
                     <div class="tabla-card-header">
                         <h2><i class="fas fa-comments me-2" style="color:var(--color-accent)"></i>Conversaciones</h2>
@@ -294,7 +294,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr th:if="${conversaciones == null or conversaciones.isEmpty()}">
+                                <tr th:if="${conversaciones = = null or conversaciones.isEmpty()}">
                                     <td colspan="5">
                                         <div class="empty-state">
                                             <i class="fas fa-comments"></i>

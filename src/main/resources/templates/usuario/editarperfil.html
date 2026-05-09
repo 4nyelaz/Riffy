@@ -39,7 +39,7 @@
                                         class="rounded-circle avatar-preview-img" alt="Foto de perfil">
 
                                     <!-- Sin foto: inicial -->
-                                    <div th:if="${usuario.fotoPerfil == null or #strings.isEmpty(usuario.fotoPerfil)}"
+                                    <div th:if="${usuario.fotoPerfil = = null or #strings.isEmpty(usuario.fotoPerfil)}"
                                         id="avatarPreview"
                                         class="rounded-circle d-flex align-items-center justify-content-center avatar-preview-inicial">
                                         <span class="fw-bold fs-2 text-white"

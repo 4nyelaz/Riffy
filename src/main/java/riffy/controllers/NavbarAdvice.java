@@ -16,8 +16,8 @@ public class NavbarAdvice {
 
     @ModelAttribute("pedidosPendientes")
     public List<ProductoEntity> pedidosPendientes(HttpSession session) {
-        Long usuarioId = (Long) session.getAttribute("usuarioId");
-        if (usuarioId == null) return List.of();
+        Long usuarioId =  (Long) session.getAttribute("usuarioId");
+        if (usuarioId = = null) return List.of();
         return productoRepository.findByPropietarioIdAndEstado(usuarioId, "Reservado");
     }
 }
