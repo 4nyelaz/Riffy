@@ -18,38 +18,38 @@ import jakarta.validation.constraints.Size;
 /* /////////////////////////////////////////////////////////////////// */
 
 @Entity
-@Table(name =  "usuario")
+@Table(name = "usuario")
 public class UsuarioEntity {
 
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
-    @Column(name =  "id_usuario")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_usuario")
     private Long idUsuario;
 
     @NotBlank
-    @Size(min =  3)
+    @Size(min = 3)
     private String nombre;
 
     @NotBlank
-    @Size(min =  4)
-    @Pattern(regexp =  "^[a-zA-Z0-9_]+$")
+    @Size(min = 4)
+    @Pattern(regexp = "^[a-zA-Z0-9_]+$")
     private String usuario;
 
     @NotBlank
-    @Size(min =  8)
-    @Pattern(regexp =  "^(?=.*[A-Z])(?=.*[0-9]).+$")
+    @Size(min = 8)
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[0-9]).+$")
     private String contrasena;
 
-    @Column(name =  "fecha_registro")
+    @Column(name = "fecha_registro")
     private LocalDate fechaRegistro;
 
-    @Column(name =  "rol")
-    private String rol =  "USER";
+    @Column(name = "rol")
+    private String rol = "USER";
 
-    @Column(name =  "email")
+    @Column(name = "email")
     private String email;
 
-    @Column(name =  "foto_perfil")
+    @Column(name = "foto_perfil")
     private String fotoPerfil;
 
     /* /////////////////////////////////////////////////////////////////// */
@@ -58,7 +58,7 @@ public class UsuarioEntity {
 
     @PrePersist
     public void antesDeGuardar() {
-        this.fechaRegistro =  LocalDate.now();
+        this.fechaRegistro = LocalDate.now();
     }
 
     public Long getIdUsuario() {
@@ -66,7 +66,7 @@ public class UsuarioEntity {
     }
 
     public void setIdUsuario(Long idUsuario) {
-        this.idUsuario =  idUsuario;
+        this.idUsuario = idUsuario;
     }
 
     public String getNombre() {
@@ -74,7 +74,7 @@ public class UsuarioEntity {
     }
 
     public void setNombre(String nombre) {
-        this.nombre =  nombre;
+        this.nombre = nombre;
     }
 
     public String getUsuario() {
@@ -82,7 +82,7 @@ public class UsuarioEntity {
     }
 
     public void setUsuario(String usuario) {
-        this.usuario =  usuario;
+        this.usuario = usuario;
     }
 
     public String getContrasena() {
@@ -90,7 +90,7 @@ public class UsuarioEntity {
     }
 
     public void setContrasena(String contrasena) {
-        this.contrasena =  contrasena;
+        this.contrasena = contrasena;
     }
 
     public LocalDate getFechaRegistro() {
@@ -98,7 +98,7 @@ public class UsuarioEntity {
     }
 
     public void setFechaRegistro(LocalDate fechaRegistro) {
-        this.fechaRegistro =  fechaRegistro;
+        this.fechaRegistro = fechaRegistro;
     }
 
     public String getRol() {
@@ -106,7 +106,7 @@ public class UsuarioEntity {
     }
 
     public void setRol(String rol) {
-        this.rol =  rol;
+        this.rol = rol;
     }
 
     public String getEmail() {
@@ -114,7 +114,7 @@ public class UsuarioEntity {
     }
 
     public void setEmail(String email) {
-        this.email =  email;
+        this.email = email;
     }
 
     public String getFotoPerfil() {
@@ -122,7 +122,7 @@ public class UsuarioEntity {
     }
 
     public void setFotoPerfil(String fotoPerfil) {
-        this.fotoPerfil =  fotoPerfil;
+        this.fotoPerfil = fotoPerfil;
     }
 
 }

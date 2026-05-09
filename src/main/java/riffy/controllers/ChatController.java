@@ -51,24 +51,24 @@ public class ChatController {
     public String iniciarConversacion(@RequestParam @NonNull Long idProducto, HttpSession session, RedirectAttributes redirect, Model model) {
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        if (usuarioId = = null){
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null){
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
         // ------------------------------------------------------------------  
 
-        UsuarioEntity usuario =  usuarioRepository.findById(usuarioId).orElse(null);
-        if (usuario = = null)
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null)
             return "redirect:/home";
 
         // guarda en un obj producto/usuario (con rol de comprador) 
         // si en el repositorio se encuentra el id pasado por parámetro o sino, devuelve null
-        ProductoEntity producto =  productoRepository.findById(idProducto).orElse(null);
-        UsuarioEntity comprador =  usuarioRepository.findById(usuarioId).orElse(null);
+        ProductoEntity producto = productoRepository.findById(idProducto).orElse(null);
+        UsuarioEntity comprador = usuarioRepository.findById(usuarioId).orElse(null);
 
         // si alguno de los objetos devuelve null, redirige a home
-        if (producto = = null || comprador = = null){
+        if (producto == null || comprador == null){
             return "redirect:/home";
         }
             
@@ -79,19 +79,19 @@ public class ChatController {
 
         // el vendedor es el propietario del producto
         // si existe, la recupera; si no, devuelve null
-        ConversacionEntity conversacion =  conversacionRepository
+        ConversacionEntity conversacion = conversacionRepository
                 .findByProductoAndCompradorAndVendedor(producto, comprador, producto.getPropietario())
                 .orElse(null);
 
         // ni no hay conversación --> crea una nueva, y la guarda en la base de datos        
-        if (conversacion = = null) {
-            conversacion =  new ConversacionEntity();
+        if (conversacion == null) {
+            conversacion = new ConversacionEntity();
             conversacion.setProducto(producto);
             conversacion.setComprador(comprador);
             conversacion.setVendedor(producto.getPropietario());
             conversacion.setConversacionActiva(true);
             conversacion.setFechaCreacion(java.time.LocalDate.now());
-            conversacion =  conversacionRepository.save(conversacion);
+            conversacion = conversacionRepository.save(conversacion);
         }
 
         model.addAttribute("usuario", usuario);
@@ -111,39 +111,39 @@ public class ChatController {
     public String verChat(@PathVariable @NonNull Long idConversacion, HttpSession session, Model model, RedirectAttributes redirect) {
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        if (usuarioId = = null){
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null){
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
         // ------------------------------------------------------------------  
 
-        UsuarioEntity usuario =  usuarioRepository.findById(usuarioId).orElse(null);
-        if (usuario = = null)
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null)
             return "redirect:/home";
 
         // busca la conversación por id, si no existe --> home
-        ConversacionEntity conversacion =  conversacionRepository.findById(idConversacion).orElse(null);
-        if (conversacion = = null){
+        ConversacionEntity conversacion = conversacionRepository.findById(idConversacion).orElse(null);
+        if (conversacion == null){
             return "redirect:/home";
         }
             
         // comprueba que el usuario actual pertenezca a la conversación
         // comprueba si es comprador o vendedor
         // si no es ninguno --> redirige a home
-        boolean esComprador =  conversacion.getComprador().getIdUsuario().equals(usuarioId);
-        boolean esVendedor =  conversacion.getVendedor().getIdUsuario().equals(usuarioId);
+        boolean esComprador = conversacion.getComprador().getIdUsuario().equals(usuarioId);
+        boolean esVendedor = conversacion.getVendedor().getIdUsuario().equals(usuarioId);
         if (!esComprador && !esVendedor){
             return "redirect:/home";
         }
             
         // recupera los mensajes y los ordena de manera ascendente (más antiguo - más nuevo)
-        List<MensajeEntity> mensajes =  mensajeRepository.findByConversacionOrderByFechaEnvioAsc(conversacion);
+        List<MensajeEntity> mensajes = mensajeRepository.findByConversacionOrderByFechaEnvioAsc(conversacion);
 
         // otro: 
-        // 1.- usuario actual =  comprador, otro =  vendedor; 
-        // 2.- usuario actual =  vendedor, otro =  comprador;
-        UsuarioEntity otro =  esComprador ? conversacion.getVendedor() : conversacion.getComprador();
+        // 1.- usuario actual = comprador, otro = vendedor; 
+        // 2.- usuario actual = vendedor, otro = comprador;
+        UsuarioEntity otro = esComprador ? conversacion.getVendedor() : conversacion.getComprador();
 
         // añade atributos para mostrarlos en la vista
         model.addAttribute("usuario", usuario);
@@ -169,28 +169,28 @@ public class ChatController {
     public String enviarMensaje(@PathVariable @NonNull Long idConversacion, @RequestParam String mensaje, HttpSession session, RedirectAttributes redirect) {
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        if (usuarioId = = null){
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null){
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
         // ------------------------------------------------------------------  
 
         // busca la conversación por id, si no existe --> home
-        ConversacionEntity conversacion =  conversacionRepository.findById(idConversacion).orElse(null);
-        if (conversacion = = null || !conversacion.getConversacionActiva()){
+        ConversacionEntity conversacion = conversacionRepository.findById(idConversacion).orElse(null);
+        if (conversacion == null || !conversacion.getConversacionActiva()){
             return "redirect:/home";
         }
             
         // recuperamos el usuario remitente con el id en sesión
         // si no existe --> redirige a home
-        UsuarioEntity remitente =  usuarioRepository.findById(usuarioId).orElse(null);
-        if (remitente = = null){
+        UsuarioEntity remitente = usuarioRepository.findById(usuarioId).orElse(null);
+        if (remitente == null){
             return "redirect:/home";
         }
             
         // crea un nuevo mensaje
-        MensajeEntity msg =  new MensajeEntity();
+        MensajeEntity msg = new MensajeEntity();
         msg.setConversacion(conversacion);
         msg.setMensaje(mensaje.trim());
         msg.setRemitente(remitente); 
@@ -210,24 +210,24 @@ public class ChatController {
     public String misConversaciones(HttpSession session, Model model, RedirectAttributes redirect) {
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        if (usuarioId = = null){
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null){
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
         // ------------------------------------------------------------------  
 
         // busca el usuario por id, si no existe --> home
-        UsuarioEntity usuario =  usuarioRepository.findById(usuarioId).orElse(null);
-        if (usuario = = null){
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null){
             return "redirect:/home";
         }
         
         // listas de conversación:
         // comoComprador: usuario es comprador
         // comoVendedor: usuario es vendedor
-        List<ConversacionEntity> comoComprador =  conversacionRepository.findByComprador(usuario);
-        List<ConversacionEntity> comoVendedor =  conversacionRepository.findByVendedor(usuario);
+        List<ConversacionEntity> comoComprador = conversacionRepository.findByComprador(usuario);
+        List<ConversacionEntity> comoVendedor = conversacionRepository.findByVendedor(usuario);
 
         // añade atributos para enseñar en la vista
         model.addAttribute("usuario", usuario);

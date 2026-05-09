@@ -13,7 +13,7 @@ import riffy.model.ProductoEntity;
 @Repository
 public interface ProductoRepository extends JpaRepository<ProductoEntity, Long> {
 
-  @Query("SELECT p FROM ProductoEntity p WHERE p.propietario.idUsuario =  :usuarioId")
+  @Query("SELECT p FROM ProductoEntity p WHERE p.propietario.idUsuario = :usuarioId")
   List<ProductoEntity> findByPropietarioId(@Param("usuarioId") Long usuarioId);
 
   List<ProductoEntity> findByCategoriaAndPropietarioIdUsuarioNot(String categoria, Long idUsuario);
@@ -23,8 +23,8 @@ public interface ProductoRepository extends JpaRepository<ProductoEntity, Long> 
           WHERE p.propietario.idUsuario != :usuarioId
             AND (:q IS NULL OR LOWER(p.titulo) LIKE LOWER(CONCAT('%', :q, '%'))
                             OR LOWER(p.artista) LIKE LOWER(CONCAT('%', :q, '%')))
-            AND (:categoria IS NULL OR p.categoria =  :categoria)
-            AND (:formato   IS NULL OR p.formato   =  :formato)
+            AND (:categoria IS NULL OR p.categoria = :categoria)
+            AND (:formato   IS NULL OR p.formato   = :formato)
             AND (:precioMin IS NULL OR p.precio >= :precioMin)
             AND (:precioMax IS NULL OR p.precio <= :precioMax)
       """)
@@ -36,7 +36,7 @@ public interface ProductoRepository extends JpaRepository<ProductoEntity, Long> 
       @Param("precioMin") BigDecimal precioMin,
       @Param("precioMax") BigDecimal precioMax);
 
-  @Query("SELECT p FROM ProductoEntity p WHERE p.propietario.idUsuario =  :vendedorId AND p.estado =  :estado")
+  @Query("SELECT p FROM ProductoEntity p WHERE p.propietario.idUsuario = :vendedorId AND p.estado = :estado")
   List<ProductoEntity> findByPropietarioIdAndEstado(@Param("vendedorId") Long vendedorId,
       @Param("estado") String estado);
 }

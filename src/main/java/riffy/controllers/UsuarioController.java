@@ -33,13 +33,13 @@ public class UsuarioController {
     // ---------------------------------------------------------------
     @GetMapping("/perfil/editar")
     public String editarPerfil(HttpSession session, Model model, RedirectAttributes redirect) {
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        if (usuarioId = = null) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
-        UsuarioEntity usuario =  usuarioRepository.findById(usuarioId).orElse(null);
-        if (usuario = = null)
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null)
             return "redirect:/home";
 
         model.addAttribute("usuario", usuario);
@@ -52,20 +52,20 @@ public class UsuarioController {
     public String guardarPerfil(
             @RequestParam String nombre,
             @RequestParam String usuario,
-            @RequestParam(required =  false) String email,
-            @RequestParam(required =  false) String contrasenaActual,
-            @RequestParam(required =  false) String contrasenaNueva,
-            @RequestParam(required =  false) MultipartFile fotoPerfil,
+            @RequestParam(required = false) String email,
+            @RequestParam(required = false) String contrasenaActual,
+            @RequestParam(required = false) String contrasenaNueva,
+            @RequestParam(required = false) MultipartFile fotoPerfil,
             HttpSession session, RedirectAttributes redirect) {
 
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        if (usuarioId = = null) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
 
-        UsuarioEntity u =  usuarioRepository.findById(usuarioId).orElse(null);
-        if (u = = null)
+        UsuarioEntity u = usuarioRepository.findById(usuarioId).orElse(null);
+        if (u == null)
             return "redirect:/home";
 
         u.setNombre(nombre);
@@ -82,8 +82,8 @@ public class UsuarioController {
 
         // foto de perfil — igual que productos
         if (fotoPerfil != null && !fotoPerfil.isEmpty()) {
-            String nombreArchivo =  "usu" + usuarioId + "_" + fotoPerfil.getOriginalFilename();
-            Path ruta =  Paths.get("src/main/resources/static/img/fotoperfil_img/" + nombreArchivo);
+            String nombreArchivo = "usu" + usuarioId + "_" + fotoPerfil.getOriginalFilename();
+            Path ruta = Paths.get("src/main/resources/static/img/fotoperfil_img/" + nombreArchivo);
             try {
                 Files.write(ruta, fotoPerfil.getBytes());
                 u.setFotoPerfil(nombreArchivo);

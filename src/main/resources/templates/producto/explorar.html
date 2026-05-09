@@ -30,8 +30,8 @@
                             <label class="form-label small fw-semibold">Categoría</label>
                             <select name="categoria" class="form-select form-select-sm rounded-pill">
                                 <option value="">Todas</option>
-                                <option value="Vinilo" th:selected="${categoria = = 'Vinilo'}">Vinilo</option>
-                                <option value="CD" th:selected="${categoria = = 'CD'}">CD</option>
+                                <option value="Vinilo" th:selected="${categoria == 'Vinilo'}">Vinilo</option>
+                                <option value="CD" th:selected="${categoria == 'CD'}">CD</option>
                             </select>
                         </div>
 
@@ -40,10 +40,10 @@
                             <label class="form-label small fw-semibold">Estado del disco</label>
                             <select name="formato" class="form-select form-select-sm rounded-pill">
                                 <option value="">Cualquiera</option>
-                                <option value="Nuevo" th:selected="${formato = = 'Nuevo'}">Nuevo</option>
-                                <option value="Muy Bueno" th:selected="${formato = = 'Muy Bueno'}">Muy Bueno</option>
-                                <option value="Bueno" th:selected="${formato = = 'Bueno'}">Bueno</option>
-                                <option value="Usado" th:selected="${formato = = 'Usado'}">Usado</option>
+                                <option value="Nuevo" th:selected="${formato == 'Nuevo'}">Nuevo</option>
+                                <option value="Muy Bueno" th:selected="${formato == 'Muy Bueno'}">Muy Bueno</option>
+                                <option value="Bueno" th:selected="${formato == 'Bueno'}">Bueno</option>
+                                <option value="Usado" th:selected="${formato == 'Usado'}">Usado</option>
                             </select>
                         </div>
 

@@ -16,29 +16,29 @@ import jakarta.persistence.Table;
 /* /////////////////////////////////////////////////////////////////// */
 
 @Entity
-@Table(name =  "conversacion")
+@Table(name = "conversacion")
 public class ConversacionEntity {
 
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_conversacion;
 
     @ManyToOne
-    @JoinColumn(name =  "id_producto")
+    @JoinColumn(name = "id_producto")
     private ProductoEntity producto;
 
     @ManyToOne
-    @JoinColumn(name =  "id_comprador")
+    @JoinColumn(name = "id_comprador")
     private UsuarioEntity comprador;
 
     @ManyToOne
-    @JoinColumn(name =  "id_vendedor")
+    @JoinColumn(name = "id_vendedor")
     private UsuarioEntity vendedor;
 
-    @Column(name =  "fecha_creacion")
+    @Column(name = "fecha_creacion")
     private LocalDate fechaCreacion;
 
-    @Column(name =  "conversacion_activa")
+    @Column(name = "conversacion_activa")
     private Boolean conversacionActiva;
 
     /* /////////////////////////////////////////////////////////////////// */
@@ -50,7 +50,7 @@ public class ConversacionEntity {
     }
 
     public void setId_conversacion(Long id_conversacion) {
-        this.id_conversacion =  id_conversacion;
+        this.id_conversacion = id_conversacion;
     }
 
     public ProductoEntity getProducto() {
@@ -58,7 +58,7 @@ public class ConversacionEntity {
     }
 
     public void setProducto(ProductoEntity producto) {
-        this.producto =  producto;
+        this.producto = producto;
     }
 
     public UsuarioEntity getComprador() {
@@ -66,7 +66,7 @@ public class ConversacionEntity {
     }
 
     public void setComprador(UsuarioEntity comprador) {
-        this.comprador =  comprador;
+        this.comprador = comprador;
     }
 
     public UsuarioEntity getVendedor() {
@@ -74,7 +74,7 @@ public class ConversacionEntity {
     }
 
     public void setVendedor(UsuarioEntity vendedor) {
-        this.vendedor =  vendedor;
+        this.vendedor = vendedor;
     }
 
     public LocalDate getFechaCreacion() {
@@ -82,7 +82,7 @@ public class ConversacionEntity {
     }
 
     public void setFechaCreacion(LocalDate fechaCreacion) {
-        this.fechaCreacion =  fechaCreacion;
+        this.fechaCreacion = fechaCreacion;
     }
 
     public Boolean getConversacionActiva() {
@@ -90,6 +90,6 @@ public class ConversacionEntity {
     }
 
     public void setConversacionActiva(Boolean conversacionActiva) {
-        this.conversacionActiva =  conversacionActiva;
+        this.conversacionActiva = conversacionActiva;
     }
 }

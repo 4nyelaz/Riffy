@@ -118,7 +118,7 @@
 
                                 <!-- Botones -->
                                 <div class="d-flex gap-3">
-                                    <a th:if="${producto.estado = = 'Disponible'}"
+                                    <a th:if="${producto.estado == 'Disponible'}"
                                         th:href="@{'/producto/comprar/' + ${producto.id_producto}}"
                                         class="btn btn-primary rounded-pill w-50">
                                         <i class="fas fa-shopping-cart me-2"></i> Comprar
@@ -138,7 +138,7 @@
                                     </form>
 
                                     <!-- Si es el propietario, mostrar botón deshabilitado -->
-                                    <button th:if="${producto.propietario.idUsuario = = session.usuarioId}"
+                                    <button th:if="${producto.propietario.idUsuario == session.usuarioId}"
                                         class="btn btn-outline-secondary rounded-pill w-50" disabled>
                                         <i class="fas fa-comment me-2"></i> Producto propio
                                     </button>

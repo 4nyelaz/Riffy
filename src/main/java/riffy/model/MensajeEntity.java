@@ -17,33 +17,33 @@ import jakarta.persistence.Table;
 /* /////////////////////////////////////////////////////////////////// */
 
 @Entity
-@Table(name =  "mensaje")
+@Table(name = "mensaje")
 public class MensajeEntity {
 
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_mensaje;
 
     @ManyToOne
-    @JoinColumn(name =  "id_conversacion", nullable =  false)
+    @JoinColumn(name = "id_conversacion", nullable = false)
     private ConversacionEntity conversacion;
 
-    @Column(name =  "mensaje", nullable =  false, columnDefinition =  "TEXT")
+    @Column(name = "mensaje", nullable = false, columnDefinition = "TEXT")
     private String mensaje;
 
-    @Column(name =  "fecha_envio", nullable =  false)
+    @Column(name = "fecha_envio", nullable = false)
     private LocalDateTime fechaEnvio;
 
-    @Column(name =  "leido")
-    private Boolean leido =  false;
+    @Column(name = "leido")
+    private Boolean leido = false;
 
     @ManyToOne
-    @JoinColumn(name =  "id_remitente", nullable =  false)
+    @JoinColumn(name = "id_remitente", nullable = false)
     private UsuarioEntity remitente;
 
     @PrePersist
     protected void onCreate() {
-        fechaEnvio =  LocalDateTime.now();
+        fechaEnvio = LocalDateTime.now();
     }
 
     /* /////////////////////////////////////////////////////////////////// */
@@ -54,7 +54,7 @@ public class MensajeEntity {
     }
 
     public void setId_mensaje(Long id_mensaje) {
-        this.id_mensaje =  id_mensaje;
+        this.id_mensaje = id_mensaje;
     }
 
     public ConversacionEntity getConversacion() {
@@ -62,7 +62,7 @@ public class MensajeEntity {
     }
 
     public void setConversacion(ConversacionEntity conversacion) {
-        this.conversacion =  conversacion;
+        this.conversacion = conversacion;
     }
 
     public String getMensaje() {
@@ -70,7 +70,7 @@ public class MensajeEntity {
     }
 
     public void setMensaje(String mensaje) {
-        this.mensaje =  mensaje;
+        this.mensaje = mensaje;
     }
 
     public LocalDateTime getFechaEnvio() {
@@ -78,7 +78,7 @@ public class MensajeEntity {
     }
 
     public void setFechaEnvio(LocalDateTime fechaEnvio) {
-        this.fechaEnvio =  fechaEnvio;
+        this.fechaEnvio = fechaEnvio;
     }
 
     public Boolean getLeido() {
@@ -86,7 +86,7 @@ public class MensajeEntity {
     }
 
     public void setLeido(Boolean leido) {
-        this.leido =  leido;
+        this.leido = leido;
     }
 
     public UsuarioEntity getRemitente() {
@@ -94,6 +94,6 @@ public class MensajeEntity {
     }
 
     public void setRemitente(UsuarioEntity remitente) {
-        this.remitente =  remitente;
+        this.remitente = remitente;
     }
 }

@@ -70,7 +70,7 @@
                                     th:text="${pedidosPendientes.size()}">0</span>
                             </a>
                             <div class="collapse px-3" id="notifMobile">
-                                <div th:if="${pedidosPendientes = = null or pedidosPendientes.isEmpty()}"
+                                <div th:if="${pedidosPendientes == null or pedidosPendientes.isEmpty()}"
                                     class="text-muted small py-2">Sin pedidos pendientes</div>
                                 <div th:each="producto : ${pedidosPendientes}" class="border-bottom py-2">
                                     <p class="fw-semibold mb-1 small nav-notif-producto" th:text="${producto.titulo}">
@@ -139,7 +139,7 @@
                                         class="badge rounded-pill nav-badge"
                                         th:text="${pedidosPendientes.size()}">0</span>
                                 </div>
-                                <div th:if="${pedidosPendientes = = null or pedidosPendientes.isEmpty()}"
+                                <div th:if="${pedidosPendientes == null or pedidosPendientes.isEmpty()}"
                                     class="text-center py-4">
                                     <i class="fas fa-bell-slash mb-2 d-block nav-accent-icon"
                                         style="font-size:22px; opacity:.4;"></i>
@@ -185,7 +185,7 @@
                                             th:text="${!#strings.isEmpty(usuario.nombre) ? #strings.toUpperCase(#strings.substring(usuario.nombre,0,1)) : 'U'}">U</span>
                                     </div>
                                 </div>
-                                <div th:if="${usuario = = null}"
+                                <div th:if="${usuario == null}"
                                     class="rounded-circle d-flex align-items-center justify-content-center nav-avatar-placeholder">
                                     <span class="fw-bold text-white">?</span>
                                 </div>

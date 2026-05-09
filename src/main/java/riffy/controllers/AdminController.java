@@ -35,10 +35,10 @@ public class AdminController {
             ProductoService productoService,
             ConversacionRepository conversacionRepository,
             MensajeRepository mensajeRepository) {
-        this.usuarioService =  usuarioService;
-        this.productoService =  productoService;
-        this.conversacionRepository =  conversacionRepository;
-        this.mensajeRepository =  mensajeRepository;
+        this.usuarioService = usuarioService;
+        this.productoService = productoService;
+        this.conversacionRepository = conversacionRepository;
+        this.mensajeRepository = mensajeRepository;
     }
 
     // comprueba que quien llama es admin — si no lo es, fuera
@@ -63,8 +63,8 @@ public class AdminController {
     public String dashboard(Model model, HttpSession session, RedirectAttributes redirect) {
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        if (usuarioId = = null) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
@@ -239,8 +239,8 @@ public class AdminController {
             return "redirect:/login";
 
         // si la conversación no existe, de vuelta al dashboard
-        ConversacionEntity conv =  conversacionRepository.findById(id).orElse(null);
-        if (conv = = null)
+        ConversacionEntity conv = conversacionRepository.findById(id).orElse(null);
+        if (conv == null)
             return "redirect:/admin/dashboard?seccion=conversaciones";
 
         // el repo necesita la entidad entera, no solo el id

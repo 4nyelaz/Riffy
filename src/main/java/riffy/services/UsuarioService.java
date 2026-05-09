@@ -14,10 +14,10 @@ import riffy.repository.UsuarioRepository;
 public class UsuarioService {
 
     private final UsuarioRepository usuarioRepositorio;
-    private final BCryptPasswordEncoder encoder =  new BCryptPasswordEncoder();
+    private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     public UsuarioService(UsuarioRepository usuarioRepositorio) {
-        this.usuarioRepositorio =  usuarioRepositorio;
+        this.usuarioRepositorio = usuarioRepositorio;
     }
 
     public void registrar(UsuarioEntity usuario) {

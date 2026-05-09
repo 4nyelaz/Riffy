@@ -34,7 +34,7 @@
             <!-- Mensajes -->
             <div class="chat-mensajes" id="contenedorMensajes">
                 <div th:each="msg : ${mensajes}"
-                    th:class="'mensaje-item ' + (${msg.remitente.idUsuario = = usuarioId} ? 'mensaje-propio' : 'mensaje-otro')">
+                    th:class="'mensaje-item ' + (${msg.remitente.idUsuario == usuarioId} ? 'mensaje-propio' : 'mensaje-otro')">
                     <div th:text="${msg.mensaje}"></div>
                     <small class="opacity-50" th:text="${#temporals.format(msg.fechaEnvio, 'HH:mm')}"></small>
                 </div>

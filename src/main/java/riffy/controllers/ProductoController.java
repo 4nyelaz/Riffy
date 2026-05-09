@@ -59,27 +59,27 @@ public class ProductoController {
     public String misproductoString(HttpSession session, Model model, RedirectAttributes redirect) {
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        if (usuarioId = = null) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
         // ------------------------------------------------------------------
 
-        UsuarioEntity usuario =  usuarioRepository.findById(usuarioId).orElse(null);
-        if (usuario = = null)
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null)
             return "redirect:/home";
 
         // recoge todos los productos del usuario en sesión
-        List<ProductoEntity> productos =  productoRepository.findByPropietarioId(usuarioId);
+        List<ProductoEntity> productos = productoRepository.findByPropietarioId(usuarioId);
 
-        Map<Long, List<String>> imagenesMap =  new HashMap<>();
+        Map<Long, List<String>> imagenesMap = new HashMap<>();
         for (ProductoEntity p : productos) {
             List<String> imgs;
             if (p.getImagenes() != null && !p.getImagenes().trim().isEmpty()) {
-                imgs =  Arrays.asList(p.getImagenes().split(","));
+                imgs = Arrays.asList(p.getImagenes().split(","));
             } else {
-                imgs =  Arrays.asList("sin_foto.png");
+                imgs = Arrays.asList("sin_foto.png");
             }
             imagenesMap.put(p.getId_producto(), imgs);
         }
@@ -99,8 +99,8 @@ public class ProductoController {
             RedirectAttributes redirect) {
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        if (usuarioId = = null) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
@@ -109,10 +109,10 @@ public class ProductoController {
         // guarda en un obj producto
         // si en el repositorio se encuentra el id pasado por parámetro o sino, devuelve
         // null
-        ProductoEntity producto =  productoRepository.findById(id_producto).orElse(null);
+        ProductoEntity producto = productoRepository.findById(id_producto).orElse(null);
 
         // si no existe, redirige a home
-        if (producto = = null) {
+        if (producto == null) {
             return "redirect:/home";
         }
 
@@ -122,9 +122,9 @@ public class ProductoController {
         model.addAttribute("producto", producto);
         model.addAttribute("modoEdicion", true);
 
-        List<String> categorias =  Arrays.asList("Vinilo", "CD");
-        List<String> formatos =  Arrays.asList("Nuevo", "Muy Bueno", "Bueno", "Usado");
-        List<String> estados =  Arrays.asList("Disponible", "Vendido", "Reservado");
+        List<String> categorias = Arrays.asList("Vinilo", "CD");
+        List<String> formatos = Arrays.asList("Nuevo", "Muy Bueno", "Bueno", "Usado");
+        List<String> estados = Arrays.asList("Disponible", "Vendido", "Reservado");
 
         model.addAttribute("categorias", categorias);
         model.addAttribute("formatos", formatos);
@@ -157,12 +157,12 @@ public class ProductoController {
             BigDecimal precio,
             String estado,
             String categoria,
-            @RequestParam(required =  false) List<MultipartFile> imagenes,
+            @RequestParam(required = false) List<MultipartFile> imagenes,
             HttpSession session) {
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        if (usuarioId = = null) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
@@ -171,10 +171,10 @@ public class ProductoController {
         // guarda en un obj producto
         // si en el repositorio se encuentra el id pasado por parámetro o sino, devuelve
         // null
-        ProductoEntity producto =  productoRepository.findById(id_producto).orElse(null);
+        ProductoEntity producto = productoRepository.findById(id_producto).orElse(null);
 
         // si no existe, redirige a home
-        if (producto = = null) {
+        if (producto == null) {
             return "redirect:/home";
         }
 
@@ -203,13 +203,13 @@ public class ProductoController {
 
             // recorre todas las imágenes del formulario y las guarda en el sistema de
             // archivos
-            List<String> nombresImagenes =  new ArrayList<>();
+            List<String> nombresImagenes = new ArrayList<>();
             for (MultipartFile img : imagenes) {
                 if (!img.isEmpty()) {
                     // genera un nombre único para la imagen
-                    String nombreArchivo =  "usu" + usuarioId + "_" + img.getOriginalFilename();
+                    String nombreArchivo = "usu" + usuarioId + "_" + img.getOriginalFilename();
                     // define la ruta donde se guardará la imagen
-                    Path ruta =  Paths.get("src/main/resources/static/img/productos_img/" + nombreArchivo);
+                    Path ruta = Paths.get("src/main/resources/static/img/productos_img/" + nombreArchivo);
                     // guarda el archivo físicamente en el disco
                     try {
                         Files.write(ruta, img.getBytes());
@@ -243,13 +243,13 @@ public class ProductoController {
     public String eliminarProducto(@PathVariable("id") @NonNull Long id_producto,
             HttpSession session,
             RedirectAttributes redirect) {
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        if (usuarioId = = null) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
 
-        ProductoEntity producto =  productoRepository.findById(id_producto).orElse(null);
+        ProductoEntity producto = productoRepository.findById(id_producto).orElse(null);
 
         if (producto != null && producto.getPropietario().getIdUsuario().equals(usuarioId)) {
             productoRepository.delete(producto);
@@ -273,10 +273,10 @@ public class ProductoController {
     @ResponseBody
     public ResponseEntity<Resource> servirImagen(@PathVariable String filename) throws IOException {
         // construimos la ruta completa, con user.dir nos dice la raíz del proyecto
-        Path ruta =  Paths
+        Path ruta = Paths
                 .get(System.getProperty("user.dir") + "/src/main/resources/static/img/productos_img/" + filename);
         // !! wrapper: añade métodos útiles al obj Path
-        FileSystemResource resource =  new FileSystemResource(ruta);
+        FileSystemResource resource = new FileSystemResource(ruta);
 
         // si no existe -> error 404
         if (!resource.exists()) {
@@ -300,15 +300,15 @@ public class ProductoController {
     public String nuevoProducto(HttpSession session, Model model, RedirectAttributes redirect) {
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        if (usuarioId = = null) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
         // ------------------------------------------------------------------
 
-        UsuarioEntity usuario =  usuarioRepository.findById(usuarioId).orElse(null);
-        if (usuario = = null)
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null)
             return "redirect:/home";
 
         // añade atributos para enseñar en la vista
@@ -332,24 +332,24 @@ public class ProductoController {
             String descripcion,
             BigDecimal precio,
             String categoria,
-            @RequestParam(required =  false) List<MultipartFile> imagenes,
+            @RequestParam(required = false) List<MultipartFile> imagenes,
             HttpSession session, Model model) {
 
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        if (usuarioId = = null) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
         // ------------------------------------------------------------------
 
-        UsuarioEntity usuario =  usuarioRepository.findById(usuarioId).orElse(null);
-        if (usuario = = null)
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null)
             return "redirect:/home";
 
         // crea nuevo obj producto y se le asigna los campos del form a los atr del obj
-        ProductoEntity nuevoProducto =  new ProductoEntity();
+        ProductoEntity nuevoProducto = new ProductoEntity();
         nuevoProducto.setTitulo(titulo);
         nuevoProducto.setArtista(artista);
         nuevoProducto.setFormato(formato);
@@ -363,20 +363,20 @@ public class ProductoController {
 
         // buscar usuario en bd por id
         // establecemos al nuevo obj el propietario
-        UsuarioEntity propietario =  usuarioRepository.findById(usuarioId).orElse(null);
+        UsuarioEntity propietario = usuarioRepository.findById(usuarioId).orElse(null);
         nuevoProducto.setPropietario(propietario);
 
         // guardar imágenes si se han subido
         if (imagenes != null && !imagenes.isEmpty() && !imagenes.get(0).isEmpty()) {
             // recorre todas las imágenes del formulario y las guarda en el sistema de
             // archivos
-            List<String> nombresImagenes =  new ArrayList<>();
+            List<String> nombresImagenes = new ArrayList<>();
             for (MultipartFile img : imagenes) {
                 if (!img.isEmpty()) {
                     // genera un nombre único para la imagen
-                    String nombreArchivo =  "usu" + usuarioId + "_" + img.getOriginalFilename();
+                    String nombreArchivo = "usu" + usuarioId + "_" + img.getOriginalFilename();
                     // define la ruta donde se guardará la imagen
-                    Path ruta =  Paths.get("src/main/resources/static/img/productos_img/" + nombreArchivo);
+                    Path ruta = Paths.get("src/main/resources/static/img/productos_img/" + nombreArchivo);
                     try {
                         Files.write(ruta, img.getBytes());
                     } catch (IOException e) {
@@ -411,24 +411,24 @@ public class ProductoController {
 
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        if (usuarioId = = null) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
         // ------------------------------------------------------------------
 
-        UsuarioEntity usuario =  usuarioRepository.findById(usuarioId).orElse(null);
-        if (usuario = = null)
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null)
             return "redirect:/home";
 
         // guarda en un obj producto
         // si en el repositorio se encuentra el id pasado por parámetro o sino, devuelve
         // null
-        ProductoEntity producto =  productoRepository.findById(id_producto).orElse(null);
+        ProductoEntity producto = productoRepository.findById(id_producto).orElse(null);
 
         // si no existe, redirige a home
-        if (producto = = null) {
+        if (producto == null) {
             return "redirect:/home";
         }
 
@@ -436,9 +436,9 @@ public class ProductoController {
         if (!producto.getPropietario().getIdUsuario().equals(usuarioId)) {
 
             // recupera el historial actual de la sesión
-            List<Long> historialIds =  (List<Long>) session.getAttribute("historialIds");
-            if (historialIds = = null)
-                historialIds =  new ArrayList<>();
+            List<Long> historialIds = (List<Long>) session.getAttribute("historialIds");
+            if (historialIds == null)
+                historialIds = new ArrayList<>();
 
             // elimina el producto si ya estaba
             historialIds.remove(id_producto);
@@ -448,7 +448,7 @@ public class ProductoController {
 
             // sólo saldrán 10 tarjetas
             if (historialIds.size() > 10) {
-                historialIds =  historialIds.subList(0, 10);
+                historialIds = historialIds.subList(0, 10);
             }
 
             // uarda el historial en la sesión
@@ -458,10 +458,10 @@ public class ProductoController {
         // separa el string -> imagenes
         List<String> imgs;
         if (producto.getImagenes() != null && !producto.getImagenes().trim().isEmpty()) {
-            imgs =  Arrays.asList(producto.getImagenes().split(","));
+            imgs = Arrays.asList(producto.getImagenes().split(","));
         } else {
             // foto por defecto
-            imgs =  Arrays.asList("sin_foto.png");
+            imgs = Arrays.asList("sin_foto.png");
         }
 
         // añade atributos para mostrarlos en la vista
@@ -488,8 +488,8 @@ public class ProductoController {
 
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        if (usuarioId = = null) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
@@ -498,10 +498,10 @@ public class ProductoController {
         // guarda en un obj producto
         // si en el repositorio se encuentra el id pasado por parámetro o sino, devuelve
         // null
-        ProductoEntity producto =  productoRepository.findById(id_producto).orElse(null);
+        ProductoEntity producto = productoRepository.findById(id_producto).orElse(null);
 
         // comprobaciones: existe, no es tuyo, y está disponible
-        if (producto = = null || producto.getPropietario().getIdUsuario().equals(usuarioId)
+        if (producto == null || producto.getPropietario().getIdUsuario().equals(usuarioId)
                 || !producto.getEstado().equals("Disponible")) {
             return "redirect:/home";
         }
@@ -529,43 +529,43 @@ public class ProductoController {
      */
     @GetMapping("/buscar")
     public String buscar(
-            @RequestParam(required =  false) String q,
-            @RequestParam(required =  false) String categoria,
-            @RequestParam(required =  false) String formato,
-            @RequestParam(required =  false) String estado,
-            @RequestParam(required =  false) BigDecimal precioMin,
-            @RequestParam(required =  false) BigDecimal precioMax,
+            @RequestParam(required = false) String q,
+            @RequestParam(required = false) String categoria,
+            @RequestParam(required = false) String formato,
+            @RequestParam(required = false) String estado,
+            @RequestParam(required = false) BigDecimal precioMin,
+            @RequestParam(required = false) BigDecimal precioMax,
             HttpSession session,
             Model model,
             RedirectAttributes redirect) {
 
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        if (usuarioId = = null) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
         // ------------------------------------------------------------------
 
-        UsuarioEntity usuario =  usuarioRepository.findById(usuarioId).orElse(null);
-        if (usuario = = null)
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null)
             return "redirect:/home";
 
         // ------------------------------------------------------------------
         // si q es null o está en blanco, se queda como null
-        String qFinal =  (q != null && !q.isBlank()) ? q.trim() : null;
-        String catFinal =  (categoria != null && !categoria.isBlank()) ? categoria : null;
-        String fmtFinal =  (formato != null && !formato.isBlank()) ? formato : null;
+        String qFinal = (q != null && !q.isBlank()) ? q.trim() : null;
+        String catFinal = (categoria != null && !categoria.isBlank()) ? categoria : null;
+        String fmtFinal = (formato != null && !formato.isBlank()) ? formato : null;
         // ------------------------------------------------------------------
 
         // llama al método personalizado del repositorio que hace la consulta dinámica
-        List<ProductoEntity> resultados =  productoRepository.buscar(usuarioId, qFinal, catFinal, fmtFinal, precioMin, precioMax);
+        List<ProductoEntity> resultados = productoRepository.buscar(usuarioId, qFinal, catFinal, fmtFinal, precioMin, precioMax);
 
 
-        Map<Long, List<String>> imagenesMap =  new HashMap<>();
+        Map<Long, List<String>> imagenesMap = new HashMap<>();
         for (ProductoEntity p : resultados) {
-            List<String> imgs =  (p.getImagenes() != null && !p.getImagenes().isBlank())
+            List<String> imgs = (p.getImagenes() != null && !p.getImagenes().isBlank())
                     ? Arrays.asList(p.getImagenes().split(","))
                     : Arrays.asList("sin_foto.png");
             imagenesMap.put(p.getId_producto(), imgs);
@@ -602,41 +602,41 @@ public class ProductoController {
      */
     @GetMapping("/explorar")
     public String explorar(
-            @RequestParam(required =  false) String categoria,
-            @RequestParam(required =  false) BigDecimal precioMin,
-            @RequestParam(required =  false) BigDecimal precioMax,
-            @RequestParam(required =  false) String formato,
+            @RequestParam(required = false) String categoria,
+            @RequestParam(required = false) BigDecimal precioMin,
+            @RequestParam(required = false) BigDecimal precioMax,
+            @RequestParam(required = false) String formato,
             HttpSession session,
             Model model,
             RedirectAttributes redirect) {
 
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        if (usuarioId = = null) {
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
         // ------------------------------------------------------------------
 
-        UsuarioEntity usuario =  usuarioRepository.findById(usuarioId).orElse(null);
-        if (usuario = = null)
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null)
             return "redirect:/home";
 
         // ------------------------------------------------------------------
         // si q es null o está en blanco, se queda como null
-        String catFinal =  (categoria != null && !categoria.isBlank()) ? categoria : null;
-        String fmtFinal =  (formato != null && !formato.isBlank()) ? formato : null;
+        String catFinal = (categoria != null && !categoria.isBlank()) ? categoria : null;
+        String fmtFinal = (formato != null && !formato.isBlank()) ? formato : null;
         // ------------------------------------------------------------------
 
         // reutiliza el mismo método buscar del repositorio
         // el primer parámetro q va como null -> no hay búsqueda textual
         // solo filtra por categoría, estado y rango de precios
-        List<ProductoEntity> resultados =  productoRepository.buscar(usuarioId, null, catFinal, fmtFinal, precioMin, precioMax);
+        List<ProductoEntity> resultados = productoRepository.buscar(usuarioId, null, catFinal, fmtFinal, precioMin, precioMax);
         
-        Map<Long, List<String>> imagenesMap =  new HashMap<>();
+        Map<Long, List<String>> imagenesMap = new HashMap<>();
         for (ProductoEntity p : resultados) {
-            List<String> imgs =  (p.getImagenes() != null && !p.getImagenes().isBlank())
+            List<String> imgs = (p.getImagenes() != null && !p.getImagenes().isBlank())
                     ? Arrays.asList(p.getImagenes().split(","))
                     : Arrays.asList("sin_foto.png");
             imagenesMap.put(p.getId_producto(), imgs);
@@ -660,8 +660,8 @@ public class ProductoController {
     @PostMapping("/producto/{id}/aceptar")
     public String aceptarProducto(@PathVariable("id") @NonNull Long id, HttpSession session,
             HttpServletRequest request) {
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        ProductoEntity producto =  productoRepository.findById(id).orElse(null);
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        ProductoEntity producto = productoRepository.findById(id).orElse(null);
         if (producto != null && producto.getPropietario().getIdUsuario().equals(usuarioId)) {
             producto.setEstado("Vendido");
             productoRepository.save(producto);
@@ -672,8 +672,8 @@ public class ProductoController {
     @PostMapping("/producto/{id}/rechazar")
     public String rechazarProducto(@PathVariable("id") @NonNull Long id, HttpSession session,
             HttpServletRequest request) {
-        Long usuarioId =  (Long) session.getAttribute("usuarioId");
-        ProductoEntity producto =  productoRepository.findById(id).orElse(null);
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        ProductoEntity producto = productoRepository.findById(id).orElse(null);
         if (producto != null && producto.getPropietario().getIdUsuario().equals(usuarioId)) {
             producto.setEstado("Disponible");
             productoRepository.save(producto);
