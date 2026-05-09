@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Acceso - Riffy</title>
 
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/riffy_favicon.ico}">
+
     <div th:replace="~{fragmentos/sections :: head}"></div>
 </head>
 
@@ -52,36 +55,56 @@
                 <div class="seccion-formulario" id="sec-registro">
                     <h2>Crea tu cuenta</h2>
                     <p>Únete a Riffy gratis</p>
-                    <form th:action="@{/register}" method="post">
+                    <form th:action="@{/register}" method="post" id="form-registro">
+
+                        <!-- Nombre -->
                         <div class="campo-formulario">
                             <label>Nombre completo</label>
-                            <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required />
+                            <input type="text" id="nombre" name="nombre" placeholder="Tu nombre completo" required />
                             <small class="mensaje-validacion" id="validacion-nombre"></small>
                         </div>
 
+                        <!-- Usuario -->
                         <div class="campo-formulario">
                             <label>Usuario</label>
-                            <input type="text" id="usuario" name="usuario" placeholder="Elige un nombre de usuario"
+                            <input type="text" id="usuario" name="usuario" placeholder="Solo letras, números y _"
                                 required />
                             <small class="mensaje-validacion" id="validacion-usuario"></small>
                         </div>
 
+                        <!-- Email -->
+                        <div class="campo-formulario">
+                            <label>Email</label>
+                            <input type="email" id="email" name="email" placeholder="tu@email.com" required />
+                            <small class="mensaje-validacion" id="validacion-email"></small>
+                        </div>
+
+                        <!-- Contraseña -->
                         <div class="campo-formulario">
                             <label>Contraseña</label>
-                            <input type="password" id="contrasena" name="contrasena" placeholder="••••••••" required />
+                            <input type="password" id="contrasena" name="contrasena"
+                                placeholder="Mín. 8 caracteres, 1 mayúscula y 1 número" required />
                             <small class="mensaje-validacion" id="validacion-contrasena"></small>
                         </div>
-                        <div class="row m-1">
-                            <div class="col-sm-10">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="gridCheck1" required>
-                                    <label class="form-check-label" for="gridCheck1">
-                                        <small>He leído y acepto los Términos ycondiciones y la Política de privacidad
-                                        </small>
-                                    </label>
-                                </div>
+
+                        <!-- Confirmar contraseña -->
+                        <div class="campo-formulario">
+                            <label>Confirmar contraseña</label>
+                            <input type="password" id="contrasena2" name="contrasena2"
+                                placeholder="Repite tu contraseña" required />
+                            <small class="mensaje-validacion" id="validacion-contrasena2"></small>
+                        </div>
+
+                        <!-- Términos -->
+                        <div class="campo-formulario">
+                            <div class="campo-checkbox">
+                                <input type="checkbox" id="terminos" required />
+                                <label for="terminos">
+                                    He leído y acepto los Términos y condiciones y la Política de privacidad
+                                </label>
                             </div>
                         </div>
+
                         <button type="submit" class="boton-enviar">Crear cuenta</button>
                     </form>
                     <p class="pie-formulario">¿Ya tienes cuenta? <span id="enlace-login">Inicia sesión</span></p>

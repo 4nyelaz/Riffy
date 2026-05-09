@@ -70,7 +70,6 @@ public class ProductoController {
         if (usuario == null)
             return "redirect:/home";
 
-
         // recoge todos los productos del usuario en sesión
         List<ProductoEntity> productos = productoRepository.findByPropietarioId(usuarioId);
 
@@ -241,30 +240,24 @@ public class ProductoController {
      * @return Todo correcto: redirección al misproductos; Error: login
      */
     @GetMapping("/eliminarproducto/{id}")
-    public String eliminarProducto(@PathVariable("id") @NonNull Long id_producto, HttpSession session,
+    public String eliminarProducto(@PathVariable("id") @NonNull Long id_producto,
+            HttpSession session,
             RedirectAttributes redirect) {
-        // ------------------------------------------------------------------
-        // comprueba que el usuario está en sesión, sino, redirige al login
         Long usuarioId = (Long) session.getAttribute("usuarioId");
         if (usuarioId == null) {
             redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
             return "redirect:/login";
         }
-        // ------------------------------------------------------------------
 
-        // guarda en un obj producto
-        // si en el repositorio se encuentra el id pasado por parámetro o sino, devuelve
-        // null
         ProductoEntity producto = productoRepository.findById(id_producto).orElse(null);
 
-        // comprueba que el producto pertenece al usuario de la sesión
         if (producto != null && producto.getPropietario().getIdUsuario().equals(usuarioId)) {
             productoRepository.delete(producto);
-            redirect.addFlashAttribute("productoEliminado", "El producto ha sido eliminado correctamente.");
-            return "redirect:/mis-productos";
+            redirect.addFlashAttribute("toastExito", "Producto eliminado correctamente.");
+        } else {
+            redirect.addFlashAttribute("toastError", "No se pudo eliminar el producto.");
         }
 
-        redirect.addFlashAttribute("productoNoEliminado", "El producto no ha sido eliminado.");
         return "redirect:/mis-productos";
     }
 
@@ -314,8 +307,13 @@ public class ProductoController {
         }
         // ------------------------------------------------------------------
 
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null)
+            return "redirect:/home";
+
         // añade atributos para enseñar en la vista
         model.addAttribute("usuarioId", usuarioId);
+        model.addAttribute("usuario", usuario);
         model.addAttribute("nombreCompletoUsuario", session.getAttribute("nombreCompletoUsuario"));
         model.addAttribute("producto", new ProductoEntity());
         model.addAttribute("modoEdicion", false);
@@ -335,7 +333,7 @@ public class ProductoController {
             BigDecimal precio,
             String categoria,
             @RequestParam(required = false) List<MultipartFile> imagenes,
-            HttpSession session) {
+            HttpSession session, Model model) {
 
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
@@ -345,6 +343,10 @@ public class ProductoController {
             return "redirect:/login";
         }
         // ------------------------------------------------------------------
+
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null)
+            return "redirect:/home";
 
         // crea nuevo obj producto y se le asigna los campos del form a los atr del obj
         ProductoEntity nuevoProducto = new ProductoEntity();
@@ -356,6 +358,8 @@ public class ProductoController {
         nuevoProducto.setEstado("Disponible");
         nuevoProducto.setCategoria(categoria);
         nuevoProducto.setFecha_edicion(LocalDate.now());
+
+        model.addAttribute("usuario", usuario);
 
         // buscar usuario en bd por id
         // establecemos al nuevo obj el propietario
@@ -414,6 +418,10 @@ public class ProductoController {
         }
         // ------------------------------------------------------------------
 
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null)
+            return "redirect:/home";
+
         // guarda en un obj producto
         // si en el repositorio se encuentra el id pasado por parámetro o sino, devuelve
         // null
@@ -458,6 +466,7 @@ public class ProductoController {
 
         // añade atributos para mostrarlos en la vista
         model.addAttribute("usuarioId", usuarioId);
+        model.addAttribute("usuario", usuario);
         model.addAttribute("nombreCompletoUsuario", session.getAttribute("nombreCompletoUsuario"));
         model.addAttribute("producto", producto);
         model.addAttribute("imagenes", imgs);
@@ -522,6 +531,7 @@ public class ProductoController {
     public String buscar(
             @RequestParam(required = false) String q,
             @RequestParam(required = false) String categoria,
+            @RequestParam(required = false) String formato,
             @RequestParam(required = false) String estado,
             @RequestParam(required = false) BigDecimal precioMin,
             @RequestParam(required = false) BigDecimal precioMax,
@@ -538,15 +548,20 @@ public class ProductoController {
         }
         // ------------------------------------------------------------------
 
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null)
+            return "redirect:/home";
+
         // ------------------------------------------------------------------
         // si q es null o está en blanco, se queda como null
         String qFinal = (q != null && !q.isBlank()) ? q.trim() : null;
         String catFinal = (categoria != null && !categoria.isBlank()) ? categoria : null;
-        String estFinal = (estado != null && !estado.isBlank()) ? estado : null;
+        String fmtFinal = (formato != null && !formato.isBlank()) ? formato : null;
         // ------------------------------------------------------------------
 
         // llama al método personalizado del repositorio que hace la consulta dinámica
-        List<ProductoEntity> resultados = productoRepository.buscar(qFinal, catFinal, estFinal, precioMin, precioMax);
+        List<ProductoEntity> resultados = productoRepository.buscar(usuarioId, qFinal, catFinal, fmtFinal, precioMin, precioMax);
+
 
         Map<Long, List<String>> imagenesMap = new HashMap<>();
         for (ProductoEntity p : resultados) {
@@ -557,13 +572,14 @@ public class ProductoController {
         }
 
         // añade atributos para mostrarlos en la vista
+        model.addAttribute("usuario", usuario);
         model.addAttribute("productos", resultados);
         model.addAttribute("imagenesMap", imagenesMap);
         model.addAttribute("usuarioId", usuarioId);
         model.addAttribute("nombreCompletoUsuario", session.getAttribute("nombreCompletoUsuario"));
         model.addAttribute("q", q);
         model.addAttribute("categoria", categoria);
-        model.addAttribute("estado", estado);
+        model.addAttribute("formato", formato);
         model.addAttribute("precioMin", precioMin);
         model.addAttribute("precioMax", precioMax);
         model.addAttribute("mostrarBuscador", true);
@@ -587,9 +603,9 @@ public class ProductoController {
     @GetMapping("/explorar")
     public String explorar(
             @RequestParam(required = false) String categoria,
-            @RequestParam(required = false) String estado,
             @RequestParam(required = false) BigDecimal precioMin,
             @RequestParam(required = false) BigDecimal precioMax,
+            @RequestParam(required = false) String formato,
             HttpSession session,
             Model model,
             RedirectAttributes redirect) {
@@ -603,17 +619,21 @@ public class ProductoController {
         }
         // ------------------------------------------------------------------
 
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null)
+            return "redirect:/home";
+
         // ------------------------------------------------------------------
         // si q es null o está en blanco, se queda como null
         String catFinal = (categoria != null && !categoria.isBlank()) ? categoria : null;
-        String estFinal = (estado != null && !estado.isBlank()) ? estado : null;
+        String fmtFinal = (formato != null && !formato.isBlank()) ? formato : null;
         // ------------------------------------------------------------------
 
         // reutiliza el mismo método buscar del repositorio
         // el primer parámetro q va como null -> no hay búsqueda textual
         // solo filtra por categoría, estado y rango de precios
-        List<ProductoEntity> resultados = productoRepository.buscar(null, catFinal, estFinal, precioMin, precioMax);
-
+        List<ProductoEntity> resultados = productoRepository.buscar(usuarioId, null, catFinal, fmtFinal, precioMin, precioMax);
+        
         Map<Long, List<String>> imagenesMap = new HashMap<>();
         for (ProductoEntity p : resultados) {
             List<String> imgs = (p.getImagenes() != null && !p.getImagenes().isBlank())
@@ -623,22 +643,23 @@ public class ProductoController {
         }
 
         // añade atributos para mostrarlos en la vista
+        model.addAttribute("usuario", usuario);
         model.addAttribute("productos", resultados);
         model.addAttribute("imagenesMap", imagenesMap);
         model.addAttribute("usuarioId", usuarioId);
         model.addAttribute("nombreCompletoUsuario", session.getAttribute("nombreCompletoUsuario"));
         model.addAttribute("categoria", categoria);
-        model.addAttribute("estado", estado);
+        model.addAttribute("formato", formato);
         model.addAttribute("precioMin", precioMin);
         model.addAttribute("precioMax", precioMax);
 
         return "producto/explorar";
     }
 
-
     // Notificaciones para el vendedor
     @PostMapping("/producto/{id}/aceptar")
-    public String aceptarProducto(@PathVariable("id") @NonNull Long id, HttpSession session, HttpServletRequest request) {
+    public String aceptarProducto(@PathVariable("id") @NonNull Long id, HttpSession session,
+            HttpServletRequest request) {
         Long usuarioId = (Long) session.getAttribute("usuarioId");
         ProductoEntity producto = productoRepository.findById(id).orElse(null);
         if (producto != null && producto.getPropietario().getIdUsuario().equals(usuarioId)) {
@@ -649,7 +670,8 @@ public class ProductoController {
     }
 
     @PostMapping("/producto/{id}/rechazar")
-    public String rechazarProducto(@PathVariable("id") @NonNull Long id, HttpSession session, HttpServletRequest request) {
+    public String rechazarProducto(@PathVariable("id") @NonNull Long id, HttpSession session,
+            HttpServletRequest request) {
         Long usuarioId = (Long) session.getAttribute("usuarioId");
         ProductoEntity producto = productoRepository.findById(id).orElse(null);
         if (producto != null && producto.getPropietario().getIdUsuario().equals(usuarioId)) {

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Nuevo usuario - Riffy</title>
+
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/riffy_favicon.ico}">
+
+    <div th:replace="~{fragmentos/sections :: head}"></div>
+</head>
+
+<body>
+
+    <div th:replace="~{fragmentos/nav-admin :: nav-admin}"></div>
+
+    <main class="home-main">
+        <section class="mis-productos-seccion">
+            <div class="container contenedor-crear-producto">
+
+                <div class="mb-4">
+                    <h2 class="display-5 fw-bold titulo-seccion">
+                        <i class="fas fa-user-plus me-2 icono-titulo"></i>
+                        Nuevo usuario
+                    </h2>
+                </div>
+
+                <form action="/admin/usuarios/nuevo" method="post">
+
+                    <div class="card rounded-4 shadow-sm border-0">
+                        <div class="card-body p-4">
+
+                            <div class="campo-formulario">
+                                <label for="nombre">Nombre completo</label>
+                                <input type="text" id="nombre" name="nombre" placeholder="Ej. Ana García" required />
+                            </div>
+
+                            <div class="campo-formulario">
+                                <label for="usuario">Usuario (login)</label>
+                                <input type="text" id="usuario" name="usuario" placeholder="Ej. ana_garcia" required />
+                            </div>
+
+                            <hr class="my-3" />
+
+                            <div class="campo-formulario">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" placeholder="Ej. ana@correo.com" />
+                            </div>
+
+                            <hr class="my-3" />
+
+                            <div class="campo-formulario">
+                                <label for="contrasena">Contraseña</label>
+                                <input type="password" id="contrasena" name="contrasena"
+                                    placeholder="Mín. 8 caracteres, 1 mayúscula y 1 número" required />
+                            </div>
+
+                            <hr class="my-3" />
+
+                            <div class="campo-formulario mb-0">
+                                <label for="rol">Rol</label>
+                                <select id="rol" name="rol" required>
+                                    <option value="USER" selected>USER</option>
+                                    <option value="ADMIN">ADMIN</option>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <div class="card-footer bg-light d-flex justify-content-end gap-2 px-4 py-3 rounded-bottom-4">
+                            <a href="/admin/dashboard?seccion=usuarios"
+                                class="btn btn-outline-secondary btn-sm rounded-pill">Cancelar</a>
+                            <button type="submit" class="btn btn-primary btn-sm rounded-pill px-3">
+                                Crear usuario
+                            </button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </section>
+    </main>
+
+</body>
+
+</html>

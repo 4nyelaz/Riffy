@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
 import riffy.model.ConversacionEntity;
@@ -59,7 +60,16 @@ public class AdminController {
      * @return plantilla admin/tablaadmin, o redirección a login si no es ADMIN
      */
     @GetMapping("/dashboard")
-    public String dashboard(Model model, HttpSession session) {
+    public String dashboard(Model model, HttpSession session, RedirectAttributes redirect) {
+        // ------------------------------------------------------------------
+        // comprueba que el usuario está en sesión, sino, redirige al login
+        Long usuarioId = (Long) session.getAttribute("usuarioId");
+        if (usuarioId == null) {
+            redirect.addFlashAttribute("sesionCaducada", "Sesión caducada");
+            return "redirect:/login";
+        }
+        // ------------------------------------------------------------------
+
         if (!esAdmin(session))
             return "redirect:/login";
 
@@ -67,6 +77,7 @@ public class AdminController {
         model.addAttribute("usuarios", usuarioService.listarTodos());
         model.addAttribute("productos", productoService.findAll());
         model.addAttribute("conversaciones", conversacionRepository.findAll());
+        model.addAttribute("nombreCompletoUsuario", session.getAttribute("nombreCompletoUsuario"));
 
         return "admin/tablaadmin";
     }
@@ -84,11 +95,15 @@ public class AdminController {
      * @return redirección al dashboard en la pestaña de usuarios, o login si no es
      *         ADMIN
      */
+
     @PostMapping("/usuarios/{id}/eliminar")
-    public String eliminarUsuario(@PathVariable @NonNull Long id, HttpSession session) {
+    public String eliminarUsuario(@PathVariable @NonNull Long id,
+            HttpSession session,
+            RedirectAttributes redirect) {
         if (!esAdmin(session))
             return "redirect:/login";
         usuarioService.eliminar(id);
+        redirect.addFlashAttribute("toastExito", "Usuario eliminado correctamente.");
         return "redirect:/admin/dashboard?seccion=usuarios";
     }
 
@@ -127,7 +142,7 @@ public class AdminController {
         if (!esAdmin(session))
             return "redirect:/login";
         model.addAttribute("usuario", new UsuarioEntity());
-        return "admin/nuevo-usuario";
+        return "admin/nuevousuario";
     }
 
     /**
@@ -165,13 +180,15 @@ public class AdminController {
      *         ADMIN
      */
     @PostMapping("/productos/{id}/eliminar")
-    public String eliminarProducto(@PathVariable @NonNull Long id, HttpSession session) {
+    public String eliminarProducto(@PathVariable @NonNull Long id,
+            HttpSession session,
+            RedirectAttributes redirect) {
         if (!esAdmin(session))
             return "redirect:/login";
         productoService.eliminar(id);
+        redirect.addFlashAttribute("toastExito", "Producto eliminado correctamente.");
         return "redirect:/admin/dashboard?seccion=productos";
     }
-
     // ---------------------------------------------------------------
     // conversaciones
     // ---------------------------------------------------------------
@@ -231,5 +248,32 @@ public class AdminController {
         model.addAttribute("mensajes", mensajeRepository.findByConversacionOrderByFechaEnvioAsc(conv));
 
         return "admin/mensajes";
+    }
+
+    // Añade estos dos métodos dentro de AdminController, junto a los otros de
+    // usuarios
+
+    /**
+     * edita los campos básicos de un usuario directamente desde la tabla
+     * nombre, usuario (login), email — sin tocar la contraseña
+     *
+     * @param id      id del usuario a editar
+     * @param nombre  nuevo nombre
+     * @param usuario nuevo nombre de usuario / login
+     * @param email   nuevo email
+     * @param session sesión HTTP del usuario actual
+     * @return redirección al dashboard en la pestaña de usuarios, o login si no es
+     *         ADMIN
+     */
+    @PostMapping("/usuarios/{id}/editar")
+    public String editarUsuario(@PathVariable @NonNull Long id,
+            @RequestParam String nombre,
+            @RequestParam String usuario,
+            @RequestParam String email,
+            HttpSession session) {
+        if (!esAdmin(session))
+            return "redirect:/login";
+        usuarioService.actualizarDatos(id, nombre, usuario, email);
+        return "redirect:/admin/dashboard?seccion=usuarios";
     }
 }

@@ -21,10 +21,10 @@ public class UsuarioService {
     }
 
     public void registrar(UsuarioEntity usuario) {
-    usuario.setContrasena(encoder.encode(usuario.getContrasena()));
-    usuario.setRol("USER");           
-    usuarioRepositorio.save(usuario);
-}
+        usuario.setContrasena(encoder.encode(usuario.getContrasena()));
+        usuario.setRol("USER");
+        usuarioRepositorio.save(usuario);
+    }
 
     public Optional<UsuarioEntity> buscarPorUsuario(String usuario) {
         return usuarioRepositorio.findByUsuario(usuario);
@@ -56,6 +56,15 @@ public class UsuarioService {
     }
 
     public boolean existeUsuario(String usuario) {
-    return usuarioRepositorio.existsByUsuario(usuario);
-}
+        return usuarioRepositorio.existsByUsuario(usuario);
+    }
+
+    public void actualizarDatos(Long id, String nombre, String usuario, String email) {
+        usuarioRepositorio.findById(id).ifPresent(u -> {
+            u.setNombre(nombre);
+            u.setUsuario(usuario);
+            u.setEmail(email);
+            usuarioRepositorio.save(u);
+        });
+    }
 }

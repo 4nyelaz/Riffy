@@ -6,106 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis conversaciones - Riffy</title>
 
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/riffy_favicon.ico}">
+
     <div th:replace="~{fragmentos/sections :: head}"></div>
-
-    <style>
-        .conversaciones-container {
-            max-width: 700px;
-            margin: 2rem auto;
-        }
-
-        .conversacion-item {
-            background: var(--color-bg);
-            border-radius: 12px;
-            padding: 1rem 1.5rem;
-            margin-bottom: 0.75rem;
-            border: 0.5px solid #d0dde8;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .conversacion-item:hover {
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-            border-color: var(--color-accent);
-        }
-
-        .conversacion-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: var(--color-second);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 1.2rem;
-            flex-shrink: 0;
-        }
-
-        .conversacion-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .conversacion-nombre {
-            font-weight: 600;
-            color: var(--color-first);
-            margin-bottom: 0.25rem;
-        }
-
-        .conversacion-producto {
-            font-size: 0.85rem;
-            color: var(--color-text-secondary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .conversacion-estado {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 0.25rem;
-            flex-shrink: 0;
-        }
-
-        .badge-activa {
-            background: #d4edda;
-            color: #155724;
-            font-size: 0.7rem;
-            padding: 0.25rem 0.6rem;
-            border-radius: 50px;
-        }
-
-        .badge-cerrada {
-            background: #f8d7da;
-            color: #721c24;
-            font-size: 0.7rem;
-            padding: 0.25rem 0.6rem;
-            border-radius: 50px;
-        }
-
-        .sin-conversaciones {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: var(--color-text-secondary);
-        }
-
-        .sin-conversaciones i {
-            font-size: 3rem;
-            color: var(--color-accent);
-            margin-bottom: 1rem;
-            display: block;
-        }
-    </style>
 </head>
 
 <body>
-    <!-- Fragmento de header -->
     <div th:replace="~{fragmentos/nav-home :: nav-home}"></div>
 
     <main class="home-main">
@@ -122,6 +29,8 @@
                 </a>
             </div>
 
+            <hr class="my-4">
+
             <!-- como comprador -->
             <h5 class="fw-bold titulo-seccion mb-3">
                 <i class="fas fa-shopping-cart me-2 icono-titulo"></i>
@@ -131,8 +40,19 @@
             <div th:if="${!comoComprador.isEmpty()}">
                 <a th:each="conv : ${comoComprador}" th:href="@{/chat/{id}(id=${conv.id_conversacion})}"
                     class="conversacion-item">
-                    <div class="conversacion-avatar">
-                        <span th:text="${#strings.substring(conv.vendedor.nombre, 0, 1)}">V</span>
+                    <!-- Mostrar avatar según si tiene foto o no -->
+                    <div th:if="${usuario != null}">
+                        <!-- Con foto -->
+                        <img th:if="${conv.vendedor.fotoPerfil != null and !#strings.isEmpty(conv.vendedor.fotoPerfil)}"
+                            th:src="@{'/img/fotoperfil_img/' + ${conv.vendedor.fotoPerfil}}"
+                            class="rounded-circle object-fit-cover" style="width:50px; height:50px; object-fit: cover;"
+                            alt="Foto perfil">
+
+                        <div th:unless="${conv.vendedor.fotoPerfil != null and !#strings.isEmpty(conv.vendedor.fotoPerfil)}"
+                            class="conversacion-avatar">
+                            <span
+                                th:text="${#strings.toUpperCase(#strings.substring(conv.vendedor.nombre, 0, 1))}">V</span>
+                        </div>
                     </div>
                     <div class="conversacion-info">
                         <div class="conversacion-nombre" th:text="${conv.vendedor.nombre}">Vendedor</div>
@@ -166,8 +86,15 @@
             <div th:if="${!comoVendedor.isEmpty()}">
                 <a th:each="conv : ${comoVendedor}" th:href="@{/chat/{id}(id=${conv.id_conversacion})}"
                     class="conversacion-item">
-                    <div class="conversacion-avatar">
-                        <span th:text="${#strings.substring(conv.comprador.nombre, 0, 1)}">C</span>
+                    <img th:if="${conv.comprador.fotoPerfil != null and !#strings.isEmpty(conv.comprador.fotoPerfil)}"
+                        th:src="@{'/img/fotoperfil_img/' + ${conv.comprador.fotoPerfil}}"
+                        class="rounded-circle object-fit-cover" style="width:50px; height:50px; object-fit: cover;"
+                        alt="Foto perfil">
+
+                    <div th:unless="${conv.comprador.fotoPerfil != null and !#strings.isEmpty(conv.comprador.fotoPerfil)}"
+                        class="conversacion-avatar">
+                        <span
+                            th:text="${#strings.toUpperCase(#strings.substring(conv.comprador.nombre, 0, 1))}">C</span>
                     </div>
                     <div class="conversacion-info">
                         <div class="conversacion-nombre" th:text="${conv.comprador.nombre}">Comprador</div>

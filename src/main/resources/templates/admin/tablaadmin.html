@@ -4,9 +4,12 @@
 <head>
     <title>Panel de Administración – Riffy</title>
     <div th:replace="~{fragmentos/sections :: head}"></div>
+
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/riffy_favicon.ico}">
+    
     <link rel="stylesheet" th:href="@{/css/admin.css}">
 
-    <!-- Lógica principal de la aplicación -->
     <script th:src="@{/js/admin.js}" defer></script>
 </head>
 
@@ -20,33 +23,8 @@
             <!-- ── CABECERA ── -->
             <div class="admin-header">
                 <div>
-                    <h1><i class="fas fa-shield-alt me-2"></i>Panel de <span>administración</span></h1>
+                    <h1></i>Panel de <span>administración</span></h1>
                     <p>Gestiona usuarios, productos y conversaciones de la plataforma</p>
-                </div>
-            </div>
-
-            <!-- ── ESTADÍSTICAS ── -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon azul"><i class="fas fa-users"></i></div>
-                    <div class="stat-info">
-                        <div class="num" th:text="${usuarios != null ? usuarios.size() : 0}">0</div>
-                        <div class="lbl">Usuarios registrados</div>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon rojo"><i class="fas fa-compact-disc"></i></div>
-                    <div class="stat-info">
-                        <div class="num" th:text="${productos != null ? productos.size() : 0}">0</div>
-                        <div class="lbl">Productos publicados</div>
-                    </div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-icon verde"><i class="fas fa-comments"></i></div>
-                    <div class="stat-info">
-                        <div class="num" th:text="${conversaciones != null ? conversaciones.size() : 0}">0</div>
-                        <div class="lbl">Conversaciones</div>
-                    </div>
                 </div>
             </div>
 
@@ -86,35 +64,46 @@
                         <table class="admin-table">
                             <thead>
                                 <tr>
+                                    <th>Nombre</th>
                                     <th>Usuario</th>
-                                    <th>Rol actual</th>
-                                    <th>Cambiar rol</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                    <th>Registro</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr th:each="u : ${usuarios}">
-                                    <td data-label="Usuario">
-                                        <div class="usuario-cell">
-                                            <div class="avatar-initials"
-                                                th:text="${#strings.substring(u.nombre, 0, 1)}">A</div>
-                                            <div>
-                                                <div class="usuario-nombre" th:text="${u.nombre}">Nombre Usuario</div>
-                                                <div class="usuario-email" th:text="${u.usuario}">email@ejemplo.com
-                                                </div>
+
+                                    <!-- los 3 campos editables comparten el mismo form -->
+                                    <td data-label="Nombre">
+                                        <form th:id="'form-' + ${u.idUsuario}"
+                                            th:action="@{'/admin/usuarios/' + ${u.idUsuario} + '/editar'}"
+                                            method="post">
+                                            <div class="usuario-cell">
+                                                <div class="avatar-initials"
+                                                    th:text="${#strings.substring(u.nombre, 0, 1)}">A</div>
+                                                <input class="input-tabla" type="text" name="nombre"
+                                                    th:value="${u.nombre}" required />
                                             </div>
-                                        </div>
+                                        </form>
                                     </td>
+
+                                    <td data-label="Usuario">
+                                        <!-- continúa el mismo form por id -->
+                                        <input class="input-tabla" type="text" name="usuario" th:value="${u.usuario}"
+                                            required th:form="'form-' + ${u.idUsuario}" />
+                                    </td>
+
+                                    <td data-label="Email">
+                                        <input class="input-tabla" type="email" name="email" th:value="${u.email}"
+                                            th:form="'form-' + ${u.idUsuario}" />
+                                    </td>
+
                                     <td data-label="Rol">
-                                        <span class="badge-rol"
-                                            th:classappend="${u.rol == 'ADMIN'} ? 'badge-admin' : 'badge-user'">
-                                            <i th:class="${u.rol == 'ADMIN'} ? 'fas fa-crown' : 'fas fa-user'"></i>
-                                            <span th:text="${u.rol}">USER</span>
-                                        </span>
-                                    </td>
-                                    <td data-label="Cambiar rol">
+                                        <!-- rol sigue siendo su propio mini-form como antes -->
                                         <form th:action="@{'/admin/usuarios/' + ${u.idUsuario} + '/rol'}" method="post"
-                                            style="display:flex;gap:0.4rem;align-items:center;">
+                                            style="display:flex; gap:0.4rem; align-items:center;">
                                             <select name="rol" class="select-rol">
                                                 <option value="USER" th:selected="${u.rol == 'USER'}">USER</option>
                                                 <option value="ADMIN" th:selected="${u.rol == 'ADMIN'}">ADMIN</option>
@@ -124,17 +113,34 @@
                                             </button>
                                         </form>
                                     </td>
-                                    <td data-label="Acciones">
-                                        <form th:action="@{'/admin/usuarios/' + ${u.idUsuario} + '/eliminar'}"
-                                            method="post">
-                                            <button type="submit" class="btn-accion btn-accion-peligro">
-                                                <i class="fas fa-trash"></i> Eliminar
-                                            </button>
-                                        </form>
+
+                                    <td data-label="Registro">
+                                        <span class="cell-muted"
+                                            th:text="${u.fechaRegistro != null ? #temporals.format(u.fechaRegistro, 'dd/MM/yyyy') : '—'}">
+                                        </span>
                                     </td>
+
+                                    <td data-label="Acciones">
+                                        <div class="acciones">
+                                            <!-- guarda los campos editables (nombre, usuario, email) -->
+                                            <button type="submit" th:form="'form-' + ${u.idUsuario}"
+                                                class="btn-accion btn-accion-neutro">
+                                                <i class="fas fa-save"></i> Guardar
+                                            </button>
+                                            <!-- eliminar — su propio form para no mezclar acciones -->
+                                            <form th:action="@{'/admin/usuarios/' + ${u.idUsuario} + '/eliminar'}"
+                                                method="post">
+                                                <button type="submit" class="btn-accion btn-accion-peligro"
+                                                    th:attr="data-admin-eliminar-usuario=${u.nombre}">
+                                                    <i class="fas fa-trash"></i> Eliminar
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+
                                 </tr>
                                 <tr th:if="${usuarios == null or usuarios.isEmpty()}">
-                                    <td colspan="4">
+                                    <td colspan="6">
                                         <div class="empty-state">
                                             <i class="fas fa-users"></i>
                                             <p>No hay usuarios registrados.</p>
@@ -194,13 +200,10 @@
                                     </td>
                                     <td data-label="Acciones">
                                         <div class="acciones">
-                                            <a th:href="@{'/producto/' + ${p.id_producto}}"
-                                                class="btn-accion btn-accion-neutro">
-                                                <i class="fas fa-eye"></i> Ver
-                                            </a>
                                             <form th:action="@{'/admin/productos/' + ${p.id_producto} + '/eliminar'}"
                                                 method="post">
-                                                <button type="submit" class="btn-accion btn-accion-peligro">
+                                                <button type="submit" class="btn-accion btn-accion-peligro"
+                                                    th:attr="data-admin-eliminar-producto=${p.titulo}">
                                                     <i class="fas fa-trash"></i> Eliminar
                                                 </button>
                                             </form>
@@ -277,10 +280,6 @@
                                     </td>
                                     <td data-label="Acciones">
                                         <div class="acciones">
-                                            <a th:href="@{'/admin/conversaciones/' + ${c.id_conversacion} + '/mensajes'}"
-                                                class="btn-accion btn-accion-neutro">
-                                                <i class="fas fa-envelope-open-text"></i> Mensajes
-                                            </a>
                                             <form
                                                 th:action="@{'/admin/conversaciones/' + ${c.id_conversacion} + '/toggle'}"
                                                 method="post">

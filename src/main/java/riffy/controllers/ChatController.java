@@ -48,7 +48,7 @@ public class ChatController {
      * @return Todo correcto: redirección al chat; Error: login/home
      */
     @PostMapping("/chat/iniciar")
-    public String iniciarConversacion(@RequestParam @NonNull Long idProducto, HttpSession session, RedirectAttributes redirect) {
+    public String iniciarConversacion(@RequestParam @NonNull Long idProducto, HttpSession session, RedirectAttributes redirect, Model model) {
         // ------------------------------------------------------------------
         // comprueba que el usuario está en sesión, sino, redirige al login
         Long usuarioId = (Long) session.getAttribute("usuarioId");
@@ -57,6 +57,10 @@ public class ChatController {
             return "redirect:/login";
         }
         // ------------------------------------------------------------------  
+
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null)
+            return "redirect:/home";
 
         // guarda en un obj producto/usuario (con rol de comprador) 
         // si en el repositorio se encuentra el id pasado por parámetro o sino, devuelve null
@@ -90,6 +94,8 @@ public class ChatController {
             conversacion = conversacionRepository.save(conversacion);
         }
 
+        model.addAttribute("usuario", usuario);
+
         return "redirect:/chat/" + conversacion.getId_conversacion();
     }
 
@@ -111,6 +117,10 @@ public class ChatController {
             return "redirect:/login";
         }
         // ------------------------------------------------------------------  
+
+        UsuarioEntity usuario = usuarioRepository.findById(usuarioId).orElse(null);
+        if (usuario == null)
+            return "redirect:/home";
 
         // busca la conversación por id, si no existe --> home
         ConversacionEntity conversacion = conversacionRepository.findById(idConversacion).orElse(null);
@@ -136,6 +146,7 @@ public class ChatController {
         UsuarioEntity otro = esComprador ? conversacion.getVendedor() : conversacion.getComprador();
 
         // añade atributos para mostrarlos en la vista
+        model.addAttribute("usuario", usuario);
         model.addAttribute("idConversacion", idConversacion);
         model.addAttribute("mensajes", mensajes);
         model.addAttribute("nombreOtro", otro.getNombre());
@@ -219,6 +230,7 @@ public class ChatController {
         List<ConversacionEntity> comoVendedor = conversacionRepository.findByVendedor(usuario);
 
         // añade atributos para enseñar en la vista
+        model.addAttribute("usuario", usuario);
         model.addAttribute("comoComprador", comoComprador);
         model.addAttribute("comoVendedor", comoVendedor);
         model.addAttribute("usuarioId", usuarioId);

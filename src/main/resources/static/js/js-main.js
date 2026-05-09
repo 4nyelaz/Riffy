@@ -5,55 +5,36 @@
 /* ------------------------------------------------------------------ */
 
 function abrirAcordeonDesdeHash() {
-    const hash = window.location.hash;
-
+    const hash = window.location.hash;  // obtiene el hash de la URL
     if (hash) {
         const accordionItem = document.querySelector(hash);
-
-        if (accordionItem) {
-            const button = accordionItem.querySelector('.accordion-button');
+        if (accordionItem) {  // Si existe
+            const button = accordionItem.querySelector('.accordion-button');  // Botón del acordeón
             const collapseElement = accordionItem.querySelector('.accordion-collapse');
-
-            if (button && collapseElement) {
-
-                // cerramos todos primero
+            if (button && collapseElement) {  // Si ambos existen
+                // cierra todos los paneles abiertos
                 document.querySelectorAll('.accordion-collapse').forEach(el => {
                     const bsCollapse = bootstrap.Collapse.getInstance(el);
                     if (bsCollapse) bsCollapse.hide();
                 });
-
-                // abrimos el que toca
+                // abre el panel correspondiente al hash
                 const bsCollapse = new bootstrap.Collapse(collapseElement, {
                     toggle: false
                 });
-
                 bsCollapse.show();
-
-                // scroll suave al elemento
                 setTimeout(() => {
-
                     accordionItem.scrollIntoView({
                         behavior: 'smooth',
                         block: 'center'
                     });
-
-                    // limpiar URL
-                    history.replaceState(
-                        null,
-                        null,
-                        window.location.pathname
-                    );
-
+                    history.replaceState(null, null, window.location.pathname);  // elimina el hash
                 }, 300);
-
             }
         }
     }
 }
-
 // al cargar la página
 document.addEventListener('DOMContentLoaded', abrirAcordeonDesdeHash);
-
 // y también si cambia el hash sin recargar
 window.addEventListener('hashchange', abrirAcordeonDesdeHash);
 
@@ -198,6 +179,39 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // ── EMAIL ──────────────────────────────────────────────────────────
+    const email = document.getElementById("email");
+    const msgEmail = document.getElementById("validacion-email");
+
+    if (email) {
+        email.addEventListener("focus", () => limpiar(msgEmail));
+
+        email.addEventListener("input", () => {
+            const val = email.value.trim();
+            if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) {
+                ok(msgEmail, "Email válido");
+            } else {
+                err(msgEmail, "Introduce un email válido");
+            }
+        });
+    }
+
+    // ── CONFIRMAR CONTRASEÑA ──────────────────────────────────────────
+    const contrasena2 = document.getElementById("contrasena2");
+    const msgContrasena2 = document.getElementById("validacion-contrasena2");
+
+    if (contrasena2) {
+        contrasena2.addEventListener("focus", () => limpiar(msgContrasena2));
+
+        contrasena2.addEventListener("input", () => {
+            if (contrasena2.value === contrasena.value) {
+                ok(msgContrasena2, "Las contraseñas coinciden");
+            } else {
+                err(msgContrasena2, "Las contraseñas no coinciden");
+            }
+        });
+    }
+
     // ── SUBMIT ───────────────────────────────────────────────────────
     const form = document.querySelector("#sec-registro form");
 
@@ -214,10 +228,22 @@ document.addEventListener("DOMContentLoaded", () => {
             valido = false;
         }
 
+        // email
+        if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim())) {
+            err(msgEmail, "Introduce un email válido");
+            valido = false;
+        }
+
         const tieneMayus = /[A-Z]/.test(contrasena.value);
         const tieneNumero = /[0-9]/.test(contrasena.value);
         if (contrasena.value.length < 8 || !tieneMayus || !tieneNumero) {
             err(msgContrasena, "8 caracteres, 1 mayúscula y 1 número");
+            valido = false;
+        }
+
+        // confirmar contraseña
+        if (contrasena2 && contrasena2.value !== contrasena.value) {
+            err(msgContrasena2, "Las contraseñas no coinciden");
             valido = false;
         }
 

@@ -649,6 +649,102 @@ footer {
     color: white;
 }
 
+/* /////////////////////////////////////////////////////////////////// */
+/* //////////////////// mis conversaciones /////////////////////////// */
+/* /////////////////////////////////////////////////////////////////// */
+
+.conversaciones-container {
+    max-width: 700px;
+    margin: 2rem auto;
+}
+
+.conversacion-item {
+    background: var(--color-bg);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 0.75rem;
+    border: 0.5px solid #d0dde8;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.conversacion-item:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    border-color: var(--color-accent);
+}
+
+.conversacion-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--color-second);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+}
+
+.conversacion-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.conversacion-nombre {
+    font-weight: 600;
+    color: var(--color-first);
+    margin-bottom: 0.25rem;
+}
+
+.conversacion-producto {
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.conversacion-estado {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.25rem;
+    flex-shrink: 0;
+}
+
+.badge-activa {
+    background: #d4edda;
+    color: #155724;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 50px;
+}
+
+.badge-cerrada {
+    background: #f8d7da;
+    color: #721c24;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 50px;
+}
+
+.sin-conversaciones {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: var(--color-text-secondary);
+}
+
+.sin-conversaciones i {
+    font-size: 3rem;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+    display: block;
+}
 
 /* /////////////////////////////////////////////////////////////////// */
 /* //////////////////////////// dialogs ////////////////////////////// */
@@ -922,32 +1018,95 @@ dialog::backdrop {
     }
 }
 
-@media (max-width: 768px) {
-    .encabezado {
-        min-height: auto;
-    }
 
-    .encabezado-contenedor {
-        flex-direction: column;
-        min-height: auto;
-    }
-
-    .encabezado-izquierda {
-        width: 100%;
-        padding: 50px 25px;
-        text-align: center;
-    }
+@media (max-width: 480px) {
 
     .encabezado-izquierda h1 {
-        font-size: 2.2rem;
-    }
-
-    .encabezado-botones {
-        justify-content: center;
+        font-size: 1.65rem;
     }
 
     .encabezado-derecha {
+        height: 200px;
+    }
+
+    /* tarjetas un poco más pequeñas para que se intuya la siguiente */
+    .producto-card {
+        min-width: 240px;
+        max-width: 240px;
+    }
+
+    /* título de sección más pequeño */
+    .titulo-seccion {
+        font-size: 1.6rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .encabezado-izquierda {
+        padding: 40px 24px 36px;
+    }
+
+    .encabezado-izquierda h1 {
+        font-size: 1.9rem;
+    }
+
+    .encabezado-izquierda p {
+        font-size: 1rem;
+        margin-bottom: 22px;
+    }
+
+    .encabezado-botones {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .boton-primario,
+    .boton-secundario {
+        text-align: center;
+        padding: 12px 20px;
+        font-size: 1rem;
+    }
+
+
+    /* -- home: padding general -- */
+    .home-main {
+        padding-top: 68px; /* nav en móvil suele ser más alto */
+    }
+
+    /* -- mis productos: cabecera -- */
+    .mis-productos-seccion .ps-md-5 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    /* cabecera mis productos: apila título y botones en columna */
+    .mis-productos-seccion .mb-4.d-flex {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 0.75rem;
+        padding-right: 0 !important; /* quita el pe-4 en móvil */
+    }
+
+    /* select + botón añadir en fila, ocupan todo el ancho */
+    .mis-productos-seccion .d-flex.align-items-center.gap-2 {
         width: 100%;
-        height: 350px;
+        justify-content: space-between;
+    }
+
+    .filtro-ordenacion-select {
+        min-width: 0;
+        flex: 1;
+    }
+
+    /* -- carrusel: que se vea bien que hay más a la derecha -- */
+    .productos-carrusel {
+        padding-left: 1rem;
+        padding-right: 0.5rem;
+    }
+
+    /* -- secciones categoria: separacion entre vinilos y CDs -- */
+    .mis-productos-seccion {
+        padding: 2rem 0;
     }
 }

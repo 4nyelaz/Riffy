@@ -25,30 +25,6 @@
                     
                     <!-- Menú de usuario (dropdown) y enlaces móviles -->
                     <ul class="navbar-nav ms-auto mt-3 mt-lg-0 align-items-lg-center gap-2">
-                        <!-- Opción Vender (siempre visible en móvil, en desktop dentro del dropdown? Mejor mantener consistencia) -->
-                        <li class="nav-item d-lg-none">
-                            <a class="nav-link d-flex align-items-center gap-2" th:href="@{/home}">
-                                 Usuarios
-                            </a>
-                        </li>
-                        <li class="nav-item d-lg-none">
-                            <a class="nav-link d-flex align-items-center gap-2" th:href="@{/nuevo-producto}">
-                                Productos
-                            </a>
-                        </li>
-                        <li class="nav-item d-lg-none">
-                            <a class="nav-link d-flex align-items-center gap-2" th:href="@{/mis-productos}">
-                                Conversaciones
-                            </a>
-                        </li>
-                        <li class="nav-item d-lg-none">
-                            <a class="nav-link d-flex align-items-center gap-2" th:href="@{/chat/mis-conversaciones}">
-                                Mensajes
-                            </a>
-                        </li>
-                        <li class="nav-item d-lg-none">
-                            <hr class="dropdown-divider">
-                        </li>
                         <li class="nav-item d-lg-none">
                             <a class="nav-link d-flex align-items-center gap-2 text-danger" th:href="@{/logout}">
                                 <i class="fas fa-sign-out-alt"></i>Cerrar sesión
@@ -64,25 +40,8 @@
                                 <span class="small fw-semibold" th:text="${nombreCompletoUsuario}">Usuario</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow-sm mt-2" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item d-flex align-items-center gap-2" th:href="@{/home}">
-                                    Usuarios</a></li>
-                                <li>
-                                <li><a class="dropdown-item d-flex align-items-center gap-2"
-                                        th:href="@{/nuevo-producto}">
-                                        Productos</a></li>
-                                <li>
-                                <li><a class="dropdown-item d-flex align-items-center gap-2"
-                                        th:href="@{/mis-productos}">
-                                        Conversaciones</a></li>
-                                <li>
-                                <li><a class="dropdown-item d-flex align-items-center gap-2"
-                                        th:href="@{/chat/mis-conversaciones}">
-                                        Mensajes</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
                                 <li><a class="dropdown-item d-flex align-items-center gap-2 text-danger"
-                                        th:href="@{/logout}">Cerrar sesión</a></li>
+                                        th:href="@{/logout}"><i class="fas fa-sign-out-alt"></i>Cerrar sesión</a></li>
                             </ul>
                         </li>
                     </ul>

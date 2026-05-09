@@ -430,6 +430,21 @@
     display: block;
 }
 
+.input-tabla {
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.85rem;
+    width: 100%;
+    background: transparent;
+    color: var(--color-first);
+}
+
+.input-tabla:focus {
+    outline: none;
+    border-color: var(--color-accent);
+}
+
 /* ── responsive ── */
 @media (max-width: 768px) {
     .admin-tabs {

@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - Riffy</title>
 
+    <!-- favicon -->
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/riffy_favicon.ico}">
+
     <div th:replace="~{fragmentos/sections :: head}"></div>
 </head>
 
@@ -91,9 +94,14 @@
                                 <!-- Info del vendedor -->
                                 <div class="bg-light rounded-4 p-3 d-flex align-items-center gap-3">
 
-                                    <!-- Avatar con inicial -->
-                                    <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
-                                        style="width: 52px; height: 52px; background-color: var(--color-accent);">
+                                    <img th:if="${producto.propietario.fotoPerfil != null and !#strings.isEmpty(producto.propietario.fotoPerfil)}"
+                                        th:src="@{'/img/fotoperfil_img/' + ${producto.propietario.fotoPerfil}}"
+                                        class="rounded-circle flex-shrink-0"
+                                        style="width:52px; height:52px; object-fit: cover;" alt="Foto perfil">
+
+                                    <div th:unless="${producto.propietario.fotoPerfil != null and !#strings.isEmpty(producto.propietario.fotoPerfil)}"
+                                        class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                                        style="width:52px; height:52px; background-color: var(--color-accent);">
                                         <span class="fw-bold fs-4 text-white"
                                             th:text="${#strings.toUpperCase(#strings.substring(producto.propietario.nombre, 0, 1))}">U</span>
                                     </div>

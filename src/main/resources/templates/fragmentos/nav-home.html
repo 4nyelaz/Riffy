@@ -106,11 +106,6 @@
                             </a>
                         </li>
                         <li class="nav-item d-lg-none">
-                            <a class="nav-link d-flex align-items-center gap-2" th:href="@{/configuracion}">
-                                <i class="fas fa-cog" style="color: var(--color-accent);"></i> Configuración
-                            </a>
-                        </li>
-                        <li class="nav-item d-lg-none">
                             <hr class="dropdown-divider">
                         </li>
                         <li class="nav-item d-lg-none">
@@ -194,7 +189,7 @@
                                 type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
 
                                 <!-- Mostrar avatar según si tiene foto o no -->
-                                <th:block th:if="${usuario != null}">
+                                <div th:if="${usuario != null}">
                                     <!-- Con foto -->
                                     <img th:if="${usuario.fotoPerfil != null and !#strings.isEmpty(usuario.fotoPerfil)}"
                                         th:src="@{'/img/fotoperfil_img/' + ${usuario.fotoPerfil}}"
@@ -210,7 +205,7 @@
                                             U
                                         </span>
                                     </div>
-                                </th:block>
+                                </div>
 
                                 <!-- Placeholder si no hay usuario (no debería ocurrir) -->
                                 <div th:if="${usuario == null}"
