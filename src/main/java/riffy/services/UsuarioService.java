@@ -59,7 +59,7 @@ public class UsuarioService {
         return usuarioRepositorio.existsByUsuario(usuario);
     }
 
-    public void actualizarDatos(Long id, String nombre, String usuario, String email) {
+    public void actualizarDatos(@NonNull Long id, String nombre, String usuario, String email) {
         usuarioRepositorio.findById(id).ifPresent(u -> {
             u.setNombre(nombre);
             u.setUsuario(usuario);
